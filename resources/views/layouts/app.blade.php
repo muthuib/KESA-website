@@ -13,20 +13,21 @@
         <!-- Include the Top Navigation Bar (Topnav) -->
         @include('dashboard.topnav')
 
-        <!-- Main Content -->
+        <!-- Main Content Area (Including Sidebar and Dashboard) -->
         <div class="main-content">
             <!-- Sidebar (optional, depending on authentication) -->
             @auth
-            @include('dashboard.sidebar')
+            <div class="sidebar">
+                @include('dashboard.sidebar')
+            </div>
             @endauth
 
-            <!-- Yield Content: Where content from individual views will be injected -->
+            <!-- Dashboard Content (You can define the dashboard content here) -->
             <div class="content">
-                @yield('content')
+                @yield('content') <!-- This will yield dynamic content from other views -->
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
