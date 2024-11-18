@@ -21,6 +21,10 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt(['EMAIL' => $credentials['EMAIL'], 'password' => $credentials['password']])) {
+            // Set a success message in session
+            // Flash success message with user's first name and last name
+            session()->flash('success', 'You have logged in successfully. Welcome, ' . Auth::user()->USERNAME . ' :' . Auth::user()->EMAIL . ' to Kenya Economics Students Association (KESA) Kenya. Explore our website to learn more!');
+
             return redirect()->intended('/app');
         }
 
@@ -32,6 +36,13 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login');
+
+        // Invalidate the session and regenerate the token
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect to the login page with a success message
+        return redirect('/login')->with('success', 'You have been logged out successfully.');
     }
+
 }

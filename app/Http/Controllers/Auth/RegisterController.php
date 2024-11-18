@@ -4,17 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator; // Add this line
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
-namespace App\Http\Controllers\Auth;
-
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;  // Add this line for email verification after successfull sign up
 
 class RegisterController extends Controller
 {
@@ -39,11 +33,14 @@ class RegisterController extends Controller
             'PASSWORD_HASH' => Hash::make($request->password), // Default password field
             'role' => 'STUDENT', // Default role (can be customized)
         ]);
+        // Dispatch Registered event to send email verification
+        event(new Registered($user));
 
-        // Log the user in
-        Auth::login($user);
+        // Flash success message to the session
+        session()->flash('success', 'You have successfully registered. Please login with your email and password.');
 
-        // Redirect to the intended page after registration, e.g. home or dashboard
-        return redirect()->route('home'); // Make sure this route exists
+        // Redirect to the login page
+        return redirect()->route('login');
     }
+
 }

@@ -1,0 +1,85 @@
+/* STYLES FOR SIDEBAR */
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: black;
+    color: brown;
+    padding-top: 20px;
+    margin-top: 25px;  /* Added margin-top */
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 10px 0;
+}
+.sidebar ul li {
+    padding: 10px;
+    text-align: left;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #444;
+}
+/* TOPNAV STYLES */
+/* Top Nav Styles */
+.topnav {
+    background-color: brown;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topnav-left a,
+.topnav-right a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.topnav-left a:hover,
+.topnav-right a:hover {
+    background-color: #444;
+}
+
+/* Content Area */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+}
