@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 12, 2024 at 01:54 PM
+-- Generation Time: Nov 19, 2024 at 05:03 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -17,64 +17,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-
+--
 -- Database: `kesa_db`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `alumni`
---
-
-CREATE TABLE `alumni` (
-  `ID` int(11) NOT NULL,
-  `NAME` varchar(255) NOT NULL,
-  `GRADUATION_YEAR` year(4) NOT NULL,
-  `CURRENT_POSITION` varchar(255) NOT NULL,
-  `PROFILE_DESCRIPTION` text DEFAULT NULL,
-  `EMAIL` varchar(255) DEFAULT NULL,
-  `CERTIFICATE_NUMBER` varchar(255) DEFAULT NULL,
-  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp(),
-  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `alumni_events`
---
-
-CREATE TABLE `alumni_events` (
-  `ID` int(11) NOT NULL,
-  `ALUMNI_ID` int(11) NOT NULL,
-  `EVENT_ID` int(11) NOT NULL,
-  `PARTICIPATION_DATE` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `alumni_membership`
---
-
-CREATE TABLE `alumni_membership` (
-  `ALUMNI_ID` int(11) NOT NULL,
-  `USER_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `alumni_network`
---
-
-CREATE TABLE `alumni_network` (
-  `ALUMNI_ID` int(11) NOT NULL,
-  `NETWORK_TYPE` enum('MENTOR','MENTEE','PEER') NOT NULL,
-  `START_DATE` datetime DEFAULT current_timestamp(),
-  `END_DATE` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -91,30 +36,66 @@ CREATE TABLE `certificates` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `donations`
+-- Table structure for table `members`
 --
 
-CREATE TABLE `donations` (
+CREATE TABLE `members` (
   `ID` int(11) NOT NULL,
-  `DONOR_NAME` varchar(255) DEFAULT NULL,
-  `AMOUNT` decimal(10,2) NOT NULL,
-  `DONATION_DATE` timestamp NOT NULL DEFAULT current_timestamp(),
-  `MESSAGE` text DEFAULT NULL
+  `FIRST_NAME` varchar(255) NOT NULL,
+  `LAST_NAME` varchar(255) NOT NULL,
+  `EMAIL` varchar(255) NOT NULL,
+  `PASSWORD` varchar(255) NOT NULL,
+  `STATUS` varchar(50) NOT NULL,
+  `COURSE` varchar(255) DEFAULT NULL,
+  `UNIVERSITY` varchar(255) DEFAULT NULL,
+  `KESA_CERTIFICATE_NUMBER` varchar(255) DEFAULT NULL,
+  `REASON` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `events`
+-- Table structure for table `news`
 --
 
-CREATE TABLE `events` (
+CREATE TABLE `news` (
   `ID` int(11) NOT NULL,
   `TITLE` varchar(255) NOT NULL,
   `DESCRIPTION` text DEFAULT NULL,
-  `EVENT_DATE` datetime DEFAULT NULL,
-  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp(),
-  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `IMAGE` varchar(255) DEFAULT NULL,
+  `EVENT_DATE` date NOT NULL,
+  `CREATED_BY` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `partners`
+--
+
+CREATE TABLE `partners` (
+  `ID` int(11) NOT NULL,
+  `COMPANY_NAME` varchar(255) NOT NULL,
+  `REGISTRATION_NUMBER` varchar(255) NOT NULL,
+  `EMAIL` varchar(255) NOT NULL,
+  `PHONE_NUMBER` varchar(20) NOT NULL,
+  `PHYSICAL_ADDRESS` text NOT NULL,
+  `PASSWORD` varchar(255) NOT NULL,
+  `REASON` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `resources`
+--
+
+CREATE TABLE `resources` (
+  `ID` int(11) NOT NULL,
+  `TITLE` varchar(255) NOT NULL,
+  `DESCRIPTION` text DEFAULT NULL,
+  `FILE_PATH` varchar(255) NOT NULL,
+  `PRICE` float DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -134,37 +115,17 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`ID`, `USERNAME`, `EMAIL`, `PASSWORD_HASH`, `ROLE`, `CREATED_AT`, `UPDATED_AT`) VALUES
+(1, 'muthuib', 'benmuthui98@gmail.com', '$2y$10$U7YKzu6MFc7pSnqoFeZNF.crpLUYba7J1nMwH43mbvDuq91vvntwe', 'STUDENT', '2024-11-16 07:45:34', '2024-11-16 07:45:34'),
+(4, 'muthui', 'muthuib220@gmail.com', '$2y$10$x9PvjN1pAgfUR4pKDWxtzuPgtgRfvQJDwZvq.YfbjeA167jjcTPL2', 'STUDENT', '2024-11-17 12:11:52', '2024-11-17 12:11:52'),
+(5, 'muthuibb', 'bonfacelingwa@gmail.com', '$2y$10$NLy1rSlvpMDuG1qMn24sr.7aj1YjTvwPRrX60EVlBqf1WmQ2XHC/O', 'STUDENT', '2024-11-18 14:45:52', '2024-11-18 14:45:52');
+
+--
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `alumni`
---
-ALTER TABLE `alumni`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `EMAIL` (`EMAIL`),
-  ADD UNIQUE KEY `CERTIFICATE_NUMBER` (`CERTIFICATE_NUMBER`);
-
---
--- Indexes for table `alumni_events`
---
-ALTER TABLE `alumni_events`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ALUMNI_ID` (`ALUMNI_ID`),
-  ADD KEY `EVENT_ID` (`EVENT_ID`);
-
---
--- Indexes for table `alumni_membership`
---
-ALTER TABLE `alumni_membership`
-  ADD PRIMARY KEY (`ALUMNI_ID`,`USER_ID`),
-  ADD KEY `USER_ID` (`USER_ID`);
-
---
--- Indexes for table `alumni_network`
---
-ALTER TABLE `alumni_network`
-  ADD PRIMARY KEY (`ALUMNI_ID`,`NETWORK_TYPE`);
 
 --
 -- Indexes for table `certificates`
@@ -174,15 +135,31 @@ ALTER TABLE `certificates`
   ADD UNIQUE KEY `CERTIFICATE_NUMBER` (`CERTIFICATE_NUMBER`);
 
 --
--- Indexes for table `donations`
+-- Indexes for table `members`
 --
-ALTER TABLE `donations`
-  ADD PRIMARY KEY (`ID`);
+ALTER TABLE `members`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `EMAIL` (`EMAIL`);
 
 --
--- Indexes for table `events`
+-- Indexes for table `news`
 --
-ALTER TABLE `events`
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `CREATED_BY` (`CREATED_BY`);
+
+--
+-- Indexes for table `partners`
+--
+ALTER TABLE `partners`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `REGISTRATION_NUMBER` (`REGISTRATION_NUMBER`),
+  ADD UNIQUE KEY `EMAIL` (`EMAIL`);
+
+--
+-- Indexes for table `resources`
+--
+ALTER TABLE `resources`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -197,70 +174,50 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `alumni`
---
-ALTER TABLE `alumni`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `alumni_events`
---
-ALTER TABLE `alumni_events`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `donations`
+-- AUTO_INCREMENT for table `members`
 --
-ALTER TABLE `donations`
+ALTER TABLE `members`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `events`
+-- AUTO_INCREMENT for table `news`
 --
-ALTER TABLE `events`
+ALTER TABLE `news`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `partners`
+--
+ALTER TABLE `partners`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `resources`
+--
+ALTER TABLE `resources`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `alumni`
+-- Constraints for table `news`
 --
-ALTER TABLE `alumni`
-  ADD CONSTRAINT `alumni_ibfk_1` FOREIGN KEY (`CERTIFICATE_NUMBER`) REFERENCES `certificates` (`CERTIFICATE_NUMBER`) ON DELETE CASCADE;
-
---
--- Constraints for table `alumni_events`
---
-ALTER TABLE `alumni_events`
-  ADD CONSTRAINT `alumni_events_ibfk_1` FOREIGN KEY (`ALUMNI_ID`) REFERENCES `alumni` (`ID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `alumni_events_ibfk_2` FOREIGN KEY (`EVENT_ID`) REFERENCES `events` (`ID`) ON DELETE CASCADE;
-
---
--- Constraints for table `alumni_membership`
---
-ALTER TABLE `alumni_membership`
-  ADD CONSTRAINT `alumni_membership_ibfk_1` FOREIGN KEY (`ALUMNI_ID`) REFERENCES `alumni` (`ID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `alumni_membership_ibfk_2` FOREIGN KEY (`USER_ID`) REFERENCES `users` (`ID`) ON DELETE CASCADE;
-
---
--- Constraints for table `alumni_network`
---
-ALTER TABLE `alumni_network`
-  ADD CONSTRAINT `alumni_network_ibfk_1` FOREIGN KEY (`ALUMNI_ID`) REFERENCES `alumni` (`ID`) ON DELETE CASCADE;
+ALTER TABLE `news`
+  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`CREATED_BY`) REFERENCES `members` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
