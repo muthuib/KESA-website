@@ -5,26 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'KESA') }}</title>
+    <style>
+      
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1; /* Ensures the content area expands to fill the remaining height */
+        }
+
+
+        /* Content Area */
+        .content {
+            flex: 1; /* Ensures content takes the remaining space */
+            padding: 20px;
+            overflow-y: auto; /* Allows scrolling if content is too large */
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <!-- Include the Top Navigation Bar (Topnav) -->
-        @include('dashboard.topnav')
+        <!-- Top Navigation Bar -->
+        <div class="topnav">
+            @include('dashboard.topnav')
+        </div>
 
-        <!-- Main Content Area (Including Sidebar and Dashboard) -->
+        <!-- Main Content Area -->
         <div class="main-content">
-            <!-- Sidebar (optional, depending on authentication) -->
+            <!-- Sidebar -->
             @auth
             <div class="sidebar">
                 @include('dashboard.sidebar')
             </div>
             @endauth
 
+            <!-- Content -->
             <div class="content">
-                <!-- Dashboard Content (You can define the dashboard content here) -->
                 @yield('content')
-                <!-- This will yield dynamic content from other views -->
             </div>
         </div>
     </div>
