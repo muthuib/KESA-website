@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Resource;  // Import the Resource model
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -27,6 +28,9 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+
+        // Explicit model binding for 'resource' parameter
+        Route::model('resource', Resource::class); // Bind the 'resource' parameter to the Resource model
 
         $this->routes(function () {
             Route::middleware('api')

@@ -33,10 +33,14 @@ Route::middleware('auth')->group(function () {
 
 // routes for resources
 Route::middleware('auth')->group(function () {
-Route::get('/resources', [ResourceController::class, 'index'])->name('index');  // To list all resources
-Route::post('/resource/store', [ResourceController::class, 'store'])->name('resource.store'); // To create a new resource
-Route::get('/resources/{id}', [ResourceController::class, 'show']); // To show a single resource
-Route::put('/resources/{id}', [ResourceController::class, 'update']); // To update a resource
-Route::delete('/resources/{id}', [ResourceController::class, 'destroy']); // To delete a resource
-Route::get('/resource/create', [ResourceController::class, 'create'])->name('create');// To show the form for creating a resource
+    // Only accessible to authenticated users/  logged in users
+    Route::get('resources', [ResourceController::class, 'index'])->name('resources.index'); // Show all resources
+    Route::get('resources/create', [ResourceController::class, 'create'])->name('resources.create'); // Show create form
+    Route::post('resources', [ResourceController::class, 'store'])->name('resources.store'); // Store new resource
+    Route::get('resources/{resource}/edit', [ResourceController::class, 'edit'])->name('resources.edit'); //show edit form
+    Route::put('resources/{resource}', [ResourceController::class, 'update'])->name('resources.update'); //update edited resource
+    Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy'); //deletes resource
+    // Add any other routes that should be protected by authentication here
 });
+Route::get('resources/{resource}', [ResourceController::class, 'view'])->name('resources.view'); //views resource
+Route::get('/show', [ResourceController::class, 'showResources'])->name('resources.show');//display resources to end user
