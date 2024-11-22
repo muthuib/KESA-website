@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2024 at 05:03 AM
+-- Generation Time: Nov 22, 2024 at 05:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -95,9 +95,13 @@ CREATE TABLE `resources` (
   `TITLE` varchar(255) NOT NULL,
   `DESCRIPTION` text DEFAULT NULL,
   `FILE_PATH` varchar(255) NOT NULL,
-  `PRICE` float DEFAULT 0
+  `PRICE` float DEFAULT 0,
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp(),
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-
 -- --------------------------------------------------------
 
 --
@@ -114,14 +118,6 @@ CREATE TABLE `users` (
   `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`ID`, `USERNAME`, `EMAIL`, `PASSWORD_HASH`, `ROLE`, `CREATED_AT`, `UPDATED_AT`) VALUES
-(1, 'muthuib', 'benmuthui98@gmail.com', '$2y$10$U7YKzu6MFc7pSnqoFeZNF.crpLUYba7J1nMwH43mbvDuq91vvntwe', 'STUDENT', '2024-11-16 07:45:34', '2024-11-16 07:45:34'),
-(4, 'muthui', 'muthuib220@gmail.com', '$2y$10$x9PvjN1pAgfUR4pKDWxtzuPgtgRfvQJDwZvq.YfbjeA167jjcTPL2', 'STUDENT', '2024-11-17 12:11:52', '2024-11-17 12:11:52'),
-(5, 'muthuibb', 'bonfacelingwa@gmail.com', '$2y$10$NLy1rSlvpMDuG1qMn24sr.7aj1YjTvwPRrX60EVlBqf1WmQ2XHC/O', 'STUDENT', '2024-11-18 14:45:52', '2024-11-18 14:45:52');
 
 --
 -- Indexes for dumped tables
@@ -201,7 +197,7 @@ ALTER TABLE `partners`
 -- AUTO_INCREMENT for table `resources`
 --
 ALTER TABLE `resources`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
