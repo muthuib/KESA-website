@@ -5,93 +5,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'KESA') }}</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Add Bootstrap CSS for better layout management -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <nav class="sb-topnav navbar navbar-expand-lg navbar-dark bg-secondary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <!-- Navbar Brand -->
-        <a class="navbar-brand ps-3" href="{{ route('app') }}">KESA WEBSITE</a>
+        <a class="navbar-brand ps-3" href="{{ route('app') }}">
+            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo">
+            Kenya Economic Students Association
+        </a>
 
-        <!-- Sidebar Toggle (only for logged-in users) -->
-        @auth
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
-            <i class="fas fa-bars"></i>
+        <!-- Toggler Button for Collapsible Navbar -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        @endauth
 
-        <!-- Navbar links -->
+        <!-- Collapsible Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto d-flex align-items-center">
-                <!-- Main Navbar Items -->
-                <li class="nav-item mx-2">
-                    <a href="{{ route('app') }}" class="nav-link" style="font-size: 18px;">Home</a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="{{ route('app') }}" class="nav-link">Home</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ route('home') }}" class="nav-link" style="font-size: 18px;">About</a>
+                <li class="nav-item">
+                    <a href="{{ route('app') }}" class="nav-link">About</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ route('home') }}" class="nav-link" style="font-size: 18px;">News/Updates</a>
+                <li class="nav-item">
+                    <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ route('home') }}" class="nav-link" style="font-size: 18px;">Events/Debates</a>
+                <li class="nav-item">
+                    <a href="{{ route('app') }}" class="nav-link">Events/Debates</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ route('home') }}" class="nav-link" style="font-size: 18px;">Memberships</a>
+                <li class="nav-item">
+                    <a href="{{ route('resources.show') }}" class="nav-link">Resources</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ route('home') }}" class="nav-link" style="font-size: 18px;">Contact</a>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}" class="nav-link">Memberships</a>
                 </li>
 
-                <!-- User Authentication (Login/Register) -->
+                <!-- Guest Links -->
                 @guest
-                <li class="nav-item mx-2">
-                    <a class="btn btn-info" href="{{ route('register') }}" style="font-size: 18px;">Register</a>
+                <li class="nav-item">
+                    <a class="btn btn-info" href="{{ route('register') }}">Register</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a class="btn btn-light" href="{{ route('login') }}" style="font-size: 18px;">Login</a>
+                <li class="nav-item">
+                    <a class="btn btn-danger" href="{{ route('login') }}">Login</a>
                 </li>
                 @endguest
 
-                <!-- User Profile Dropdown (only for logged-in users) -->
-                @auth
-                <li class="nav-item dropdown mx-2">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user fa-fw"></i>
+                <!-- Authenticated User Dropdown -->
+              @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </li>
                 @endauth
             </ul>
         </div>
     </nav>
-
-    <!-- Add Bootstrap JS for the dropdown and other interactive components -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-    </script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
+    <!-- Kenyan Flag -->
+    <div class="kenyan-flag"  style="position: fixed; top: 60px; left: 0; width: 100%; z-index: 1040;">
+        <div class="black"></div> <!-- Black stripe -->
+        <div class="white"></div> <!-- White separator -->
+        <div class="red"></div>   <!-- Red stripe -->
+        <div class="white"></div> <!-- White separator -->
+        <div class="green"></div> <!-- Green stripe -->
+    </div>
+    <!-- Add Bootstrap JS for Interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

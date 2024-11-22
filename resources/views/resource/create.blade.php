@@ -2,32 +2,28 @@
 
 @section('content')
 <div class="container">
-    <!-- Centered Heading -->
-    <h1 style="text-align: center; margin-bottom: 20px;">Add Resource</h1>
-
-    <!-- Card container with inline CSS -->
-    <div class="card" style="border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 900px;  margin-left: 50px;">
+    <h1 class="text-center">Add Resource</h1>
+    <div class="card mx-auto" style="max-width: 600px;">
         <div class="card-body">
-            <!-- Form -->
-            <form action="{{ route('resource.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('resources.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="TITLE" required>
+                    <label for="TITLE" class="form-label">Title</label>
+                    <input type="text" name="TITLE" class="form-control" id="TITLE" required>
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="DESCRIPTION"></textarea>
+                    <label for="DESCRIPTION" class="form-label">Description</label>
+                    <textarea name="DESCRIPTION" class="form-control" id="DESCRIPTION"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="file" class="form-label">File</label>
-                    <input type="file" class="form-control" id="file" name="FILE" required>
+                    <label for="FILE" class="form-label">File</label>
+                    <input type="file" name="FILE" class="form-control" id="FILE" required>
                 </div>
                 <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="price" name="PRICE" min="0" step="0.01">
+                    <label for="PRICE" class="form-label">Price</label>
+                    <input type="number" name="PRICE" class="form-control" id="PRICE" min="0" step="0.01">
                 </div>
-                <button type="submit" class="btn btn-success">Add resource</button>
+                <button type="submit" class="btn btn-primary">Add Resource</button>
             </form>
         </div>
     </div>

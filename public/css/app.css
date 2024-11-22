@@ -1,85 +1,225 @@
-/* STYLES FOR SIDEBAR */
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* STYLES FOR TOPNAV */
+/* Style for the top navigation bar */
+.sb-topnav {
+    
+    background-color: #4CAF50; /* A green color for an engaging look */
+    color: white; /* Ensure text is white for contrast */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
+    
 }
 
-/* Sidebar Styles */
-.sidebar {
-    width: 250px;
-    position: fixed;
-    top: 0;
+.sb-topnav .navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem; /* Slightly larger font for prominence */
+    color: white; /* White text color */
+    text-decoration: none; /* No underline */
+}
+
+.sb-topnav .navbar-brand img {
+    height: 50px;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.sb-topnav .nav-link {
+    font-size: 1rem; /* Set font size for links */
+    color: #ffffff; /* White text color */
+    padding: 8px 16px; /* Add padding for better spacing */
+    transition: color 0.3s, background-color 0.3s; /* Smooth hover transition */
+}
+
+.sb-topnav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Lighten background on hover */
+    color: #e8e8e8; /* Slightly lighter text color */
+    text-decoration: none; /* No underline on hover */
+}
+
+.sb-topnav .btn {
+    font-size: 1rem; /* Adjust button font size */
+    color: white;
+    border: none;
+    margin-left: 10px; /* Add spacing between buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sb-topnav .btn-info {
+    background-color: #17a2b8; /* Info blue */
+}
+
+.sb-topnav .btn-info:hover {
+    background-color: #138496; /* Darker info blue on hover */
+}
+
+.sb-topnav .btn-light {
+    background-color: #f8f9fa; /* Light button background */
+    color: #212529; /* Darker text color */
+}
+
+.sb-topnav .btn-light:hover {
+    background-color: #e2e6ea; /* Darker light on hover */
+}
+/* STYLING KENYAN FLAG STRIPES */
+/* Kenyan Flag Styling */
+        .kenyan-flag {
+            width: 100%;
+            height: 20px;
+            position: relative;
+        }
+
+        /* Black color stripe at top */
+        .kenyan-flag .black {
+            background-color: #000000; /* Black stripe */
+            height: 5px;
+            width: 100%;
+        }
+
+        /* Red color stripe in the middle */
+        .kenyan-flag .red {
+            background-color: #ff0000; /* Red stripe */
+            height: 5px;
+            width: 100%;
+        }
+
+        /* White separator lines */
+        .kenyan-flag .white {
+            background-color: #ffffff;
+            height: 2px;
+            width: 100%;
+        }
+
+        /* Green color stripe at bottom */
+        .kenyan-flag .green {
+            background-color: #008000; /* Green stripe */
+            height: 5px;
+            width: 100%;
+        }
+
+        /* Style for logo in the navbar */
+        .navbar-brand img {
+            height: 40px; /* Adjust the size of the logo */
+            margin-right: 10px; /* Space between the logo and text */
+        }
+
+        /* SIDEBAR STYLING */
+        /* General layout for the sidebar */
+#layoutSidenav_nav {
+    width: 220px; /* Set the width of the sidebar */
+    height: 100vh; /* Full height of the viewport */
+    background-color: #343a40; /* Dark background color */
+    position: fixed; /* Keep sidebar fixed while scrolling */
+    top: 60;
     left: 0;
-    height: 100%;
-    background-color: black;
-    color: brown;
     padding-top: 20px;
-    margin-top: 25px;  /* Added margin-top */
+    z-index: 100;
+    padding-top: 20px;
+    transition: all 0.3s ease; /* Smooth transition for interactions */
+    z-index: 99;
 }
-.sidebar ul {
-    list-style: none;
+
+/* The sidebar navigation menu */
+.sb-sidenav-menu {
     padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
-.sidebar li {
-    margin: 10px 0;
-}
-.sidebar ul li {
-    padding: 10px;
-    text-align: left;
+/* Styling for each navigation item */
+.sb-sidenav-menu .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.sidebar a {
-    color: #fff;
+/* Navigation link */
+.sb-sidenav-menu .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #ccc;
     text-decoration: none;
-    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sb-sidenav-menu .nav-link i {
+    margin-right: 10px;
+    font-size: 20px; /* Icon size */
+}
+
+/* Hover effect for the navigation items */
+.sb-sidenav-menu .nav-link:hover {
+    background-color: #495057; /* Darken background on hover */
+    color: #ffffff; /* Change text color to white */
+}
+
+/* Active link styling */
+.sb-sidenav-menu .nav-link.active {
+    background-color: #007bff; /* Blue background for active link */
+    color: #ffffff;
+}
+
+/* Heading styling */
+.sb-sidenav-menu .sb-sidenav-menu-heading {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin: 15px 20px;
+    text-transform: uppercase;
+}
+
+/* Collapse content (for dropdown menus) */
+.sb-sidenav-menu .collapse {
+    display: none; /* Hide collapsible sections initially */
+}
+
+/* Nested menu when expanded */
+.sb-sidenav-menu .collapse.show {
     display: block;
 }
 
-.sidebar a:hover {
-    background-color: #444;
-}
-/* TOPNAV STYLES */
-/* Top Nav Styles */
-.topnav {
-    background-color: brown;
-    color: #fff;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Nested navigation menu items */
+.sb-sidenav-menu .sb-sidenav-menu-nested .nav-link {
+    padding-left: 40px; /* Indent nested links */
+    font-size: 15px;
 }
 
-.topnav-left a,
-.topnav-right a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px;
+/* Footer section of the sidebar */
+.sb-sidenav-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: #ccc;
+    padding: 10px 20px;
+    text-align: center;
 }
 
-.topnav-left a:hover,
-.topnav-right a:hover {
-    background-color: #444;
+/* Small text in the footer */
+.sb-sidenav-footer .small {
+    font-size: 14px;
 }
 
-/* Content Area */
-.content {
-    margin-left: 250px;
-    padding: 20px;
-}
-
-/* Media Queries for responsiveness */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
+    #layoutSidenav_nav {
+        width: 100%; /* Make the sidebar full-width on smaller screens */
         height: auto;
-        position: relative;
+        position: relative; /* Make it scrollable */
+    }
+    
+    .sb-sidenav-menu .nav {
+        flex-direction: row;
+        justify-content: space-around; /* Horizontal layout for small screens */
+        padding: 10px 0;
+    }
+    
+    .sb-sidenav-menu .nav-link {
+        padding: 10px 15px; /* Adjust padding for smaller screens */
     }
 
-    .content {
-        margin-left: 0;
+    .sb-sidenav-footer {
+        display: none; /* Optionally hide footer in mobile view */
     }
 }
