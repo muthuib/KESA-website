@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 05:32 PM
+-- Generation Time: Nov 24, 2024 at 04:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -101,7 +101,35 @@ CREATE TABLE `resources` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--
+-- Dumping data for table `resources`
+--
+
+INSERT INTO `resources` (`ID`, `TITLE`, `DESCRIPTION`, `FILE_PATH`, `PRICE`, `CREATED_AT`, `UPDATED_AT`) VALUES
+(2, 'KESA', 'A textbook is a book containing a comprehensive compilation of content in a branch of study with the intention of explaining it. Textbooks are produced to meet the needs of educators, usually at educational institutions. Schoolbooks are textbooks and other books used in schools.', 'images/1732296722.png', 400, '2024-11-22 14:29:09', '2024-11-22 14:32:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slides`
+--
+
+CREATE TABLE `slides` (
+  `ID` bigint(20) UNSIGNED NOT NULL,
+  `IMAGE_PATH` varchar(255) NOT NULL,
+  `CAPTION` varchar(255) DEFAULT NULL,
+  `CREATED_AT` timestamp NULL DEFAULT NULL,
+  `UPDATED_AT` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `slides`
+--
+
+INSERT INTO `slides` (`ID`, `IMAGE_PATH`, `CAPTION`, `CREATED_AT`, `UPDATED_AT`) VALUES
+(12, 'slides/1732378497.jfif', 'KESA is the best platform', '2024-11-23 13:14:57', '2024-11-23 13:14:57'),
+(13, 'slides/1732378524.jfif', 'KESA is the best platform', '2024-11-23 13:15:24', '2024-11-23 13:15:24'),
+(14, 'slides/1732378551.jfif', 'KESA is the best platform', '2024-11-23 13:15:51', '2024-11-23 13:15:51');
+
 -- --------------------------------------------------------
 
 --
@@ -117,7 +145,6 @@ CREATE TABLE `users` (
   `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp(),
   `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 --
 -- Indexes for dumped tables
@@ -159,6 +186,12 @@ ALTER TABLE `resources`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `slides`
+--
+ALTER TABLE `slides`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -197,7 +230,13 @@ ALTER TABLE `partners`
 -- AUTO_INCREMENT for table `resources`
 --
 ALTER TABLE `resources`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `slides`
+--
+ALTER TABLE `slides`
+  MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
