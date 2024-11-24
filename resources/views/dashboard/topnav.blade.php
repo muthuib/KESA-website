@@ -29,8 +29,8 @@
         <!-- Collapsible Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="{{ route('app') }}" class="nav-link">Home</a>
+                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('app') }}" class="nav-link">About</a>
@@ -51,10 +51,10 @@
                 <!-- Guest Links -->
                 @guest
                 <li class="nav-item">
-                    <a class="btn btn-info" href="{{ route('register') }}">Register</a>
+                    <a class="btn btn-info me-3" href="{{ route('register') }}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-danger" href="{{ route('login') }}">Login</a>
+                    <a class="btn btn-danger me-2" href="{{ route('login') }}">Login</a>
                 </li>
                 @endguest
 
