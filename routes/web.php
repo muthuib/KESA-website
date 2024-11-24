@@ -8,6 +8,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Admin\SlideController;
+use App\Http\Controllers\GuestController;
 
 
 
@@ -44,3 +46,19 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('resources/{resource}', [ResourceController::class, 'view'])->name('resources.view'); //views resource
 Route::get('/show', [ResourceController::class, 'showResources'])->name('resources.show');//display resources to end user
+
+//Admin routes to add sliswshows
+// Admin Routes: CRUD for slides (requires authentication)
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+    Route::get('slides', [SlideController::class, 'index'])->name('slides.index');
+    Route::get('slides/create', [SlideController::class, 'create'])->name('slides.create');
+    Route::post('slides', [SlideController::class, 'store'])->name('slides.store');
+    Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
+});
+
+//Routes for guest slideshow before login. it gets slideshows from admin routes.
+// Guest/Home Route: Displays slides to everyone
+Route::get('/', [GuestController::class, 'home'])->name('home');
+
+
+

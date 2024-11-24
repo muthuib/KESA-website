@@ -12,6 +12,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Manage Resources
                 </a>
+                <!-- Manage slides tab -->
+                <a class="nav-link" href="{{ route('admin.slides.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                    Manage slideshows
+                </a>
+                <!-- end of slides tab -->
                 <div class="sb-sidenav-menu-heading">Interface</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
