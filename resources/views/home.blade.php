@@ -38,8 +38,7 @@
         @foreach ($slides as $index => $slide)
         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
             <!-- Overlay -->
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 2;"></div>
-            
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); "></div>    
             <!-- Slide Image -->
             <img src="{{ asset($slide->IMAGE_PATH) }}" 
                  class="d-block w-100" 
