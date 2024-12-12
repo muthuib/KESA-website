@@ -14,11 +14,23 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg- fixed-top" style="background-color: brown; margin-left: 0px; gap: 25px;">
         <!-- Navbar Brand -->
         <a class="navbar-brand ps-3" href="{{ route('app') }}">
-            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo">
-            Kenya Economic Students Association
+           
+        </a>
+        <!-- Social media icons -->
+        <a href="#" target="_blank" class="text-decoration-none">
+            <i class="fab fa-facebook text-white" style="font-size: 24px;"></i>
+        </a>
+        <a href="#" target="_blank" class="text-decoration-none">
+            <i class="fab fa-twitter text-white" style="font-size: 24px;"></i>
+        </a>
+        <a href="#" target="_blank" class="text-decoration-none">
+            <i class="fab fa-instagram text-white" style="font-size: 24px;"></i>
+        </a>
+        <a href="#" target="_blank" class="text-decoration-none">
+            <i class="fab fa-linkedin text-white" style="font-size: 24px;"></i>
         </a>
 
         <!-- Toggler Button for Collapsible Navbar -->
@@ -74,7 +86,7 @@
         </div>
     </nav>
     <!-- Kenyan Flag -->
-    <div class="kenyan-flag"  style="position: fixed; top: 60px; left: 0; width: 100%; z-index: 1040;">
+    <div class="kenyan-flag"  style="position: fixed; top: 50px; left: 0; width: 100%; z-index: 1040;">
         <div class="black"></div> <!-- Black stripe -->
         <div class="white"></div> <!-- White separator -->
         <div class="red"></div>   <!-- Red stripe -->

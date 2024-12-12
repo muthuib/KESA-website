@@ -3,13 +3,21 @@
 @section('content')
 
 <!-- Main Content Container -->
-<div class="container mt-5" style="margin-left: 0px; margin-right: 0px;">
-    <!-- Hero Section -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold" style="font-size: 20px; margin-top: 90px;">
-            Welcome to Kenya Economics Students Association
-        </h1>
-        <p class="lead">Explore our content, events, and resources. Stay updated with the latest news and debates!</p>
+<div class="container mt-5" style="margin-left: 0px; margin-right: 0px; height: 110px;">
+    <!-- Main Row -->
+    <div class="d-flex align-items-center" style="gap: 15px;">
+        <!-- Logo -->
+        <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" style="width: 200px; margin-top: 25px;">
+        
+        <!-- Text Section -->
+        <div>
+            <h1 class="display-4 fw-bold" style="font-size: 20px; margin: 0; margin-left: 400px;">
+                Welcome to Kenya Economics Students Association
+            </h1>
+            <p class="lead" style="margin: 0; margin-left: 200px;">
+                Explore our content, events, and resources. Stay updated with the latest news and debates!
+            </p>
+        </div>
     </div>
 </div>
 
@@ -18,7 +26,7 @@
 <div id="guestSlideshow" 
      class="carousel slide shadow-lg" 
      data-bs-ride="carousel" 
-     style="width: 100%; height: 80vh; margin-left: 0px;">
+     style="width: 100%; height: 60vh; margin-left: 0px;">
     
     <!-- Indicators -->
     <div class="carousel-indicators">
@@ -79,9 +87,59 @@
 </div>
 @endif
 
-<!-- End of slideshow -->
+<!-- Newsletter Subscription Section -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm" style="margin-top: 150px;">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Subscribe to Our Newsletter</h4>
+                    
+                    <!-- Display error message if email is already subscribed -->
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('subscribe') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thank You Modal -->
+@if(session('success'))
+<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="thankYouModalLabel">Subscription Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ session('success') }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- Explore Section -->
 <div class="container mt-5" style="margin-left: 0px; margin-right: 0px;">
-    <!-- Explore Section -->
     <div class="row mt-5">
         <div class="col-md-4">
             <div class="card shadow-sm">
@@ -115,5 +173,4 @@
         </div>
     </div>
 </div>
-
 @endsection
