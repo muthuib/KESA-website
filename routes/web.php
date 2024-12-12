@@ -10,6 +10,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\NewsletterController;
 
 
 
@@ -60,5 +62,33 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 // Guest/Home Route: Displays slides to everyone
 Route::get('/', [GuestController::class, 'home'])->name('home');
 
+//ROUTES FOR NEWS LETTER
+Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 
+
+// For logged-in users (email passed as a parameter in the URL)T
+Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
+
+
+// Thank you page route
+Route::get('/thankyou', function() {
+    return view('thankyou');
+})->name('thankyou');
+
+// Route for displaying the unsubscribe response page
+Route::get('/unsubscribe-response', function() {
+    return view('unsubscribe-response');
+})->name('unsubscribe-response');
+
+//Send newsletters to adll subscribed users
+Route::get('/send-newsletter', [SubscriptionController::class, 'showNewsletterForm'])->name('send.newsletter');
+Route::post('/send-newsletter', [SubscriptionController::class, 'sendNewsletter'])->name('send.newsletter');
+Route::get('/newsletters', [SubscriptionController::class, 'index'])->name('newsletters.index');
+Route::get('unsubscribe/{EMAIL}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
+
+
+Route::get('admin/newsletters/{newsletter}/show', [NewsletterController::class, 'show'])->name('newsletters.show'); //view newsletter
+Route::get('admin/newsletters/{newsletter}/edit', [NewsletterController::class, 'edit'])->name('newsletters.edit'); //show edit form
+Route::put('admin.newsletters/{newsletter}', [NewsletterController::class, 'update'])->name('newsletters.update'); //update edited newsletter
+Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'destroy'])->name('newsletters.destroy'); //deletes newsletter
 

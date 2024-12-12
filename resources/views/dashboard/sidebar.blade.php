@@ -18,6 +18,17 @@
                     Manage slideshows
                 </a>
                 <!-- end of slides tab -->
+                 <!-- Manage newsletters tab -->
+                 <a class="nav-link" href="{{ route('send.newsletter') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                    Sent Newsletter
+                </a>
+                <a class="nav-link" href="{{ route('newsletters.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                    View news letters
+                </a>
+
+                <!-- end of manage newsletters tab -->
                 <div class="sb-sidenav-menu-heading">Interface</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
