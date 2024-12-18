@@ -3,7 +3,7 @@
 <p>You will now receive updates from our newsletter.</p>
 <div class="form-group text-center mt-4">
         <!-- Unsubscribe Button -->
-        <a href="{{ route('unsubscribe', ['email' => auth()->user()->email ?? request()->email]) }}" class="btn btn-dark mt-3">
+        <a href="{{ route('unsubscribe', ['EMAIL' => auth()->user()->email ?? request()->email]) }}" class="btn btn-dark mt-3">
             Unsubscribe
         </a>
 </div>

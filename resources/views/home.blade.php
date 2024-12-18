@@ -3,23 +3,29 @@
 @section('content')
 
 <!-- Main Content Container -->
-<div class="container mt-5" style="margin-left: 0px; margin-right: 0px; height: 110px;">
+<div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;">
     <!-- Main Row -->
-    <div class="d-flex align-items-center" style="gap: 15px;">
+    <div class="row align-items-center g-3">
         <!-- Logo -->
-        <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" style="width: 200px; margin-top: 25px;">
-        
+        <div class="col-12 col-md-3 d-flex justify-content-start">
+            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" 
+                 style="width: 200px; margin-top: 25px;" class="img-fluid">
+        </div>
+
         <!-- Text Section -->
-        <div>
-            <h1 class="display-4 fw-bold" style="font-size: 20px; margin: 0; margin-left: 400px;">
+        <div class="col-12 col-md-9">
+            <h1 class="display-6 fw-bold text-md-start text-center" 
+                style="font-size: 20px; margin: 0; margin-left: 0;">
                 Welcome to Kenya Economics Students Association
             </h1>
-            <p class="lead" style="margin: 0; margin-left: 200px;">
+            <p class="lead text-md-start text-center mt-2" style="margin: 0;">
                 Explore our content, events, and resources. Stay updated with the latest news and debates!
             </p>
         </div>
     </div>
 </div>
+
+
 
 <!-- Slideshow outside the container for full-screen width -->
 @if($slides->isNotEmpty())

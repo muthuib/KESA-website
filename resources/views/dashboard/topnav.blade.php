@@ -66,6 +66,9 @@
                     <a class="btn btn-info me-3" href="{{ route('register') }}">Register</a>
                 </li>
                 <li class="nav-item">
+                    <a class="btn btn-success me-3" href="{{ route('registration') }}">Partner Registration</a>
+                </li>
+                <li class="nav-item">
                     <a class="btn btn-danger me-2" href="{{ route('login') }}">Login</a>
                 </li>
                 @endguest
