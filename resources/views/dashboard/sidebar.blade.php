@@ -9,10 +9,13 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
+                <!-- admin roles authentication -->
+                @if(auth()->user()->hasRole('admin'))
                 <a class="nav-link" href="{{ route('resources.index') }}" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Manage Resources
                 </a>
+               
                 <a class="nav-link" href="{{ route('admin.slides.index') }}" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Manage slideshows
@@ -25,6 +28,8 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     View newsletters
                 </a>
+                @endif
+                <!-- end of admin roles -->
                 <div class="sb-sidenav-menu-heading">Interface</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
