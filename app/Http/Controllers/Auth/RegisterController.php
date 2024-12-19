@@ -31,7 +31,6 @@ class RegisterController extends Controller
             'USERNAME' => $request->USERNAME, // Use lowercase for consistency
             'EMAIL' => $request->EMAIL,       // Use lowercase for consistency
             'PASSWORD_HASH' => Hash::make($request->password), // Default password field
-            'role' => 'STUDENT', // Default role (can be customized)
         ]);
         // Dispatch Registered event to send email verification
         event(new Registered($user));
