@@ -28,6 +28,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     View newsletters
                 </a>
+                <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                    Manage Users
+                </a>
                 @endif
                 <!-- end of admin roles -->
                 <div class="sb-sidenav-menu-heading">Interface</div>

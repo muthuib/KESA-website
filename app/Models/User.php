@@ -36,6 +36,7 @@ class User extends Authenticatable
     const UPDATED_AT = 'UPDATED_AT';
 
     //RBAC IMPLEMENTATION FUNCTIONS
+    // function to assign roles
     public function roles()
     {
         return $this->belongsToMany(Role::class);
