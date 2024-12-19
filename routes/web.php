@@ -13,10 +13,17 @@ use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\AdminController;
 
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+//RBAC ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index']);
+});
+
 
 // Registration routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
