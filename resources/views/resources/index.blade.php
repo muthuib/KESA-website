@@ -6,7 +6,7 @@
         <div class="card" style="margin-left: 0px; width: 1100px; top: 40px;">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Resources</h5>
-            <a href="{{ route('resources.create') }}" class="btn btn-primary">Add New Resource</a>
+            <a href="{{ route('resources.create') }}" class="btn btn-primary"> <i class="fas fa-plus"></i>Add New Resource</a>
         </div>
         <div class="card-body">
             <!-- Table Design with Borders and Divided Columns -->

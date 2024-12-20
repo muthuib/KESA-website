@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container">
+         <!-- Back button with a backward icon -->
+         <div class="mb-3 text-end">
+        <a href="{{ route('resources.index') }}" class="btn btn-outline-dark">
+            <i class="fa fa-backward"></i> Back
+        </a>
+    </div>
     <!-- Card with margin-left for spacing -->
    <div class="card" style="margin-left: 0px; width: 900px; top: 40px;">
         <div class="card-header">
@@ -22,7 +28,6 @@
             @endif
         </div>
         <div class="card-footer d-flex justify-content-between">
-            <a href="{{ route('resources.index') }}" class="btn btn-secondary">Back to Resources</a>
             <a href="{{ route('resources.edit', $resource->ID) }}" class="btn btn-primary">Edit Resource</a>
         </div>
     </div>

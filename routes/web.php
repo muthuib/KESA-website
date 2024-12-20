@@ -16,7 +16,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\RoleController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -82,6 +82,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('slides', [SlideController::class, 'index'])->name('slides.index');
     Route::get('slides/create', [SlideController::class, 'create'])->name('slides.create');
     Route::post('slides', [SlideController::class, 'store'])->name('slides.store');
+    Route::get('/slides/{id}', [SlideController::class, 'show'])->name('slides.show');
     Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
 });
 

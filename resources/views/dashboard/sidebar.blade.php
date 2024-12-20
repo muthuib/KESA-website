@@ -1,6 +1,6 @@
 <!-- sidebar.blade.php -->
-<div id="layoutSidenav_nav" class="sb-sidenav-container" style="top: 60px;">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+<div id="layoutSidenav_nav" class="sb-sidenav-container" style="top: 60px; background-color: maroon; width: 250px;">
+    <nav class="sb-sidenav accordion sb-sidenav-" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
                 <!-- Sidebar heading -->
@@ -29,9 +29,10 @@
                     View newsletters
                 </a>
                 <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-user-circle text-info"></i></div>
                     Manage Users
                 </a>
+
                 @endif
                 <!-- end of admin roles -->
                 <div class="sb-sidenav-menu-heading">Interface</div>
