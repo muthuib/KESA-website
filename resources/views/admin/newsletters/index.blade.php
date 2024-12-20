@@ -11,7 +11,7 @@
         <div class="card-body">
             <!-- Button to add a new newsletter, aligned to the right -->
             <div class="mb-3 text-end">
-                <a href="{{ route('send.newsletter') }}" class="btn btn-primary">Add Newsletter</a>
+                <a href="{{ route('send.newsletter') }}" class="btn btn-primary"> <i class="fas fa-plus"></i> Newsletter</a>
             </div>
             <!-- Table to display newsletters -->
             <table class="table table-bordered table-striped">

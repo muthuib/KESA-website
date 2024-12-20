@@ -16,6 +16,11 @@ class SlideController extends Controller
         $slides = Slide::all();
         return view('admin.slides.index', compact('slides'));
     }
+    public function show($id)
+{
+    $slide = Slide::findOrFail($id); // Fetch the slide or throw a 404 error if not found
+    return view('admin.slides.show', compact('slide')); // Pass the slide to the view
+}
 
     public function create()
     {
