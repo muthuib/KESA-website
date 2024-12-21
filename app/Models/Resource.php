@@ -13,7 +13,7 @@ class Resource extends Model
     protected $table = 'resources';  // No need to specify unless it differs from default
 
     // Specify the fillable attributes (with uppercase column names)
-    protected $fillable = ['TITLE', 'DESCRIPTION', 'FILE_PATH', 'PRICE'];
+    protected $fillable = ['TITLE', 'DESCRIPTION', 'FILE_PATH', 'PRICE', 'TYPE'];
 
     // If your table uses custom primary key name (still 'id' in this case, so optional)
     //since our columns are in uppercase we will define this key to move it from default laravel snake case id.

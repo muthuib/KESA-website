@@ -16,7 +16,7 @@
                 @if($resource->FILE_PATH)
                 <img src="{{ asset($resource->FILE_PATH) }}" class="card-img-top" alt="{{ $resource->TITLE }}" style="height: 200px; object-fit: cover;">
                 @else
-                <img src="{{ asset('images/placeholder.png') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
+                <img src="{{ asset('images/placeholder.png') }}" class="card-img-top" alt="Default File" style="height: 200px; object-fit: cover;">
                 @endif
 
                 <div class="card-body">

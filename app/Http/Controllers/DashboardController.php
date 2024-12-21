@@ -10,32 +10,40 @@ use App\Models\Collaboration;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Fetch dynamic data
-        $totalUsers = User::count();
-        $totalResources = Resource::count();
-        $totalNewsletters = Newsletter::count();
-        $totalCollaborators = Collaboration::count();
+{
+    // Total counts
+    $totalUsers = User::count();
+    $totalResources = Resource::count();
+    $totalNewsletters = Newsletter::count();
+    $totalCollaborators = Collaboration::count();
 
-        // Simulated growth data for charts
-        $growthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-        $growthData = [10, 20, 40, 80, 100]; // Replace with real data logic
-
-        // Resource data for charts
-        $resourceLabels = ['PDFs', 'Videos', 'Articles'];
-        $resourceData = [15, 25, 10]; // Replace with real data logic
-
-        // Pass data to the view
-        return view('dashboard.dashboard', compact(
-            'totalUsers',
-            'totalResources',
-            'totalNewsletters',
-            'totalCollaborators',
-            'growthLabels',
-            'growthData',
-            'resourceLabels',
-            'resourceData'
-        ));
+    // Growth data (simulate with months or actual DB data)
+    $growthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $growthData = array_fill(0, 12, 0); // Example data, replace with real monthly counts
+    foreach (User::selectRaw('MONTH(created_at) as month, COUNT(*) as count')->groupBy('month')->pluck('count', 'month') as $month => $count) {
+        $growthData[$month - 1] = $count; // Match array indexes (Jan = 0, Feb = 1)
     }
+
+    // Resource data
+    $resourceLabels = ['PDFs', 'Videos', 'Articles'];
+    $resourceData = [
+        Resource::where('TYPE', 'pdf')->count(),
+        Resource::where('TYPE', 'video')->count(),
+        Resource::where('TYPE', 'article')->count()
+    ];
+
+    return view('dashboard.dashboard', compact(
+        'totalUsers',
+        'totalResources',
+        'totalNewsletters',
+        'totalCollaborators',
+        'growthLabels',
+        'growthData',
+        'resourceLabels',
+        'resourceData'
+    ));
+}
+
+    
 }
 
