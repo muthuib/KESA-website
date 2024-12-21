@@ -32,6 +32,11 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-user-circle text-info"></i></div>
                     Manage Users
                 </a>
+                <!-- Add Collaborators Link -->
+                <a class="nav-link" href="{{ route('collaborators.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users text-info"></i></div>
+                    Add Collaborators
+                </a>
 
                 @endif
                 <!-- end of admin roles -->

@@ -16,6 +16,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CollaboratorsController;
 use App\Http\Controllers\RoleController;
 
 
@@ -85,6 +86,13 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/slides/{id}', [SlideController::class, 'show'])->name('slides.show');
     Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
 });
+
+//collaborators routes
+Route::post('/collaborators', [CollaboratorsController::class, 'store'])->name('collaborators.store');
+Route::resource('collaborators', CollaboratorsController::class);
+// Route to show collaborations
+Route::get('/collaborators', [CollaboratorsController::class, 'index'])->name('collaborators.index');
+
 
 //Routes for guest slideshow before login. it gets slideshows from admin routes.
 // Guest/Home Route: Displays slides to everyone

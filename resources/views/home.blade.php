@@ -25,8 +25,6 @@
     </div>
 </div>
 
-
-
 <!-- Slideshow outside the container for full-screen width -->
 @if($slides->isNotEmpty())
 <div id="guestSlideshow" 
@@ -145,7 +143,7 @@
 @endif
 
 <!-- Explore Section -->
-<div class="container mt-5" style="margin-left: 0px; margin-right: 0px;">
+<div class="container mt-5">
     <div class="row mt-5">
         <div class="col-md-4">
             <div class="card shadow-sm">
@@ -179,4 +177,136 @@
         </div>
     </div>
 </div>
-@endsection
+
+<!-- Collaborations Section -->
+@php
+    $collaborations = $collaborations ?? collect(); // Default to an empty collection if not passed
+@endphp
+
+@if($collaborations->isNotEmpty())
+    <div class="container mt-5">
+        <h3 class="text-center">Our Collaborations</h3>
+        <div class="row mt-4">
+            @foreach ($collaborations as $collaboration)
+                <div class="col-md-3 text-center mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Logo -->
+                            <img src="{{ asset('storage/' . $collaboration->LOGO_PATH) }}" 
+                                 alt="{{ $collaboration->NAME }}" 
+                                 class="img-fluid mb-3" style="max-height: 100px; object-fit: contain;">
+                            <!-- Name -->
+                            <h5 class="card-title">{{ $collaboration->NAME }}</h5>
+                            <!-- Description -->
+                            <p class="card-text text-muted">
+                                {{ $collaboration->DESCRIPTION ?? 'No description available.' }}
+                            </p>
+                            <!-- Website -->
+                            @if($collaboration->WEBSITE)
+                                <a href="{{ $collaboration->WEBSITE }}" 
+                                   class="btn btn-outline-primary btn-sm mt-auto" 
+                                   target="_blank">Learn More</a>
+                            @else
+                                <span class="text-muted">No website available</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@else
+    <div class="container mt-5">
+        <h3 class="text-center">Our Collaborations</h3>
+        <p class="text-center text-muted">No collaborations available at the moment.</p>
+    </div>
+@endif
+
+<!-- Footer Section -->
+<footer class="bg- text-light pt-5 pb-4" style="background-color: brown;">
+    <div class="container">
+        <div class="row">
+            <!-- About Us Section -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5 class="text-uppercase font-weight-bold">About Us</h5>
+                <p class="mt-3">
+                KESA is a Premier National Economics Scholars Association that unites Economics, Business, and Statistics Stakeholders and Passionate Associate members from other backgrounds from various universities, colleges, and Technical, Vocational Education, and Training Institutions in Kenya.
+                </p>
+                        <p class="mt-3">
+                Our vision is to nurture a generation of well-informed and influential contributors to the global economic landscape.
+                    </p>
+                    <p class="mt-3">
+                To achieve this, we are guided by our mission of striving to build a conscious society capable of participating and making effective decisions rationally to keep pace with changes and economic challenges, and exploit opportunities through support with a set of career-enhancing programs and services.
+                </p>
+            </div>
+
+            <!-- Quick Links Section -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5 class="text-uppercase font-weight-bold">Quick Links</h5>
+                <ul class="list-unstyled mt-3">
+                    <li><a href="/" class="text-light">Home</a></li>
+                    <li><a href="/about" class="text-light">About Us</a></li>
+                    <li><a href="/services" class="text-light">Services</a></li>
+                    <li><a href="/contact" class="text-light">Contact</a></li>
+                    <li><a href="/faq" class="text-light">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info Section -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="text-uppercase font-weight-bold">Contact Us</h5>
+                <ul class="list-unstyled mt-3">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Street Name, City, Kenya</li>
+                    <li><i class="fas fa-phone-alt"></i> +254700000000</li>
+                    <li><i class="fas fa-envelope"></i> info@example.com</li>
+                </ul>
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <!-- Newsletter Subscription Section -->
+                <h5 class="text-uppercase font-weight-bold">Newsletter</h5>
+                    <div class="row justify-content-left">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm" style="margin-top: 0px; width: 350px;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-center mb-4" style="font-size: 20px;">Subscribe to Our Newsletter</h4>
+                                    
+                                    <!-- Display error message if email is already subscribed -->
+                                    @if(session('error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+                                    
+                                    <form method="POST" action="{{ route('subscribe') }}">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="email" class="form-label">Your Email Address</label>
+                                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                                        </div>
+                                        <div class="form-group text-center mt-4">
+                                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Social Media Links -->
+                <div class="mt-4">
+                    <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="text-center mt-4">
+        <p class="mb-0">&copy; 2024 Kenya Economics Students Association. All rights reserved.</p>
+    </div>
+</footer>
