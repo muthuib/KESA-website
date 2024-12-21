@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollaboratorsController;
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 
 
@@ -133,3 +134,6 @@ Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'd
 Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
 Route::get('/about/edit', [AboutUsController::class, 'edit'])->name('about.edit');
 Route::post('/about/update', [AboutUsController::class, 'update'])->name('about.update');
+
+//DASHBOARD ANALYTICS ROUTES
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');

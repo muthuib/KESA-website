@@ -4,7 +4,7 @@
             <div class="nav">
                 <!-- Sidebar heading -->
                 <div class="sb-sidenav-menu-heading" style="background-color: white; color:darkgreen;"><u>KESA MAIN MENU</u></div>
-                <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">
+                <a class="nav-link" href="{{ route('dashboard') }}" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
@@ -41,7 +41,6 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-info-circle text-info"></i></div>
                     Add About Us
                 </a>
-
                 @endif
                 <!-- end of admin roles -->  
             </div>
