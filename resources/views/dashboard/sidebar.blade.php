@@ -37,6 +37,11 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-users text-info"></i></div>
                     Add Collaborators
                 </a>
+                 <!-- Add About Us Link -->
+                 <a class="nav-link" href="{{ route('about.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users text-info"></i></div>
+                    Add About Us
+                </a>
 
                 @endif
                 <!-- end of admin roles -->

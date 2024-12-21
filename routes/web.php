@@ -17,6 +17,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollaboratorsController;
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\RoleController;
 
 
@@ -128,3 +129,7 @@ Route::get('admin/newsletters/{newsletter}/edit', [NewsletterController::class, 
 Route::put('admin.newsletters/{newsletter}', [NewsletterController::class, 'update'])->name('newsletters.update'); //update edited newsletter
 Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'destroy'])->name('newsletters.destroy'); //deletes newsletter
 
+//ABOUT US ROUTES
+Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
+Route::get('/about/edit', [AboutUsController::class, 'edit'])->name('about.edit');
+Route::post('/about/update', [AboutUsController::class, 'update'])->name('about.update');
