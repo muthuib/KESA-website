@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Resource;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ResourceController extends Controller
 {
@@ -31,8 +32,9 @@ class ResourceController extends Controller
         $validated = $request->validate([
             'TITLE' => 'required|string|max:255',
             'DESCRIPTION' => 'nullable|string',
-            'FILE_PATH' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',  // Image validation
+           'FILE_PATH' => 'nullable|file|mimes:jpeg,png,jpg,pdf,mp4,gif,svg',
             'PRICE' => 'required|numeric',
+            'TYPE' => 'required|in:pdf,video,article', // Allow only the specified types
         ]);
 
         // Handle the image upload if an image is present
@@ -66,8 +68,9 @@ class ResourceController extends Controller
         $validated = $request->validate([
             'TITLE' => 'required|string|max:255',
             'DESCRIPTION' => 'nullable|string',
-            'FILE_PATH' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Make file optional
+           'FILE_PATH' => 'nullable|file|mimes:jpeg,png,jpg,pdf,mp4,gif,svg',
             'PRICE' => 'required|numeric',
+            'TYPE' => 'required|in:pdf,video,article', // Allow only the specified types
         ]);
 
         // Handle file upload if a new file is provided
