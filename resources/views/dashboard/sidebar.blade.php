@@ -1,10 +1,9 @@
 <!-- sidebar.blade.php -->
 <div id="layoutSidenav_nav" class="sb-sidenav-container" style="top: 60px; background-color: maroon; width: 250px;">
-    <nav class="sb-sidenav accordion sb-sidenav-" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
                 <!-- Sidebar heading -->
-                <div class="sb-sidenav-menu-heading">Core</div>
+                <div class="sb-sidenav-menu-heading" style="background-color: white; color:darkgreen;"><u>KESA MAIN MENU</u></div>
                 <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
@@ -39,48 +38,14 @@
                 </a>
                  <!-- Add About Us Link -->
                  <a class="nav-link" href="{{ route('about.index') }}" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-users text-info"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-info-circle text-info"></i></div>
                     Add About Us
                 </a>
 
                 @endif
-                <!-- end of admin roles -->
-                <div class="sb-sidenav-menu-heading">Interface</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                    Layouts
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">Static Navigation</a>
-                        <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">Light Sidenav</a>
-                    </nav>
-                </div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Pages
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">Login</a>
-                        <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">Register</a>
-                        <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">Forgot Password</a>
-                    </nav>
-                </div>
-                <div class="sb-sidenav-menu-heading">Addons</div>
-                <a class="nav-link" href="{{ route('app') }}" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Charts
-                </a>
+                <!-- end of admin roles -->  
             </div>
         </div>
-        <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Start Bootstrap
-        </div>
-    </nav>
 </div>
 
 <!-- Add the following styles for responsiveness -->

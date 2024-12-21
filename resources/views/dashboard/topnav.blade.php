@@ -45,9 +45,6 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('about.index') }}" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
                 </li>
                 <li class="nav-item">
@@ -62,6 +59,9 @@
 
                 <!-- Guest Links -->
                 @guest
+                <li class="nav-item">
+                    <a href="{{ route('about.index') }}" class="nav-link">About</a>
+                </li>
                 <li class="nav-item">
                     <a class="btn btn-info me-3" href="{{ route('register') }}">Register</a>
                 </li>

@@ -61,6 +61,7 @@
         </div>
     </div>
     <!-- Footer Section -->
+    @guest
 <footer class="bg- text-light pt-5 pb-4" style="background-color: brown;">
     <div class="container">
         <div class="row">
@@ -154,7 +155,7 @@
             <a href="{{ route('app') }}" class="text-decoration-none bg-primary" style="font-size: 18px;color:white;"><u>Terms & Conditions</u></a>
         </div>
 </footer>
-
+@endguest
     <!-- Scripts -->
     <!-- Include Bootstrap JS for responsiveness and interactivity -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
