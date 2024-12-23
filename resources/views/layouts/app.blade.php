@@ -45,6 +45,8 @@
             @endauth
 
                 <!-- End of alert message -->
+        
+
             <main>
                 <div class="container-fluid px-4">
                     @yield('content')

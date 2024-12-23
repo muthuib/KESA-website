@@ -19,36 +19,37 @@ class RegisterPartnerController extends Controller
         return view('registration');
     }
 
-    public function register(Request $request)
+    public function registration(Request $request)
     {
         // Validate the request inputs
         $request->validate([
-            'COMPANY_NAME' => 'required|string|max:255|unique:partners,company_name', // Ensure this matches your table's column name
+            'COMPANY_NAME' => 'required|string|max:255|unique:partners,company_name',
             'REGISTRATION_NUMBER' => 'required|string|max:255|unique:partners,registration_number',
-            'EMAIL' => 'required|string|email|max:255|unique:partners,email', // Ensure this matches your table's column name
-            'PHONE_NUMBER' => 'required|integer|phone_number|max:9|unique:partners,phone_number',
-            'PHYSICAL_ADDRESS' => 'required|string|physical_address|max:255',
-            'PASSWORD' => 'required|string|min:8|confirmed', // Confirmed validation for password
-            'REASON' => 'required|string|reason|max:255',
+            'EMAIL' => 'required|string|email|max:255|unique:partners,email',
+            'PHONE_NUMBER' => 'required|digits:10|unique:partners,phone_number',
+            'PHYSICAL_ADDRESS' => 'required|string',
+            'COMPANY_TYPE' => 'nullable|string', // Allow NULL or provide a default value
+            'REASON' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
         ]);
-        // Create the user
-        $user = Partners::create([
-            'COMPANY_NAME' => $request->COMPANY_NAME, // Use lowercase for consistency
-            'REGISTRATION_NUMBER' => $request->REGISTRATION_NUMBERER,
-            'EMAIL' => $request->EMAIL,       // Use lowercase for consistency
+    
+        // Create the record
+        $partner = Partners::create([
+            'COMPANY_NAME' => $request->COMPANY_NAME,
+            'REGISTRATION_NUMBER' => $request->REGISTRATION_NUMBER,
+            'EMAIL' => $request->EMAIL,
             'PHONE_NUMBER' => $request->PHONE_NUMBER,
             'PHYSICAL_ADDRESS' => $request->PHYSICAL_ADDRESS,
-            'PASSWORD_HASH' => Hash::make($request->password), // Default password field
-            'REASON' =>  $request-> REASON,
+            'COMPANY_TYPE' => $request->COMPANY_TYPE ?? '', // Use empty string if NULL
+            'REASON' => $request->REASON,
+            'PASSWORD' => Hash::make($request->password),
         ]);
-        // Dispatch Registered event to send email verification
-        event(new Registered($user));
-
-        // Flash success message to the session
-        session()->flash('success', 'You have successfully registered. Please login with your email and password.');
-
-        // Redirect to the login page
+    
+        // Flash success message
+        session()->flash('success', 'You have successfully registered your company. Please log in with your company email and password.');
+    
+        // Redirect to login page
         return redirect()->route('login');
     }
-
+    
 }

@@ -2,13 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <!-- Back button with a backward icon -->
-    <div class="mb-3 text-end">
-        <a href="{{ route('about.index') }}" class="btn btn-outline-dark">
-            <i class="fa fa-backward"></i> Back
-        </a>
-    </div>
-    <h1 class="text-center" style="font-size: 30px;">Edit About Us</h1>
+    <h1 class="text-center">Edit About Us</h1>
 
     <form method="POST" action="{{ route('about.update') }}" class="mt-4">
         @csrf
