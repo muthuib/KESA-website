@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        //partner guards
+        'partner' => [ // New guard for partners
+        'driver' => 'session',
+        'provider' => 'partners',
+    ],
     ],
 
     /*
@@ -64,6 +69,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        //partner provider
+        'partners' => [ // Provider for the partners guard
+        'driver' => 'eloquent',
+        'model' => App\Models\Partners::class,
+    ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -92,6 +102,11 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+        ],
+        'partners' => [
+            'provider' => 'partners',
+            'table' => 'password_resets',
+            'expire' => 60,
         ],
     ],
 

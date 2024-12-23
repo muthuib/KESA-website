@@ -45,6 +45,10 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('about.index') }}" class="nav-link">About us</a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
                 </li>
                 <li class="nav-item">
@@ -56,23 +60,24 @@
                 <li class="nav-item">
                     <a href="{{ route('home') }}" class="nav-link">Memberships</a>
                 </li>
-
                 <!-- Guest Links -->
                 @guest
-                <li class="nav-item">
-                    <a href="{{ route('about.index') }}" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-info me-3" href="{{ route('register') }}">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-success me-3" href="{{ route('registration') }}">Partner Registration</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger me-2" href="{{ route('login') }}">Login</a>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: blue; color:white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Register</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #00FF7F;">
+                            <li><a class="dropdown-item" href="{{ route('register') }}" style="color: blue; font-weight: bold;">Member Registration</a></li>
+                            <li><a class="dropdown-item" href="{{ route('registration') }}" style="color: blue; font-weight: bold;">Partner Registration</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: green; color:white; margin-right: 1
+                        5px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Login</a>
+                        <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown" style="background-color: #00FF7F;">
+                            <li><a class="dropdown-item" href="{{  route('login') }}"style="color: blue; font-weight: bold;">Member</a></li>
+                            <li><a class="dropdown-item" href="{{  route('partnerlogin') }}"style="color: blue; font-weight: bold;">Partner</a></li>
+                        </ul>
+                    </li>
                 @endguest
-
                 <!-- Authenticated User Dropdown -->
               @auth
                 <li class="nav-item">

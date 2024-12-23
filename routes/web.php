@@ -19,6 +19,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollaboratorsController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\PartnerLoginController;
 use App\Http\Controllers\RoleController;
 
 
@@ -51,6 +52,12 @@ Route::post('/register', [RegisterController::class, 'register']);
 //Partners registration routes
 Route::get('registration', [RegisterPartnerController::class, 'showRegistrationForm'])->name('registration');
 Route::post('/registration',[RegisterPartnerController::class, 'registration']);
+
+// Partner Login routes
+Route::get('partnerlogin', [PartnerLoginController::class, 'showLoginForm'])->name('partnerlogin');
+Route::post('partnerlogin', [PartnerLoginController::class, 'partnerlogin']);
+Route::post('/logout', [PartnerLoginController::class, 'logout'])->name('logout');
+
 // Login routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
