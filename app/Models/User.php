@@ -18,7 +18,18 @@ class User extends Authenticatable
     protected $keyType = 'int';
 
     // Table columns
-    protected $fillable = ['USERNAME', 'EMAIL', 'PASSWORD_HASH', 'ROLE'];
+    protected $fillable = [
+        'USERNAME',
+        'FIRST_NAME',
+        'LAST_NAME',
+        'EMAIL',
+        'CATEGORY',
+        'COURSE',
+        'UNIVERSITY',
+        'REASON',
+        'PASSWORD_HASH',
+    ];
+    
 
     // Override default password attribute to match `PASSWORD_HASH` column
     public function setPasswordAttribute($password)
