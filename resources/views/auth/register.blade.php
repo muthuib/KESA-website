@@ -125,7 +125,7 @@
                 </div>
             @endif
 
-            <h2>Register</h2>
+            <h2 style="color:rgb(61, 15, 81);">KESA Member Registration</h2>
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
@@ -146,10 +146,7 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-
-                <!-- First Name, Last Name, and Category in a Row -->
-                <div class="form-row">
+                    
                     <div class="form-group">
                         <label for="FIRST_NAME">First Name *</label>
                         <input id="FIRST_NAME" type="text" name="FIRST_NAME" value="{{ old('FIRST_NAME') }}" required>
@@ -157,7 +154,10 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
+                </div>
 
+                <!--  Last Name,  Category and course in a Row -->
+                <div class="form-row">
                     <div class="form-group">
                         <label for="LAST_NAME">Last Name *</label>
                         <input id="LAST_NAME" type="text" name="LAST_NAME" value="{{ old('LAST_NAME') }}" required>
@@ -177,10 +177,6 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-
-                <!-- Course, University,  in a Row -->
-                <div class="form-row">
                     <div class="form-group">
                         <label for="COURSE">Course *</label>
                         <input id="COURSE" type="text" name="COURSE" value="{{ old('COURSE') }}" required>
@@ -188,7 +184,10 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
+                </div>
 
+                <!--  University and reason  in a Row -->
+                <div class="form-row">
                     <div class="form-group">
                         <label for="UNIVERSITY">University *</label>
                         <input id="UNIVERSITY" type="text" name="UNIVERSITY" value="{{ old('UNIVERSITY') }}" required>
@@ -196,15 +195,13 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-
-                <!-- Reason -->
-                <div class="form-group">
+                    <div class="form-group">
                     <label for="REASON">Reason *</label>
                     <textarea id="REASON" name="REASON" rows="1" required>{{ old('REASON') }}</textarea>
                     @error('REASON')
                         <div class="error">{{ $message }}</div>
                     @enderror
+                </div>
                 </div>
 
                 <!-- Password -->
@@ -226,6 +223,14 @@
 
                 <!-- Submit -->
                 <button type="submit">Register</button>
+                <!-- Terms and Conditions -->
+                <p style="text-align: left; margin-top: 20px; font-size: 14px;">
+                    By registering, you agree to our <a href="{{ route('register') }}" style="color: #007bff;">terms and conditions</a>.
+                </p>
+                        <!-- Link to login -->
+                <p style="text-align: left; margin-bottom: 20px;">
+                    Having an account? <a href="{{ route('login') }}" style="color: #007bff;">Please login</a>
+                </p>
             </form>
         </div>
     </div>
