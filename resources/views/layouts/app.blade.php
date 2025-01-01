@@ -14,6 +14,12 @@
 <body class="sb-nav-fixed">
     {{-- Include Top Navigation --}}
     @include('dashboard.topnav')
+    
+    {{-- Sidebar Toggle Button for Small Devices --}}
+    <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
+            style="position: fixed; top: 10px; left: 10px; z-index: 1050;">
+        <i class="fas fa-bars"></i> Menu
+    </button>
 
     {{-- Only logged-in users will see the sidebar --}}
     @auth

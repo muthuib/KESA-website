@@ -112,7 +112,7 @@
                 A fresh verification link has been sent to your email address.
             </div>
             @endif
-            <h2>Login</h2>
+            <h2> Member Login</h2>
 
             <!-- Display success message if available -->
             @if(session('success'))
@@ -151,6 +151,10 @@
 
                 <!-- Submit Button -->
                 <button type="submit">Login</button>
+                     <!-- Link to register -->
+                <p style="text-align: left; margin-bottom: 20px; margin-top: 12px;">
+                    Dont have an account? <a href="{{ route('register') }}" style="color: #007bff;">Please Register</a>
+                </p>
             </form>
         </div>
     </div>
