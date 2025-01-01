@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Auth\RegisterPartnerController;
 use App\Http\Controllers\UserManagementController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PartnerLoginController;
 use App\Http\Controllers\RoleController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -29,6 +32,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
 });
+
+//EMAIL VERIFICATION AFTER SIGN UP
+// Protect routes with email verification middleware
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
+
+// Email verification routes
+Auth::routes(['verify' => true]);
 
 //USER management routes
 Route::middleware(['role:admin'])->group(function () {

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Log;
 
-class User extends Authenticatable 
+class User extends Authenticatable implements MustVerifyEmail
 
 {
     use Notifiable;
@@ -67,5 +69,15 @@ class User extends Authenticatable
             })
             ->exists();
     }
+     public function routeNotificationForVerifyEmail()
+    {
+        return url('/verify-email');
+    }
+    public function sendEmailVerificationNotification()
+    {
+        Log::info('Sending email verification to: ' . $this->EMAIL);
+        parent::sendEmailVerificationNotification();
+    }
+
 
 }
