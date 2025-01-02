@@ -25,7 +25,7 @@ class LoginController extends Controller
             // Flash success message with user's first name and last name
             session()->flash('success', 'You have logged in successfully. Welcome, ' . Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME . ' to KESA');
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/app');
         }
 
         return back()->withErrors([

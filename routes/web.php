@@ -23,6 +23,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PartnerLoginController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\MemberController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -33,7 +36,12 @@ Route::middleware(['role:admin'])->group(function () {
 
 //EMAIL VERIFICATION AFTER SIGN UP
 
-Auth::routes(['verify' => true]);
+Route::middleware(['auth', 'verified', EnsureEmailIsVerified::class])->group(function () {
+    Route::get('/partner-dashboard', [PartnerController::class, 'index'])->name('partner.dashboard');
+    Route::get('/member-dashboard', [MemberController::class, 'index'])->name('member.dashboard');
+});
+
+
 
 
 //USER management routes
@@ -45,12 +53,12 @@ Route::middleware(['role:admin'])->group(function () {
     Route::put('/users/{id}', [UserManagementController::class, 'update'])->name('users.update');
     Route::get('/users/{id}', [UserManagementController::class, 'show'])->name('users.show');
     Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.destroy');
-});
+
 
 //Assign roles to user routes
 Route::get('/users/{id}/assign-roles', [UserController::class, 'assignRolesForm'])->name('users.assignRolesForm');
 Route::post('/users/{id}/assign-roles', [UserController::class, 'assignRoles'])->name('users.assignRoles');
-
+});
 // Registration routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
@@ -79,6 +87,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // routes for resources
+Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
     // Only accessible to authenticated users/  logged in users
     Route::get('resources', [ResourceController::class, 'index'])->name('resources.index'); // Show all resources
@@ -89,8 +98,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy'); //deletes resource
     // Add any other routes that should be protected by authentication here
 });
+});
 Route::get('resources/{resource}', [ResourceController::class, 'view'])->name('resources.view'); //views resource
 Route::get('/show', [ResourceController::class, 'showResources'])->name('resources.show');//display resources to end user
+
+//PARTNER AND MEMBER DASHBOARDS
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Partner dashboard route
+    Route::get('/partner-dashboard', [PartnerController::class, 'index'])->name('partner.dashboard');
+    
+    // Member dashboard route
+    Route::get('/member-dashboard', [MemberController::class, 'index'])->name('member.dashboard');
+});
 
 //Admin routes to add sliswshows
 // Admin Routes: CRUD for slides (requires authentication)
@@ -100,14 +119,17 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::post('slides', [SlideController::class, 'store'])->name('slides.store');
     Route::get('/slides/{id}', [SlideController::class, 'show'])->name('slides.show');
     Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
-});
 
-//collaborators routes
+
+
+//COLLABORATORS ROUTES
+Route::middleware('auth')->group(function () {
 Route::post('/collaborators', [CollaboratorsController::class, 'store'])->name('collaborators.store');
 Route::resource('collaborators', CollaboratorsController::class);
 // Route to show collaborations
 Route::get('/collaborators', [CollaboratorsController::class, 'index'])->name('collaborators.index');
-
+});
+});
 
 //Routes for guest slideshow before login. it gets slideshows from admin routes.
 // Guest/Home Route: Displays slides to everyone
@@ -132,6 +154,8 @@ Route::get('/unsubscribe-response', function() {
 })->name('unsubscribe-response');
 
 //Send newsletters to adll subscribed users
+Route::middleware(['role:admin'])->group(function () {
+Route::middleware('auth')->group(function () {
 Route::get('/send-newsletter', [SubscriptionController::class, 'showNewsletterForm'])->name('send.newsletter');
 Route::post('/send-newsletter', [SubscriptionController::class, 'sendNewsletter'])->name('send.newsletter');
 Route::get('/newsletters', [SubscriptionController::class, 'index'])->name('newsletters.index');
@@ -142,11 +166,16 @@ Route::get('admin/newsletters/{newsletter}/show', [NewsletterController::class, 
 Route::get('admin/newsletters/{newsletter}/edit', [NewsletterController::class, 'edit'])->name('newsletters.edit'); //show edit form
 Route::put('admin.newsletters/{newsletter}', [NewsletterController::class, 'update'])->name('newsletters.update'); //update edited newsletter
 Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'destroy'])->name('newsletters.destroy'); //deletes newsletter
+});
+});
 
 //ABOUT US ROUTES
 Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
+Route::middleware(['role:admin'])->group(function () {
 Route::get('/about/edit', [AboutUsController::class, 'edit'])->name('about.edit');
 Route::post('/about/update', [AboutUsController::class, 'update'])->name('about.update');
 
 //DASHBOARD ANALYTICS ROUTES
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+
+});
