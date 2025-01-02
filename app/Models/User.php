@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\MustVerifyEmail; // Import MustVerifyEmail
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail
-
+class User extends Authenticatable implements MustVerifyEmailContract
 {
-    use Notifiable;
-    
+    use Notifiable, MustVerifyEmail;
 
     // Custom table name and primary key
     protected $table = 'users';
@@ -30,8 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'UNIVERSITY',
         'REASON',
         'PASSWORD_HASH',
+        'EMAIL_VERIFICATION',
     ];
-    
 
     // Override default password attribute to match `PASSWORD_HASH` column
     public function setPasswordAttribute($password)
@@ -48,8 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
     const CREATED_AT = 'CREATED_AT';
     const UPDATED_AT = 'UPDATED_AT';
 
-    //RBAC IMPLEMENTATION FUNCTIONS
-    // function to assign roles
+    // RBAC Implementation
+    // Function to assign roles
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -69,15 +68,19 @@ class User extends Authenticatable implements MustVerifyEmail
             })
             ->exists();
     }
-     public function routeNotificationForVerifyEmail()
+
+    // Email verification methods
+    public function markEmailAsVerified()
     {
-        return url('/verify-email');
-    }
-    public function sendEmailVerificationNotification()
-    {
-        Log::info('Sending email verification to: ' . $this->EMAIL);
-        parent::sendEmailVerificationNotification();
+        $this->EMAIL_VERIFICATION = 1; // Set email verification status to true (1)
+        $this->save();
     }
 
 
+    public function hasVerifiedEmail()
+    {
+        return $this->EMAIL_VERIFICATION === 1; // Check if email is verified
+    }
+
+   
 }

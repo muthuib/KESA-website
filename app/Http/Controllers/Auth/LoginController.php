@@ -23,9 +23,9 @@ class LoginController extends Controller
         if (Auth::attempt(['EMAIL' => $credentials['EMAIL'], 'password' => $credentials['password']])) {
             // Set a success message in session
             // Flash success message with user's first name and last name
-            session()->flash('success', 'You have logged in successfully. Welcome, ' . Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME . ' to Kenya Economics Students Association (KESA) Kenya. Explore our website to learn more!');
+            session()->flash('success', 'You have logged in successfully. Welcome, ' . Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME . ' to KESA');
 
-            return redirect()->intended('/app');
+            return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors([

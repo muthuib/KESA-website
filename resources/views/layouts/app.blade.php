@@ -16,11 +16,12 @@
     @include('dashboard.topnav')
     
     {{-- Sidebar Toggle Button for Small Devices --}}
+    @auth
     <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
             style="position: fixed; top: 10px; left: 10px; z-index: 1050;">
         <i class="fas fa-bars"></i> Menu
     </button>
-
+@endauth
     {{-- Only logged-in users will see the sidebar --}}
     @auth
     <div id="layoutSidenav" style="display: flex;">

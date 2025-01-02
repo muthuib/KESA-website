@@ -41,9 +41,11 @@
         <!-- Collapsible Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                @guest
                  <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
+                @endguest
                 <li class="nav-item">
                     <a href="{{ route('about.index') }}" class="nav-link">About us</a>
                 </li>
