@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Auth\MustVerifyEmail; // Import MustVerifyEmail
-use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
-use Illuminate\Auth\Notifications\VerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmailContract
+class User extends Authenticatable
 {
-    use Notifiable, MustVerifyEmail;
+    use Notifiable;
 
     // Custom table name and primary key
     protected $table = 'users';
@@ -47,18 +44,20 @@ class User extends Authenticatable implements MustVerifyEmailContract
     const CREATED_AT = 'CREATED_AT';
     const UPDATED_AT = 'UPDATED_AT';
 
-    // RBAC Implementation
-    // Function to assign roles
+    // RBAC: Check if user has a specific role
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    // Define roles relationship
     public function roles()
     {
         return $this->belongsToMany(Role::class);
     }
+    
 
-    public function hasRole($role)
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
-
+    // Check if user has a specific permission
     public function hasPermission($permission)
     {
         return $this->roles()
@@ -69,18 +68,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
             ->exists();
     }
 
-    // Email verification methods
+    // Email verification method
     public function markEmailAsVerified()
     {
         $this->EMAIL_VERIFICATION = 1; // Set email verification status to true (1)
         $this->save();
     }
 
-
     public function hasVerifiedEmail()
     {
         return $this->EMAIL_VERIFICATION === 1; // Check if email is verified
     }
-
-   
 }
