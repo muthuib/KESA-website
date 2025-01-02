@@ -21,10 +21,8 @@ use App\Http\Controllers\CollaboratorsController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PartnerLoginController;
-use App\Http\Controllers\RoleController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Middleware\EnsureEmailIsVerified;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -34,13 +32,9 @@ Route::middleware(['role:admin'])->group(function () {
 });
 
 //EMAIL VERIFICATION AFTER SIGN UP
-// Protect routes with email verification middleware
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
 
-// Email verification routes
 Auth::routes(['verify' => true]);
+
 
 //USER management routes
 Route::middleware(['role:admin'])->group(function () {
