@@ -148,8 +148,8 @@
     </div>
 
         <!-- Footer Bottom -->
-        <div class="text-center mt-4">
-            <p class="mb-0">&copy; 2024 Kenya Economics Students Association. All rights reserved.</p>
+        <div class="text-left mt-4"  style= "color: white;">
+        <div class="text" style="font-size: 18px; margin-left: 400px;color:white;">&copy; Kenya Economics Students Association. All rights reserved. {{ date('Y') }}</div>
         </div>
         <!-- Use responsive font sizes -->
         <div>
@@ -169,7 +169,7 @@
  <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">&copy; KESA 2024</div>
+                        <div class="text-muted">&copy; KESA {{ date('Y') }}</div>
                         <div>
                             <a href="{{ route('app') }}" style="font-size: 18px;">Privacy Policy</a>
                             &middot;

@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Middleware\EnsureEmailIsVerified;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\UserDashboardController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -181,3 +182,6 @@ Route::post('/about/update', [AboutUsController::class, 'update'])->name('about.
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 });
+
+//USER DASHBOARD
+Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');

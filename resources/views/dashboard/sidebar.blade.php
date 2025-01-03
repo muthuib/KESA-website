@@ -3,9 +3,14 @@
         <div class="nav">
             <!-- Sidebar heading -->
             <div class="sb-sidenav-menu-heading" style="background-color: white; color: darkgreen;"><u>KESA MAIN MENU</u></div>
+             <!-- Dashboard Link -->
+             <a class="nav-link" href="{{ route('user-dashboard') }}" style="font-size: 18px;">
+                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+               Dashboard
+            </a>
             <!-- Admin roles authentication -->
             @if(auth()->user()->hasRole('admin'))
-             <!-- Dashboard Link -->
+             <!-- Statistics Link -->
              <a class="nav-link" href="{{ route('dashboard') }}" style="font-size: 18px;">
                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                Statistics
