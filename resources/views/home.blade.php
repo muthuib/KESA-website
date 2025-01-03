@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')
+
 
 <!-- Main Content Container -->
 <div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;">
@@ -30,7 +30,7 @@
 <div id="guestSlideshow" 
      class="carousel slide shadow-lg" 
      data-bs-ride="carousel" 
-     style="width: 100%; height: 60vh; margin-left: 0px;">
+     style="width: 100%; height: 60vh;">
     
     <!-- Indicators -->
     <div class="carousel-indicators">
@@ -177,48 +177,6 @@
         </div>
     </div>
 </div>
-
 <!-- Collaborations Section -->
-@php
-    $collaborations = $collaborations ?? collect(); // Default to an empty collection if not passed
-@endphp
-
-@if($collaborations->isNotEmpty())
-    <div class="container mt-5">
-        <h3 class="text-center">Our Collaborations</h3>
-        <div class="row mt-4">
-            @foreach ($collaborations as $collaboration)
-                <div class="col-md-3 text-center mb-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body d-flex flex-column">
-                            <!-- Logo -->
-                            <img src="{{ asset('storage/' . $collaboration->LOGO_PATH) }}" 
-                                 alt="{{ $collaboration->NAME }}" 
-                                 class="img-fluid mb-3" style="max-height: 100px; object-fit: contain;">
-                            <!-- Name -->
-                            <h5 class="card-title">{{ $collaboration->NAME }}</h5>
-                            <!-- Description -->
-                            <p class="card-text text-muted">
-                                {{ $collaboration->DESCRIPTION ?? 'No description available.' }}
-                            </p>
-                            <!-- Website -->
-                            @if($collaboration->WEBSITE)
-                                <a href="{{ $collaboration->WEBSITE }}" 
-                                   class="btn btn-outline-primary btn-sm mt-auto" 
-                                   target="_blank">Learn More</a>
-                            @else
-                                <span class="text-muted">No website available</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-@else
-    <div class="container mt-5">
-        <h3 class="text-center">Our Collaborations</h3>
-        <p class="text-center text-muted">No collaborations available at the moment.</p>
-    </div>
-@endif
+@include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
