@@ -8,12 +8,15 @@ use App\Models\Activity; // Import Activity model
 
 class UserDashboardController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user(); // Get authenticated user
-        $notifications = $user->notifications()->latest()->take(5)->get(); // Fetch recent notifications
-        $recentActivities = Activity::where('user_id', $user->id)->latest()->take(5)->get(); // Get recent activities
+   // app/Http/Controllers/UserDashboardController.php
+public function index()
+{
+    $user = Auth::user(); // Assuming Auth is properly configured
+    $notifications = $user->notifications()->latest()->take(5)->get();
+    $recentActivities = Activity::where('USER_ID', $user->ID)->latest()->take(5)->get();
     
-        return view('dashboard.index', compact('user', 'notifications', 'recentActivities'));
-    }
+
+    return view('dashboard.index', compact('user', 'notifications', 'recentActivities'));
+}
+
 }
