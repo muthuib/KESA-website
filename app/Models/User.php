@@ -79,4 +79,6 @@ class User extends Authenticatable
     {
         return $this->EMAIL_VERIFICATION === 1; // Check if email is verified
     }
+    
+
 }

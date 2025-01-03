@@ -26,7 +26,9 @@
             <div class="col-md-9">
                 <!-- Hero Section: Welcome Message & Statistics -->
                 <div class="mb-4">
-                    <h1>Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</h1>
+                @foreach($user->roles as $role)
+                <h1 style = "font-size: 35px;">Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} <h style="font-size: 25px; color:green;">({{ $role->name }})</h></h1>
+                @endforeach
                     <p>Your go-to space for insights, notifications, and quick access to KESA resources.</p>
                 </div>
 
