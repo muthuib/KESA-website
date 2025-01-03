@@ -64,11 +64,20 @@ class CollaboratorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showCollaborations()
     {
-        $collaboration = Collaboration::findOrFail($id);
-        return view('collaborators.show', compact('collaboration'));
+        $collaborations = Collaboration::all(); // Fetch all collaborations
+        return view('collaborations.index', compact('collaborations'));
     }
+     // Alternative method to fetch collaborations
+     public function fetchCollaborations()
+     {
+         // Fetch all collaboration records
+         $collaborations = Collaboration::all();
+ 
+         // Return the partial view with collaborations
+         return view('partials.collaborations', compact('collaborations'));
+     }
 
     /**
      * Show the form for editing the specified resource.

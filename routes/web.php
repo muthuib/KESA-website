@@ -119,17 +119,19 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::post('slides', [SlideController::class, 'store'])->name('slides.store');
     Route::get('/slides/{id}', [SlideController::class, 'show'])->name('slides.show');
     Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
-
+});
 
 
 //COLLABORATORS ROUTES
 Route::middleware('auth')->group(function () {
-Route::post('/collaborators', [CollaboratorsController::class, 'store'])->name('collaborators.store');
-Route::resource('collaborators', CollaboratorsController::class);
-// Route to show collaborations
-Route::get('/collaborators', [CollaboratorsController::class, 'index'])->name('collaborators.index');
-});
-});
+    Route::post('/collaborators', [CollaboratorsController::class, 'store'])->name('collaborators.store');
+    Route::resource('collaborators', CollaboratorsController::class);
+    // Route to show collaborations
+    Route::get('/collaborators', [CollaboratorsController::class, 'index'])->name('collaborators.index');
+    });
+    
+Route::get('/fetch-collaborations', [CollaboratorsController::class, 'fetchCollaborations'])->name('collaborations.fetch');
+
 
 //Routes for guest slideshow before login. it gets slideshows from admin routes.
 // Guest/Home Route: Displays slides to everyone
