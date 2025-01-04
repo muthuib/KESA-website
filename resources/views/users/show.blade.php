@@ -16,10 +16,22 @@
                 <i class="fas fa-user-circle text-warning"></i> Username: <span class="text-dark">{{ $user->USERNAME }}</span>
             </h4>
             <h5 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-user text-info"></i> Name: <span class="text-dark">{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</span>
+            </h5>
+            <h5 class="card-subtitle mb-3 text-muted">
                 <i class="fas fa-envelope text-secondary"></i> Email: <span class="text-dark">{{ $user->EMAIL }}</span>
             </h5>
+            <h5 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-book text-secondary"></i> Course: <span class="text-dark">{{ $user->COURSE }}</span>
+            </h5>
+            <h5 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-user-graduate text-dark"></i> University: <span class="text-dark">{{ $user->UNIVERSITY }}</span>
+            </h5>
+            <h5 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-book text-dark"></i> Category: <span class="text-dark">{{ $user->CATEGORY }}</span>
+            </h5>
             <p class="card-text">
-                <strong>Roles:</strong>
+                <strong>Role:</strong>
                 @if($user->roles->isEmpty())
                     <span class="text-danger">No roles assigned</span>
                 @else
