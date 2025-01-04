@@ -12,6 +12,7 @@
         <thead class="thead-dark">
             <tr>
                 <th>#</th>
+                <th>Name</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Roles</th>
@@ -22,6 +23,7 @@
             @foreach($users as $user)
                 <tr>
                     <td>{{ $loop->iteration }}</td> <!-- Sequential numbering -->
+                    <td>{{ $user->FIRST_NAME}} {{ $user->LAST_NAME}}</td>
                     <td>{{ $user->USERNAME }}</td>
                     <td>{{ $user->EMAIL }}</td>
                     <td>

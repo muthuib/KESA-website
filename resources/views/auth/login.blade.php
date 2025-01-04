@@ -151,6 +151,9 @@
 
                 <!-- Submit Button -->
                 <button type="submit">Login</button>
+                <p style="text-align: left; margin-bottom: 20px; margin-top: 12px;">
+                    <a href="{{ route('register') }}" style="color: #007bff;">Forgot Password?</a>
+                </p>
                      <!-- Link to register -->
                 <p style="text-align: left; margin-bottom: 20px; margin-top: 12px;">
                     Dont have an account? <a href="{{ route('register') }}" style="color: #007bff;">Please Register</a>
