@@ -59,8 +59,8 @@ class RegisterController extends Controller
         // Trigger the email verification event
         event(new Registered($user));
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please verify your email to proceed.');
+        return redirect()->route('login')->with('success', 'Registration successful! Please Login with your Email and Password.');
     }
 }
