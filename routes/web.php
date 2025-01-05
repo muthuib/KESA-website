@@ -76,7 +76,9 @@ Route::post('/logout', [PartnerLoginController::class, 'logout'])->name('logout'
 // Login routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
+Route::middleware('auth')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {

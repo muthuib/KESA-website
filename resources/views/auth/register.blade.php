@@ -14,6 +14,10 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            background-image: url('pictures/econ.jpg'); /* Add the background image URL */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
         }
 
         .register-wrapper {
@@ -118,13 +122,17 @@
     @include('dashboard.topnav')
 
     <div class="register-wrapper">
-        <div class="register-container">
+        <div class="register-container" style="margin-top: 30px; margin-bottom: 90px; height: 645px;">
             @if (session('success'))
                 <div class="success">
                     {{ session('success') }}
                 </div>
             @endif
-
+      <!-- Logo -->
+      <div class="col-12 col-md-3 d-flex justify-content-start">
+            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" 
+                 style="width: 140px; margin-top: 2px; margin-left: 260px;" class="img-fluid">
+        </div>
             <h2 style="color:rgb(61, 15, 81);">KESA Member Registration</h2>
             <form method="POST" action="{{ route('register') }}">
                 @csrf
@@ -224,11 +232,11 @@
                 <!-- Submit -->
                 <button type="submit">Register</button>
                 <!-- Terms and Conditions -->
-                <p style="text-align: left; margin-top: 20px; font-size: 14px;">
+                <p style="text-align: left; margin-top: 5px; font-size: 14px;">
                     By registering, you agree to our <a href="{{ route('register') }}" style="color: #007bff;">terms and conditions</a>.
                 </p>
                         <!-- Link to login -->
-                <p style="text-align: left; margin-bottom: 20px;">
+                <p style="text-align: left; margin-top: 4px;">
                     Having an account? <a href="{{ route('login') }}" style="color: #007bff;">Please login</a>
                 </p>
             </form>
