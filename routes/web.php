@@ -26,6 +26,8 @@ use App\Http\Middleware\EnsureEmailIsVerified;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\MpesaController;
+use App\Http\Controllers\TicketController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -189,3 +191,24 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::middleware('auth')->group(function () {
 Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
 });
+
+//TICKETS AND  MPESA INTERGRATION ROUTES
+// Ticket Routes
+Route::middleware('auth')->group(function () {
+Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
+Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+});
+Route::get('/tickets/buy', [TicketController::class, 'buy'])->name('tickets.buy');
+
+// Mpesa Routes
+Route::post('/mpesa/initiate', [MpesaController::class, 'initiatePayment'])->name('mpesa.initiate');
+Route::post('/mpesa/callback', [MpesaController::class, 'handleCallback'])->name('mpesa.callback');
+Route::get('/payment-success', [MpesaController::class, 'paymentSuccess'])->name('payment.success');
+// Define a route for the payment error
+Route::get('/payment-error', function () {
+    return view('payment.error');
+})->name('payment.error');

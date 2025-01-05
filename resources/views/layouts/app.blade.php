@@ -51,6 +51,14 @@
                     </div>
                 </div>
                 @endif
+                @if (session('error'))
+                <div class="alert alert-danger d-flex align-items-center mx-auto" role="alert" style="width: 600px; top: 10px;">
+                    <i class="fas fa-times-circle me-2 fs-3 text-danger" style="font-size: 1.5rem;"></i>
+                    <div style="font-size: 1rem; color: #721c24;">
+                        {{ session('error') }}
+                    </div>
+                </div>
+                @endif
             @endauth
 
                 <!-- End of alert message -->
