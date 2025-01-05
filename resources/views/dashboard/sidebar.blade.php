@@ -19,9 +19,13 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Manage Resources
                 </a>
+                <a class="nav-link" href="{{ route('tickets.index') }}" style="font-size: 18px;">
+                    <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list text-light"></i></div>
+                    Manage Tickets
+                </a>
 
                 <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px;">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user-circle text-info"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-user-circle text-light"></i></div>
                     Manage Users
                 </a>
 

@@ -54,7 +54,7 @@
                     <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('app') }}" class="nav-link">Events/Debates</a>
+                    <a href="{{ route('tickets.buy') }}" class="nav-link">Events/Debates</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('resources.show') }}" class="nav-link">Resources</a>
