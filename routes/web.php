@@ -28,6 +28,8 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\RegistrationController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -212,3 +214,18 @@ Route::get('/payment-success', [MpesaController::class, 'paymentSuccess'])->name
 Route::get('/payment-error', function () {
     return view('payment.error');
 })->name('payment.error');
+
+//EVENT AND EVENT REGISTRATION ROUTES
+Route::middleware('auth')->group(function () {
+Route::resource('events', EventController::class); //for crud
+});
+Route::get('/events', [EventController::class, 'showAllEvents'])->name('events.showAll'); // Route for displaying events to users (Show All)
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/events', [EventController::class, 'index'])->name('events.index'); // Route for managing events (Index)
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');  // Use model binding here
+    
+
+});
+Route::get('/events/{event}/register', [RegistrationController::class, 'create'])->name('registrations.create');
+Route::post('/events/{event}/register', [RegistrationController::class, 'store'])->name('registrations.store');
