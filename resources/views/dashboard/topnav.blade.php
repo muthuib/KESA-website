@@ -53,6 +53,10 @@
                 <li class="nav-item">
                     <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
                 </li>
+                <a href="{{ route('events.showAll') }}" class="nav-link">Events</a>
+
+
+
                 <li class="nav-item">
                     <a href="{{ route('tickets.buy') }}" class="nav-link">Events/Debates</a>
                 </li>
