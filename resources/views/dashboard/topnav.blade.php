@@ -64,7 +64,7 @@
                     <a href="{{ route('resources.show') }}" class="nav-link">Resources</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link">Memberships</a>
+                    <a href="{{ route('contact.display') }}" class="nav-link">Contact Us</a>
                 </li>
                 <!-- Guest Links -->
                 @guest

@@ -30,6 +30,7 @@ use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\ContactController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -196,6 +197,7 @@ Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('
 
 //TICKETS AND  MPESA INTERGRATION ROUTES
 // Ticket Routes
+Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
 Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
 Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
@@ -203,6 +205,7 @@ Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store
 Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
 Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
 Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+});
 });
 Route::get('/tickets/buy', [TicketController::class, 'buy'])->name('tickets.buy');
 
@@ -216,16 +219,31 @@ Route::get('/payment-error', function () {
 })->name('payment.error');
 
 //EVENT AND EVENT REGISTRATION ROUTES
+Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
 Route::resource('events', EventController::class); //for crud
 });
+});
 Route::get('/events', [EventController::class, 'showAllEvents'])->name('events.showAll'); // Route for displaying events to users (Show All)
+Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/admin/events', [EventController::class, 'index'])->name('events.index'); // Route for managing events (Index)
     Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');  // Use model binding here
-    
-
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');  // Use model binding here  
+});
 });
 Route::get('/events/{event}/register', [RegistrationController::class, 'create'])->name('registrations.create');
 Route::post('/events/{event}/register', [RegistrationController::class, 'store'])->name('registrations.store');
+
+//CONTACT ROUTES
+Route::middleware(['role:admin'])->group(function () {
+Route::middleware('auth')->group(function () {
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::get('/contact/create', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/contact/{contact}/edit', [ContactController::class, 'edit'])->name('contact.edit');
+Route::put('/contact/{contact}', [ContactController::class, 'update'])->name('contact.update');
+Route::delete('/contact/{contact}', [ContactController::class, 'destroy'])->name('contact.destroy');
+});
+});
+Route::get('/contacts', [ContactController::class, 'display'])->name('contact.display');
