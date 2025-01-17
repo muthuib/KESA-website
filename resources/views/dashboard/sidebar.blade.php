@@ -26,6 +26,11 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
                 Manage Resources
             </a>
+            <!-- Manage Resources -->
+            <a class="nav-link" href="{{ route('feedback.index') }}" style="font-size: 18px;">
+                <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
+                Feedbacks
+            </a>
 
             <!-- Manage Tickets -->
             <a class="nav-link" href="{{ route('tickets.index') }}" style="font-size: 18px;">

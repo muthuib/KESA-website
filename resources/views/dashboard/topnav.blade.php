@@ -51,18 +51,19 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('app') }}" class="nav-link">News/Updates</a>
+                    <a href="{{ route('app') }}" class="nav-link">Research</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('feedback.create') }}" class="nav-link">Feedback</a>
                 </li>
                 <a href="{{ route('events.showAll') }}" class="nav-link">Events</a>
-
-
-
-                <li class="nav-item">
-                    <a href="{{ route('tickets.buy') }}" class="nav-link">Events/Debates</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('resources.show') }}" class="nav-link">Resources</a>
-                </li>
+                <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: brown; color:white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Economics Hub</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:rgb(44, 215, 158);">
+                        <li><a class="dropdown-item" href="{{ route('resources.show') }}" style="color: blue; font-weight: bold;">Resources</a></li>
+                            <li><a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: blue; font-weight: bold;">Feedback</a></li>
+                        </ul>
+                    </li>
                 <li class="nav-item">
                     <a href="{{ route('contact.display') }}" class="nav-link">Contact Us</a>
                 </li>
