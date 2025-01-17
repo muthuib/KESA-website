@@ -180,3 +180,7 @@
 <!-- Collaborations Section -->
 @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
+<!-- What People Say About Us Section -->
+@include('feedback.display', ['feedbacks' => App\Models\Feedback::all()])
+
+
