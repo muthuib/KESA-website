@@ -41,34 +41,44 @@
         <!-- Collapsible Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: 30px;">
             <ul class="navbar-nav ms-auto">
-                @guest
-                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                </li>
-                @endguest
+            @guest
                 <li class="nav-item">
-                    <a href="{{ route('about.index') }}" class="nav-link">About us</a>
+                    <a 
+                        class="nav-link" 
+                        href="{{ route('home') }}" 
+                        style="@if(request()->routeIs('home')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">
+                        Home
+                    </a>
                 </li>
+            @endguest
+                <li class="nav-item">
+                    <a href="{{ route('about.index') }}" class="nav-link"  style="@if(request()->routeIs('about.index')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">About us</a>
+                </li>
+                <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Events</a>
+                <li class="nav-item dropdown">
+                <!-- Economics hub dropdown menu -->
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">
+                    Economics Hub
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:rgb(44, 215, 158);">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('resources.show') }}" style="color: blue; font-weight: bold;">Resources</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('app') }}" style="color: blue; font-weight: bold;">Research</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: blue; font-weight: bold;">Feedback</a>
+                    </li>
+                </ul>
+            </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('app') }}" class="nav-link">Research</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('feedback.create') }}" class="nav-link">Feedback</a>
-                </li>
-                <a href="{{ route('events.showAll') }}" class="nav-link">Events</a>
-                <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: brown; color:white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Economics Hub</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:rgb(44, 215, 158);">
-                        <li><a class="dropdown-item" href="{{ route('resources.show') }}" style="color: blue; font-weight: bold;">Resources</a></li>
-                            <li><a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: blue; font-weight: bold;">Feedback</a></li>
-                        </ul>
-                    </li>
-                <li class="nav-item">
-                    <a href="{{ route('contact.display') }}" class="nav-link">Contact Us</a>
+                    <a href="{{ route('contact.display') }}" class="nav-link" style="@if(request()->routeIs('contact.display')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Contact Us</a>
                 </li>
                 <!-- Guest Links -->
-                @guest
+                <!-- @guest
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: blue; color:white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Register</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #00FF7F;">
@@ -84,7 +94,23 @@
                             <li><a class="dropdown-item" href="{{  route('partnerlogin') }}"style="color: blue; font-weight: bold;">Partner</a></li>
                         </ul>
                     </li>
+                @endguest -->
+                @guest
+                    <!-- Register Button -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}" style="background-color: blue; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                            Register
+                        </a>
+                    </li>
+
+                    <!-- Login Button -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}" style="background-color: green; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                            Login
+                        </a>
+                    </li>
                 @endguest
+
                 <!-- Authenticated User Dropdown -->
               @auth
               <li class="nav-item dropdown">
