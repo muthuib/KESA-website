@@ -70,7 +70,7 @@
         /* Black color stripe at top */
         .kenyan-flag .black {
             background-color: #000000; /* Black stripe */
-            height: 5px;
+            height: 10px;
             width: 100%;
         }
 

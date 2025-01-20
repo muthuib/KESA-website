@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-
-
 <!-- Main Content Container -->
 <div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;">
     <!-- Main Row -->
@@ -13,12 +11,11 @@
         </div>
 
         <!-- Text Section -->
-        <div class="col-12 col-md-9">
-            <h1 class="display-6 fw-bold text-md-start text-center" 
-                style="font-size: 20px; margin: 0; margin-left: 0;">
+        <div class="col-12 col-md-9 text-center text-md-start">
+            <h1 class="display-6 fw-bold" style="font-size: 20px; margin: 0;">
                 Welcome to Kenya Economics Students Association
             </h1>
-            <p class="lead text-md-start text-center mt-2" style="margin: 0;">
+            <p class="lead mt-2" style="margin: 0;">
                 Explore our content, events, and resources. Stay updated with the latest news and debates!
             </p>
         </div>
@@ -145,7 +142,7 @@
 <!-- Explore Section -->
 <div class="container mt-5">
     <div class="row mt-5">
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-6">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
                     <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
@@ -155,17 +152,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-6">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
                     <i class="fas fa-calendar-alt fa-3x text-success mb-3"></i>
                     <h5 class="card-title">Events & Debates</h5>
                     <p class="card-text">Join upcoming events and engage in enriching discussions.</p>
-                    <a href="{{ route('app') }}" class="btn btn-success">Explore</a>
+                    <a href="{{ route('events.showAll') }}" class="btn btn-success">Explore</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-6">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
                     <i class="fas fa-book fa-3x text-warning mb-3"></i>
@@ -177,10 +174,9 @@
         </div>
     </div>
 </div>
+
 <!-- Collaborations Section -->
 @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
 <!-- What People Say About Us Section -->
 @include('feedback.display', ['feedbacks' => App\Models\Feedback::all()])
-
-

@@ -72,7 +72,7 @@
 
             <!-- Footer -->
             @guest
-            <footer class="bg- text-light pt-5 pb-4" style="background-color: brown;">
+            <footer class="bg- text-light pt-5 pb-4" style="background-color:rgb(42, 22, 22);">
                 <div class="container-fluid px-4">
                 <div class="container">
             <div class="row">

@@ -250,12 +250,12 @@ Route::delete('/contact/{contact}', [ContactController::class, 'destroy'])->name
 Route::get('/contacts', [ContactController::class, 'display'])->name('contact.display');
 
 //FEEDBACK ROUTES
-Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index'); // Display feedback
 Route::get('/feedbacks', [FeedbackController::class, 'display'])->name('feedbacks.display');
 Route::get('/feedback/create', [FeedbackController::class, 'create'])->name('feedback.create'); // Feedback form
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store'); // Store feedback
 Route::middleware(['role:admin'])->group(function () {
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () { 
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index'); // Display feedback
 Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
 });
 });
