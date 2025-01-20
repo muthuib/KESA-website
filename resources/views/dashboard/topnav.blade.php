@@ -56,24 +56,65 @@
                 </li>
                 <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Events</a>
                 <li class="nav-item dropdown">
-                <!-- Economics hub dropdown menu -->
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">
-                    Economics Hub
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:rgb(44, 215, 158);">
-                    <li>
-                        <a class="dropdown-item" href="{{ route('resources.show') }}" style="color: blue; font-weight: bold;">Resources</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('app') }}" style="color: blue; font-weight: bold;">Research</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: blue; font-weight: bold;">Feedback</a>
-                    </li>
-                </ul>
-            </li>
+               <!-- Economics Hub Dropdown -->
+                <li class="nav-item dropdown" style="position: relative;">
+                    <!-- Main Tab -->
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                        style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) 
+                                color: aqua; font-weight: bold; text-decoration: none; 
+                            @else 
+                                color: white; font-weight: bold; text-decoration: none; 
+                            @endif">
+                        Economics Hub
+                    </a>
 
+                    <!-- Dropdown Menu -->
+                    <ul class="dropdown-menu" id="dropdown-menu" 
+                        style="background-color:white; position: absolute; top: 100%; left: 0; padding: 10px; border-radius: 5px; display: none;">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('resources.show') }}" style="color: black; font-weight: bold;">Resources</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('app') }}" style="color: black; font-weight: bold;">Research</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: black; font-weight: bold;">Feedback</a>
+                        </li>
+                    </ul>
+                </li>
+                <script>
+                        // Select the Economics Hub tab and dropdown menu
+                        const navbarDropdown = document.getElementById('navbarDropdown');
+                        const dropdownMenu = document.getElementById('dropdown-menu');
+                        const parentLi = navbarDropdown.parentElement;
+
+                        // Show dropdown when cursor enters the parent tab or the dropdown
+                        parentLi.addEventListener('mouseenter', () => {
+                            dropdownMenu.style.display = 'block';
+                        });
+
+                        // Ensure dropdown stays visible when hovering over the dropdown menu
+                        dropdownMenu.addEventListener('mouseenter', () => {
+                            dropdownMenu.style.display = 'block'; // Ensure it stays visible while hovering over the dropdown
+                        });
+
+                        // Hide dropdown when cursor leaves the parent tab and dropdown
+                        parentLi.addEventListener('mouseleave', () => {
+                            dropdownMenu.style.display = 'none';
+                        });
+
+                        // Hide dropdown when cursor leaves the dropdown
+                        dropdownMenu.addEventListener('mouseleave', () => {
+                            dropdownMenu.style.display = 'none'; // Hide it when the cursor leaves the dropdown
+                        });
+
+                        // Show the dropdown again when moving the cursor back to the Economics Hub tab
+                        navbarDropdown.addEventListener('mouseenter', () => {
+                            dropdownMenu.style.display = 'block';
+                        });
+                </script>
+
+                <!-- Contact us tab -->
                 <li class="nav-item">
                     <a href="{{ route('contact.display') }}" class="nav-link" style="@if(request()->routeIs('contact.display')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Contact Us</a>
                 </li>
@@ -141,7 +182,7 @@
         </div>
     </nav>
     <!-- Kenyan Flag -->
-    <div class="kenyan-flag"  style="position: fixed; top: 50px; left: 0; width: 100%; z-index: 1040;">
+    <div class="kenyan-flag"  style="position: fixed; top: 50px; left: 0; width: 100%; z-index: 1000;">
         <div class="black"></div> <!-- Black stripe -->
         <div class="white"></div> <!-- White separator -->
         <div class="red"></div>   <!-- Red stripe -->
@@ -153,3 +194,29 @@
 </body>
 
 </html>
+<style>
+/* Custom Hover Effect for Dropdown Items */
+#dropdown-menu .dropdown-item {
+    padding: 10px 20px;  /* Adjust padding to make items look bigger */
+    font-size: 16px;  /* Change font size */
+    font-family: 'Arial', sans-serif;  /* Change font family */
+    color: #333;  /* Default text color */
+    transition: all 0.3s ease;  /* Smooth transition for hover effect */
+}
+
+/* Hover Effect */
+#dropdown-menu .dropdown-item:hover {
+    background-color:rgb(162, 143, 143);  /* Blue background on hover */
+    color: white;  /* White text color on hover */
+    border-radius: 5px;  /* Optional: Add rounded corners */
+}
+
+/* Optionally, you can also add a focus state for keyboard accessibility */
+#dropdown-menu .dropdown-item:focus {
+    background-color: #0056b3;  /* Darker blue for focused item */
+    color: white;  /* White text on focus */
+}
+
+
+
+</style>

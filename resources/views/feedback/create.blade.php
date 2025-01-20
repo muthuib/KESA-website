@@ -4,6 +4,14 @@
 <div style="background-color: #f3f4f6; font-family: Arial, sans-serif; padding: 20px; margin-left: 0; display: flex; justify-content: flex-start; align-items: flex-start; min-height: 100vh;">
     <div style="background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; max-width: 1000px; margin-top: 70px;">
         <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 0px; color: #111827; text-align: center;">Submit Feedback</h1>
+        <!-- Display success message -->
+         @guest
+        @if(session('success'))
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #c3e6cb;">
+                <strong>Success!</strong> {{ session('success') }}
+            </div>
+        @endif
+        @endguest
 
         <form action="{{ url('/feedback') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
             @csrf

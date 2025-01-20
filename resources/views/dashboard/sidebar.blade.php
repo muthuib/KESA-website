@@ -1,4 +1,4 @@
-<div id="layoutSidenav_nav" class="sb-sidenav-container" style="top: 60px; background-color: rgb(18, 56, 81); width: 250px;">
+<div id="layoutSidenav_nav" class="sb-sidenav-container" style="top: 74px; background-color: rgb(18, 56, 81); width: 250px;">
     <div class="sb-sidenav-menu">
         <div class="nav">
             <!-- Sidebar heading -->

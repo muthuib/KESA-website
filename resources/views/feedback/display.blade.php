@@ -89,6 +89,7 @@
     });
 </script>
 
+
 <style>
     /* Apply marquee animation to the entire feedback container */
     .marquee {
@@ -111,9 +112,22 @@
         margin-right: 15px;
     }
 
-    /* Ensure cards do not wrap */
+    /* Ensure cards do not wrap on larger screens */
     .row {
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap !important;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 767px) {
+        .feedback-card {
+            width: 100% !important; /* Cards stack vertically */
+        }
+    }
+
+    @media (max-width: 991px) {
+        .feedback-card {
+            width: 48% !important; /* Two cards per row on medium screens */
+        }
     }
 </style>
 @endsection
