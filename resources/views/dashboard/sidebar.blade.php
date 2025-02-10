@@ -60,7 +60,7 @@
                 <ul class="dropdown-menu" aria-labelledby="systemSettingsDropdown">
                     <li>
                         <a class="dropdown-item" href="{{ route('about.index') }}">
-                            <i class="fas fa-info-circle"></i> Add About Us
+                            <i class="fas fa-info-circle"></i> About Us
                         </a>
                     </li>
                     <li>
