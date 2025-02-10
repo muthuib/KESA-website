@@ -32,6 +32,8 @@
         <a href="#" target="_blank" class="text-decoration-none">
             <i class="fab fa-linkedin text-white" style="font-size: 24px;"></i>
         </a>
+      <p style="color:rgb(9, 220, 248);"><b>Motto:</b> <k style="color: #ffffff;"><b>Unity of Purpose</b></k></p> 
+      
 
         <!-- Toggler Button for Collapsible Navbar -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,37 +53,75 @@
                     </a>
                 </li>
             @endguest
-                <li class="nav-item">
-                    <a href="{{ route('about.index') }}" class="nav-link"  style="@if(request()->routeIs('about.index')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">About us</a>
-                </li>
+                
+                 <!-- About Us Dropdown -->
+            <li class="nav-item dropdown" style="position: relative;">
+                <!-- Main Tab -->
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                    style="@if(request()->routeIs('about.vision') || request()->routeIs('about.mission') || request()->routeIs('about.objectives')) 
+                            color: aqua; font-weight: bold; text-decoration: none; 
+                        @else 
+                            color: white; font-weight: bold; text-decoration: none; 
+                        @endif">
+                    About Us
+                </a>
+
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu" id="dropdown-menu" 
+                    style="background-color:white; position: absolute; top: 100%; left: 0; padding: 10px; border-radius: 5px; display: none;">              
+                    <li>
+                        <a class="dropdown-item" href="{{ route('about.vision') }}" style="color: black; font-weight: bold;">Vision</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('about.mission') }}" style="color: black; font-weight: bold;">Mission</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('about.objectives') }}" style="color: black; font-weight: bold;">Objectives</a>
+                    </li>
+                </ul>
+            </li>
+         <!-- End of About us dropdown -->
                 <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Events</a>
+                    <!-- Economics Hub Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
-               <!-- Economics Hub Dropdown -->
-                <li class="nav-item dropdown" style="position: relative;">
-                    <!-- Main Tab -->
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
-                        style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) 
+                    <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) 
                                 color: aqua; font-weight: bold; text-decoration: none; 
                             @else 
                                 color: white; font-weight: bold; text-decoration: none; 
-                            @endif">
-                        Economics Hub
-                    </a>
-
-                    <!-- Dropdown Menu -->
-                    <ul class="dropdown-menu" id="dropdown-menu" 
-                        style="background-color:white; position: absolute; top: 100%; left: 0; padding: 10px; border-radius: 5px; display: none;">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('resources.show') }}" style="color: black; font-weight: bold;">Resources</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('app') }}" style="color: black; font-weight: bold;">Research</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('feedback.create') }}" style="color: black; font-weight: bold;">Feedback</a>
-                        </li>
+                            @endif">Economics Hub</a>
+                    <ul class="dropdown-menu" id="economicsHubMenu">
+                        <li><a class="dropdown-item" href="{{ route('resources.show') }}">Resources</a></li>
+                        <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li>
+                        <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
                     </ul>
                 </li>
+                <script>
+                // Economics Hub Dropdown (Fix)
+                const economicsHubDropdown = document.getElementById('economicsHubDropdown');
+                const economicsHubMenu = document.getElementById('economicsHubMenu');
+                const economicsHubParent = economicsHubDropdown.parentElement;
+
+                economicsHubParent.addEventListener('mouseenter', () => {
+                    economicsHubMenu.style.display = 'block';
+                });
+
+                economicsHubMenu.addEventListener('mouseenter', () => {
+                    economicsHubMenu.style.display = 'block';
+                });
+
+                economicsHubParent.addEventListener('mouseleave', () => {
+                    economicsHubMenu.style.display = 'none';
+                });
+
+                economicsHubMenu.addEventListener('mouseleave', () => {
+                    economicsHubMenu.style.display = 'none';
+                });
+
+                economicsHubDropdown.addEventListener('mouseenter', () => {
+                    economicsHubMenu.style.display = 'block';
+                });
+            </script>
+              
                 <script>
                         // Select the Economics Hub tab and dropdown menu
                         const navbarDropdown = document.getElementById('navbarDropdown');
@@ -206,7 +246,7 @@
 
 /* Hover Effect */
 #dropdown-menu .dropdown-item:hover {
-    background-color:rgb(162, 143, 143);  /* Blue background on hover */
+    background-color:rgb(222, 124, 124);  /* Blue background on hover */
     color: white;  /* White text color on hover */
     border-radius: 5px;  /* Optional: Add rounded corners */
 }

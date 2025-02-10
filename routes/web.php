@@ -32,6 +32,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\AboutController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -181,15 +182,22 @@ Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'd
 });
 
 //ABOUT US ROUTES
-Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
+// Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
 Route::middleware(['role:admin'])->group(function () {
-Route::get('/about/edit', [AboutUsController::class, 'edit'])->name('about.edit');
-Route::post('/about/update', [AboutUsController::class, 'update'])->name('about.update');
-
 //DASHBOARD ANALYTICS ROUTES
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
+//ABOUT ROUTES
+Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+Route::get('about/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
+Route::put('about/{id}', [AboutController::class, 'update'])->name('about.update');
+Route::get('about/create', [AboutController::class, 'create'])->name('about.create');
+Route::post('about', [AboutController::class, 'store'])->name('about.store');
+Route::delete('about/{id}', [AboutController::class, 'destroy'])->name('about.destroy');
 });
+Route::get('/about/vision', [AboutController::class, 'vision'])->name('about.vision');
+Route::get('/about/mission', [AboutController::class, 'mission'])->name('about.mission');
+Route::get('/about/objectives', [AboutController::class, 'objectives'])->name('about.objectives');
 
 //USER DASHBOARD
 Route::middleware('auth')->group(function () {
