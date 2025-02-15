@@ -6,11 +6,23 @@
             <!-- User Info Panel -->
             <div class="col-md-3">
                 <div class="card mb-4">
-                    <img src="{{ asset('path/to/profile-picture.jpg') }}" class="card-img-top rounded-circle" alt="Profile Picture">
-                    <div class="card-body text-center">
+                <div class="d-flex justify-content-center">
+                    <img src="{{ url('storage/' . $user->PASSPORT_PHOTO) }}" class="card-img-top rounded-circle" alt="Upload profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
+                    <div class="card-body text-left" style=" width: 300px;">
                         <h5 class="card-title">{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</h5>
+                        <h3 style="color:blue; font-size: 14px;">
+                            Membership Number:
+                            <span class="card-title" style="font-size: 14px; color:brown;">
+                                @if($user->roles->isEmpty())
+                                    Not Approved, Waiting for Approval
+                                @else
+                                    {{ $user->MEMBERSHIP_NUMBER }}
+                                @endif
+                            </span>
+                        </h3>
                         <p class="card-text">Welcome back! Here’s your personalized dashboard.</p>
-                        <a href="{{ route('user-dashboard') }}" class="btn btn-primary btn-sm">Edit Profile</a>
+                        <a href="{{ route('profile.edit', $user->ID) }}" class="btn btn-primary btn-sm">Edit Profile</a>
                     </div>
                 </div>
 
@@ -21,7 +33,6 @@
                     <a class="nav-link" href="{{ route('user-dashboard') }}">Activities</a>
                 </nav>
             </div>
-
             <!-- Main Content Section -->
             <div class="col-md-9">
                 <!-- Hero Section: Welcome Message & Statistics -->

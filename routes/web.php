@@ -202,6 +202,10 @@ Route::get('/about/objectives', [AboutController::class, 'objectives'])->name('a
 //USER DASHBOARD
 Route::middleware('auth')->group(function () {
 Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
+Route::get('/profile/edit/{id}', [UserDashboardController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/update/{id}', [UserDashboardController::class, 'update'])->name('profile.update');
+
+
 });
 
 //TICKETS AND  MPESA INTERGRATION ROUTES

@@ -195,9 +195,15 @@
                 <!-- Authenticated User Dropdown -->
               @auth
               <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
-                        <i class="fas fa-user" style="font-size: 20px; color: white;"></i> {{ Auth::user()->FIRST_NAME }} {{ Auth::user()->LAST_NAME }}
-                    </a>
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+                    <i class="fas fa-user" style="font-size: 20px; color: white;"></i> 
+                    {{ Auth::user()->FIRST_NAME }} {{ Auth::user()->LAST_NAME }} 
+                    (@if(Auth::user()->roles->isEmpty()) 
+                        <span style="color: aqua; font-weight: bold;">Waiting for Approval</span> 
+                    @else 
+                    <span style="color: aqua; font-weight: bold;">{{ Auth::user()->MEMBERSHIP_NUMBER }} </span> 
+                    @endif)
+                </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="top: 60px;">
                         <li>
                             <a class="dropdown-item" href="{{ route('app') }}">
@@ -235,28 +241,32 @@
 
 </html>
 <style>
-/* Custom Hover Effect for Dropdown Items */
-#dropdown-menu .dropdown-item {
-    padding: 10px 20px;  /* Adjust padding to make items look bigger */
-    font-size: 16px;  /* Change font size */
-    font-family: 'Arial', sans-serif;  /* Change font family */
-    color: #333;  /* Default text color */
-    transition: all 0.3s ease;  /* Smooth transition for hover effect */
-}
+    /* Custom Hover Effect for Dropdown Items */
+    #dropdown-menu .dropdown-item {
+        padding: 10px 20px;  /* Adjust padding to make items look bigger */
+        font-size: 16px;  /* Change font size */
+        font-family: 'Arial', sans-serif;  /* Change font family */
+        color: #333;  /* Default text color */
+        transition: all 0.3s ease;  /* Smooth transition for hover effect */
+    }
 
-/* Hover Effect */
-#dropdown-menu .dropdown-item:hover {
-    background-color:rgb(222, 124, 124);  /* Blue background on hover */
-    color: white;  /* White text color on hover */
-    border-radius: 5px;  /* Optional: Add rounded corners */
-}
+    /* Hover Effect */
+    #dropdown-menu .dropdown-item:hover {
+        background-color:rgb(222, 124, 124);  /* Blue background on hover */
+        color: white;  /* White text color on hover */
+        border-radius: 5px;  /* Optional: Add rounded corners */
+    }
 
-/* Optionally, you can also add a focus state for keyboard accessibility */
-#dropdown-menu .dropdown-item:focus {
-    background-color: #0056b3;  /* Darker blue for focused item */
-    color: white;  /* White text on focus */
-}
-
-
-
+    /* Optionally, you can also add a focus state for keyboard accessibility */
+    #dropdown-menu .dropdown-item:focus {
+        background-color: #0056b3;  /* Darker blue for focused item */
+        color: white;  /* White text on focus */
+    }
+    /* Economics Hub Dropdown Hover Effect */
+    #economicsHubMenu .dropdown-item:hover {
+        background-color: maroon; /* Brown background on hover */
+        color: white; /* White text on hover */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        transition: all 0.3s ease;
+    }
 </style>
