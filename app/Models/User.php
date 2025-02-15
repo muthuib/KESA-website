@@ -17,16 +17,32 @@ class User extends Authenticatable
 
     // Table columns
     protected $fillable = [
-        'USERNAME',
         'FIRST_NAME',
+        'MIDDLE_NAME',
         'LAST_NAME',
         'EMAIL',
-        'CATEGORY',
-        'COURSE',
-        'UNIVERSITY',
-        'REASON',
-        'PASSWORD_HASH',
         'EMAIL_VERIFICATION',
+        'email_verified_at',
+        'PASSWORD_HASH',
+        'ROLE',
+        'GENDER',
+        'PHONE_NUMBER',
+        'ALTERNATIVE_PHONE_NUMBER',
+        'NATIONAL_ID_NUMBER',
+        'DISABILITY_STATUS',
+        'DISABILITY_TYPE',
+        'PASSPORT_PHOTO',
+        'CURRENTLY_IN_SCHOOL',
+        'HIGHEST_LEVEL_SCHOOL_ATTENDING',
+        'SCHOOL_NAME',
+        'PROGRAM_OF_STUDY',
+        'SCHOOL_REGISTRATION_NUMBER',
+        'HIGHEST_LEVEL_SCHOOL_ATTENDED',
+        'EDUCATION_LEVEL',
+        'PREVIOUS_SCHOOL_NAME',
+        'PREVIOUS_PROGRAM_OF_STUDY',
+        'REGISTRATION_FEE',
+        'MEMBERSHIP_NUMBER',
     ];
 
     // Override default password attribute to match `PASSWORD_HASH` column
@@ -43,6 +59,19 @@ class User extends Authenticatable
     // Timestamp columns
     const CREATED_AT = 'CREATED_AT';
     const UPDATED_AT = 'UPDATED_AT';
+
+    // Email verification method
+    public function markEmailAsVerified()
+    {
+        $this->EMAIL_VERIFICATION = 1; // Set email verification status to true (1)
+        $this->email_verified_at = now();
+        $this->save();
+    }
+
+    public function hasVerifiedEmail()
+    {
+        return $this->EMAIL_VERIFICATION === 1; // Check if email is verified
+    }
 
     // RBAC: Check if user has a specific role
     public function hasRole($roleName)
@@ -67,18 +96,5 @@ class User extends Authenticatable
             })
             ->exists();
     }
-
-    // Email verification method
-    public function markEmailAsVerified()
-    {
-        $this->EMAIL_VERIFICATION = 1; // Set email verification status to true (1)
-        $this->save();
-    }
-
-    public function hasVerifiedEmail()
-    {
-        return $this->EMAIL_VERIFICATION === 1; // Check if email is verified
-    }
     
-
 }

@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -29,38 +27,54 @@ class RegisterController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
-    {
-        // Validate the request inputs
-        $validatedData = $request->validate([
-            'USERNAME' => 'required|string|max:255|unique:users,USERNAME',
-            'FIRST_NAME' => 'required|string|max:255',
-            'LAST_NAME' => 'required|string|max:255',
-            'EMAIL' => 'required|string|email|max:255|unique:users,EMAIL',
-            'CATEGORY' => 'required|string|max:255',
-            'COURSE' => 'required|string|max:255',
-            'UNIVERSITY' => 'required|string|max:255',
-            'REASON' => 'nullable|string|max:1000', // Optional field
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        {
+            $validatedData = $request->validate([
+                'FIRST_NAME' => 'required|string|max:255',
+                'LAST_NAME' => 'required|string|max:255',
+                'EMAIL' => 'required|email|unique:users,EMAIL',
+                'PASSWORD' => 'required|string|min:8',
+                'GENDER' => 'required|in:Male,Female,Other',
+                'PHONE_NUMBER' => 'required|string|max:20|unique:users,PHONE_NUMBER',
+                'NATIONAL_ID_NUMBER' => 'required|string|max:50|unique:users,NATIONAL_ID_NUMBER',
+                'DISABILITY_STATUS' => 'required|in:Yes,No',
+                'DISABILITY_TYPE' => 'nullable|string|required_if:DISABILITY_STATUS,Yes',
+                'CURRENTLY_IN_SCHOOL' => 'required|in:Yes,No',
+                'HIGHEST_LEVEL_SCHOOL_ATTENDING' => 'nullable|required_if:CURRENTLY_IN_SCHOOL,Yes|in:TVET,College,University',
+                'SCHOOL_NAME' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+                'PROGRAM_OF_STUDY' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+                'SCHOOL_REGISTRATION_NUMBER' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+                'HIGHEST_LEVEL_SCHOOL_ATTENDED' => 'nullable|in:TVET,College,University',
+                'EDUCATION_LEVEL' => 'nullable|in:Undergraduate Degree,Post Graduate Diploma,Masters Degree,PhD',
+                'PREVIOUS_SCHOOL_NAME' => 'nullable|string',
+                'PREVIOUS_PROGRAM_OF_STUDY' => 'nullable|string',
+                'REGISTRATION_FEE' => 'required|string|min:0',
+                'PASSPORT_PHOTO' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image validation
+            ]);
 
-        // Create the user
-        $user = User::create([
-            'USERNAME' => $validatedData['USERNAME'],
-            'FIRST_NAME' => $validatedData['FIRST_NAME'],
-            'LAST_NAME' => $validatedData['LAST_NAME'],
-            'EMAIL' => $validatedData['EMAIL'],
-            'CATEGORY' => $validatedData['CATEGORY'],
-            'COURSE' => $validatedData['COURSE'],
-            'UNIVERSITY' => $validatedData['UNIVERSITY'],
-            'REASON' => $validatedData['REASON'],
-            'PASSWORD_HASH' => Hash::make($validatedData['password']),
-        ]);
+            // Encrypt password
+            $validatedData['PASSWORD_HASH'] = Hash::make($validatedData['PASSWORD']);
+            unset($validatedData['PASSWORD']); // Remove plain password
 
-        // Trigger the email verification event
-        event(new Registered($user));
+            // Handle file upload
+            if ($request->hasFile('PASSPORT_PHOTO')) {
+                $file = $request->file('PASSPORT_PHOTO');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('passport_photos', $filename, 'public');
 
-        // $user->sendEmailVerificationNotification();
+                // Save only the relative file path in the database
+                $validatedData['PASSPORT_PHOTO'] = 'passport_photos/' . $filename;
+            }
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please Login with your Email and Password.');
-    }
+            // Generate unique membership number
+            $validatedData['MEMBERSHIP_NUMBER'] = 'KESA' . str_pad(User::count() + 1, 5, '0', STR_PAD_LEFT);
+
+            // Create user
+            User::create($validatedData);
+
+            // Flash success message
+            session()->flash('success', 'You have successfully registered. Please log in with your email and password.');
+
+            // Redirect to login page
+            return redirect()->route('login');
+        }
 }
