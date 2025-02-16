@@ -44,6 +44,11 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                 Manage Events
             </a>
+            <!-- Manage Users -->
+            <a class="nav-link" href="{{ route('live-events.index') }}" style="font-size: 18px;">
+                <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                Live Events
+            </a>
 
             <!-- Manage Users -->
             <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px;">

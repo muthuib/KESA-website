@@ -158,6 +158,10 @@
                 <li class="nav-item">
                     <a href="{{ route('contact.display') }}" class="nav-link" style="@if(request()->routeIs('contact.display')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Contact Us</a>
                 </li>
+                <!-- Live events  tab -->
+                <li class="nav-item">
+                    <a href="{{ route('live-events.list') }}" class="nav-link" style="@if(request()->routeIs('contact.display')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Live Media</a>
+                </li>
                 <!-- Guest Links -->
                 <!-- @guest
                     <li class="nav-item dropdown">
