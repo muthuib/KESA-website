@@ -33,6 +33,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\LiveEventController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -271,3 +272,16 @@ Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.in
 Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
 });
 });
+
+//LIVE EVENTS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/media', [LiveEventController::class, 'index'])->name('live-events.index');
+Route::get('/media/add', [LiveEventController::class, 'create'])->name('live-events.create');
+Route::post('/media/store', [LiveEventController::class, 'store'])->name('live-events.store');
+Route::get('/live-events/edit/{id}', [LiveEventController::class, 'edit'])->name('live-events.edit');
+Route::put('/live-events/update/{id}', [LiveEventController::class, 'update'])->name('live-events.update');
+Route::delete('/live-events/destroy/{id}', [LiveEventController::class, 'destroy'])->name('live-events.destroy');
+});
+});
+Route::get('/live-events/list', [LiveEventController::class, 'list'])->name('live-events.list');
