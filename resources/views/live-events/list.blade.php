@@ -15,10 +15,12 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $event->title }}</h5>
                             <p class="text-muted">
-                                <i class="fas fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($event->date_time)->format('M d, Y - h:i A') }}
+                                <i class="fas fa-calendar-alt"></i> 
+                                {{ \Carbon\Carbon::parse($event->date_time)->format('M d, Y - h:i A') }}
                             </p>
                             <p><strong>Platform:</strong> {{ $event->platform }}</p>
-                            <button class="btn btn-danger" onclick="showLiveEvent('{{ $event->title }}', '{{ $event->platform }}', '{{ $event->link }}')">
+                            <button class="btn btn-danger" 
+                                    onclick="showLiveEvent('{{ $event->title }}', '{{ $event->platform }}', '{{ $event->link }}')">
                                 <i class="fas fa-play-circle"></i> Watch Live
                             </button>
                         </div>
@@ -34,8 +36,11 @@
 
     <!-- Live Video Section (Initially Hidden) -->
     <div id="liveEventSection" class="mt-5" style="display: none;">
-        <!-- Back to Events Button Moved to Right -->
+        <!-- Buttons: Cancel (Left) & Back to Events (Right) -->
         <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-danger" id="cancelButton" style="display: none;" onclick="cancelEvent()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
             <button class="btn btn-dark" onclick="closeLiveEvent()">
                 <i class="fas fa-backward"></i> Back to Events
             </button>
@@ -79,6 +84,7 @@
         let youtubeComments = document.getElementById('youtubeComments');
         let facebookComments = document.getElementById('facebookComments');
         let eventsList = document.getElementById('eventsList');
+        let cancelButton = document.getElementById('cancelButton');
 
         // Hide the events list when watching live
         eventsList.style.display = "none";
@@ -97,21 +103,26 @@
             videoFrame.src = "https://www.youtube.com/embed/" + videoId;
             youtubeComments.src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + window.location.hostname;
             youtubeCommentSection.style.display = "block";
+            cancelButton.style.display = "none"; // Hide cancel button
         }
         // Handle Facebook links
         else if (link.includes("facebook.com")) {
             videoFrame.src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(link);
             facebookComments.setAttribute("data-href", link);
             facebookCommentSection.style.display = "block";
+            cancelButton.style.display = "none"; // Hide cancel button
 
             // Reload Facebook SDK for comments
             FB.XFBML.parse();
         }
-        // Handle other platforms (open in a new tab)
+        // Handle other platforms (ask for confirmation before opening in new tab)
         else {
-            alert("This platform cannot be embedded. Opening in a new tab.");
-            window.open(link, "_blank");
-            return;
+            let confirmation = confirm("This platform cannot be embedded. Do you want to open it in a new tab?");
+            if (confirmation) {
+                window.open(link, "_blank");
+            }
+            eventsList.style.display = "block"; // Keep event list visible
+            return; // Stop execution
         }
 
         // Show the live event section
@@ -129,6 +140,15 @@
 
         // Stop video playback
         videoFrame.src = "";
+    }
+
+    function cancelEvent() {
+        let eventsList = document.getElementById('eventsList');
+        let cancelButton = document.getElementById('cancelButton');
+
+        // Show events list again
+        eventsList.style.display = "block";
+        cancelButton.style.display = "none"; // Hide cancel button
     }
 </script>
 

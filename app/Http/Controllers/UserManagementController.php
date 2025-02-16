@@ -15,9 +15,17 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get(); // Load users along with their roles
-        return view('users.index', compact('users'));
+        $users = User::with('roles')->get(); // Fetch all users with roles
+    
+        // Categorize users based on their role
+        $admins = $users->filter(fn($user) => $user->hasRole('Admin'));
+        $members = $users->filter(fn($user) => $user->hasRole('Member'));
+        $partners = $users->filter(fn($user) => $user->hasRole('Partner'));
+        $unassigned = $users->filter(fn($user) => $user->roles->isEmpty());
+    
+        return view('users.index', compact('admins', 'members', 'partners', 'unassigned'));
     }
+    
 /**
      * View user.
      */
