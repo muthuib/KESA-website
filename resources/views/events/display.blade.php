@@ -55,9 +55,9 @@
                             </div>
                         </div>
 
-                        <div class="card-footer text-center">
+                        <!-- <div class="card-footer text-center">
                             <a href="{{ route('tickets.buy', ['event' => $event->id]) }}" class="btn btn-primary">Book Ticket</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             @endif

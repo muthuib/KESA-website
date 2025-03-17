@@ -13,7 +13,7 @@
         <!-- Text Section -->
         <div class="col-12 col-md-9 text-center text-md-start">
             <h1 class="display-6 fw-bold" style="font-size: 20px; margin: 0;">
-                Welcome to Kenya Economics Students Association
+                Welcome to the Economics Students Association of Kenya
             </h1>
             <p class="lead mt-2" style="margin: 0;">
                 Explore our content, events, and resources. Stay updated with the latest news and debates!

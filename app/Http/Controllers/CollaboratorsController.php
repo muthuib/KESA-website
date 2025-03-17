@@ -36,27 +36,31 @@ class CollaboratorsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:jpg,png,jpeg,jfif|max:2048',
-            'description' => 'nullable|string',
-            'website' => 'nullable|url',
-        ]);
+        {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'logo' => 'required|image|mimes:jpg,png,jpeg,jfif|max:2048',
+                'description' => 'nullable|string',
+                'website' => 'nullable|url',
+            ]);
 
-        if ($request->hasFile('logo')) {
-            $validated['LOGO_PATH'] = $request->file('logo')->store('logos', 'public');
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('collaborators'), $filename);
+                $validated['LOGO_PATH'] = 'collaborators/' . $filename; // Save relative path
+            }
+
+            Collaboration::create([
+                'NAME' => $validated['name'],
+                'LOGO_PATH' => $validated['LOGO_PATH'],
+                'DESCRIPTION' => $validated['description'],
+                'WEBSITE' => $validated['website'],
+            ]);
+
+            return redirect()->route('collaborators.index')->with('success', 'Collaborator added successfully!');
         }
 
-        Collaboration::create([
-            'NAME' => $validated['name'],
-            'LOGO_PATH' => $validated['LOGO_PATH'],
-            'DESCRIPTION' => $validated['description'],
-            'WEBSITE' => $validated['website'],
-        ]);
-
-        return redirect()->route('collaborators.index')->with('success', 'Collaborator added successfully!');
-    }
 
     /**
      * Display the specified resource.
@@ -113,9 +117,12 @@ class CollaboratorsController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $validated['LOGO_PATH'] = $request->file('logo')->store('logos', 'public');
+            $file = $request->file('logo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('collaborators'), $filename);
+            $validated['LOGO_PATH'] = 'collaborators/' . $filename;
         } else {
-            $validated['LOGO_PATH'] = $collaboration->LOGO_PATH;
+            $validated['LOGO_PATH'] = $collaboration->LOGO_PATH; // Keep existing logo if no file is uploaded
         }
 
         $collaboration->update([

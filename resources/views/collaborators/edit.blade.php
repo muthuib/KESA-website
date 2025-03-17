@@ -39,9 +39,9 @@
 
                         <!-- Current Logo Preview -->
                         <div class="mb-3">
-                        <img src="{{ asset('storage/' . $collaborator->LOGO_PATH) }}" 
-                                 alt="{{ $collaborator->NAME }}" 
-                                 style="width: 50px; height: 50px; object-fit: contain;">
+                        <img src="{{ asset($collaborator->LOGO_PATH) }}" 
+                        alt="{{ $collaborator->NAME }}" 
+                        style="width: 50px; height: 50px; object-fit: contain;">
                         </div>
 
                         <!-- Description -->

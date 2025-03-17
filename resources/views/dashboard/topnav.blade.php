@@ -14,34 +14,185 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg- fixed-top" style="background-color: brown; margin-left: 0px; gap: 25px;">
+<style>
+        /* Default styles */
+        .motto-text { 
+            color: brown; 
+            font-size: 18px;
+        }
+        .motto-key { 
+            color: rgb(51, 33, 132); 
+            font-size: 17px;
+        }
+
+        /* For small devices */
+        @media (max-width: 576px) {
+            .motto-text, .motto-key {
+                font-size: 6px !important;
+            }
+        }
+         /* Pop-up styling */
+         #customPopup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Popup Content */
+        .popup-content {
+            text-align: left;
+        }
+
+        /* Close Button */
+        #closePopup {
+            background: none;
+            border: none;
+            font-size: 34px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: red;
+            font-weight: bold;
+        }
+        .menu-item {
+                margin-bottom: 10px; /* Adds space between items */
+            }
+
+        .menu-item a {
+            text-decoration: none; /* Removes underline */
+            color: black; /* Sets link color */
+            font-size: 16px; /* Adjust text size */
+            font-weight: bold;
+        }
+
+        .menu-item a:hover {
+            color: blue; /* Change color on hover */
+        }
+            /* consultancies dropdown */
+            .menu-item {
+                display: inline-block;
+                margin-right: 15px;
+            }
+
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                background: white; 
+                padding: 10px;
+                list-style: none;
+            }
+
+            .dropdown:hover .dropdown-menu {
+                display: block;
+            }
+ </style>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: brown; gap: 15px;">
         <!-- Navbar Brand -->
-        <a class="navbar-brand ps-3" href="{{ route('app') }}">
-           
+        <a class="navbar-brand ps-3" href="{{ route('app') }}"> 
         </a>
         <!-- Social media icons -->
-        <a href="#" target="_blank" class="text-decoration-none">
+        <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" target="_blank" class="text-decoration-none">
             <i class="fab fa-facebook text-white" style="font-size: 24px;"></i>
         </a>
-        <a href="#" target="_blank" class="text-decoration-none">
+        <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" target="_blank" class="text-decoration-none">
             <i class="fab fa-twitter text-white" style="font-size: 24px;"></i>
         </a>
-        <a href="#" target="_blank" class="text-decoration-none">
+        <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" target="_blank" class="text-decoration-none">
             <i class="fab fa-instagram text-white" style="font-size: 24px;"></i>
         </a>
-        <a href="#" target="_blank" class="text-decoration-none">
+        <a href="https://www.linkedin.com/company/kenya-economics-students-association/" target="_blank" class="text-decoration-none">
             <i class="fab fa-linkedin text-white" style="font-size: 24px;"></i>
         </a>
-      <p style="color:rgb(9, 220, 248);"><b>Motto:</b> <k style="color: #ffffff;"><b>Unity of Purpose</b></k></p> 
+      <p class="motto-text" style="color:rgb(9, 220, 248);"><b>Motto:</b> <k class="motto-key" style="color: #ffffff;"><b>Unity of Purpose</b></k></p> 
       
-
         <!-- Toggler Button for Collapsible Navbar -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+        </button> -->
+        <button class="navbar-toggler" id="openPopup">
             <span class="navbar-toggler-icon"></span>
         </button>
+<!-- Pop-Up Menu -->
+<div id="customPopup">
+    <div class="popup-content">
+        <button id="closePopup">&times;</button><br>
+        <ul style="text-align:left; width: 150px; list-style: none; padding: 0;">
+            @guest
+            <div class="menu-item"><a href="{{ route('home') }}">Home</a></div><br>
+            @endguest
+            <!-- About us Dropdown -->
+            <div class="menu-item dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">About Us</a>
+                <ul class="dropdown-menu">
+                <li>
+                        <a class="dropdown-item" href="{{ route('about.vision') }}" style="color: black; font-weight: bold;">Vision</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('about.mission') }}" style="color: black; font-weight: bold;">Mission</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('about.objectives') }}" style="color: black; font-weight: bold;">Objectives</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu-item"><a href="{{ route('events.showAll') }}">Events</a></div>
+            <!-- ECONOMICS HUB Dropdown -->
+            <div class="menu-item dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Economics hub</a>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ route('resources.show') }}">Resources</a></li>
+                        <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li>
+                        <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
+                </ul>
+            </div>
+            <div class="menu-item"><a href="{{ route('contact.display') }}">Contact</a></div>
+            <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div>
+            @guest
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('register') }}" style="background-color: blue; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                    Register
+                </a>
+            </li>
+            <li class="nav-item" style="margin-top: 10px;">
+                <a class="nav-link" href="{{ route('login') }}" style="background-color: green; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                    Login
+                </a>
+            </li>
+        
+            @endguest
+            @auth
+                    <!-- Logout Button -->
+               <li class="nav-item">
+               <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+               <i class="fas fa-user" style="font-size: 20px; color: blue;"></i> <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                    </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                @endauth
+                 </ul>
+            </div>
+        </div>
+                <script>
+                            document.getElementById("openPopup").addEventListener("click", function() {
+                            document.getElementById("customPopup").style.display = "block";
+                        });
 
+                        document.getElementById("closePopup").addEventListener("click", function() {
+                            document.getElementById("customPopup").style.display = "none";
+                        });
+
+                 </script>
         <!-- Collapsible Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: 30px;">
+        <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: 30px; margin-left: 200px;">
             <ul class="navbar-nav ms-auto">
             @guest
                 <li class="nav-item">
@@ -65,7 +216,6 @@
                         @endif">
                     About Us
                 </a>
-
                 <!-- Dropdown Menu -->
                 <ul class="dropdown-menu" id="dropdown-menu" 
                     style="background-color:white; position: absolute; top: 100%; left: 0; padding: 10px; border-radius: 5px; display: none;">              
@@ -160,7 +310,7 @@
                 </li>
                 <!-- Live events  tab -->
                 <li class="nav-item">
-                    <a href="{{ route('live-events.list') }}" class="nav-link" style="@if(request()->routeIs('contact.display')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Live Media</a>
+                    <a href="{{ route('live-events.list') }}" class="nav-link" style="@if(request()->routeIs('live-events.list')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Live Media</a>
                 </li>
                 <!-- Guest Links -->
                 <!-- @guest
