@@ -73,9 +73,16 @@ public function index()
         
             // Handle profile picture update
             if ($request->hasFile('PASSPORT_PHOTO')) {
-                $imagePath = $request->file('PASSPORT_PHOTO')->store('profile_pictures', 'public');
-                $user->PASSPORT_PHOTO = $imagePath;
+                $file = $request->file('PASSPORT_PHOTO');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                
+                // Move the file directly to the public/profile_photos/ directory
+                $file->move(public_path('profile_photos'), $filename);
+            
+                // Store the relative path in the database
+                $user->PASSPORT_PHOTO = 'profile_photos/' . $filename;
             }
+          
         
             $user->save();
         

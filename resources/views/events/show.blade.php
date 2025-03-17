@@ -10,6 +10,7 @@
         </a>
     </div>
 
+    
     <h1>{{ $event->name }}</h1>
     <p><strong>Location:</strong> {{ $event->location }}</p>
     <p><strong>Venue:</strong> {{ $event->venue }}</p>

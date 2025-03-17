@@ -54,7 +54,7 @@ class LiveEventController extends Controller
         $event = LiveEvent::findOrFail($id);
         $event->update($request->all());
     
-        return redirect()->route('live-events.list')->with('success', 'Live event updated successfully.');
+        return redirect()->route('live-events.index')->with('success', 'Live event updated successfully.');
     }
     
     public function destroy($id)
@@ -62,7 +62,7 @@ class LiveEventController extends Controller
         $event = LiveEvent::findOrFail($id);
         $event->delete();
     
-        return redirect()->route('live-events.list')->with('danger', 'Live event deleted successfully.');
+        return redirect()->route('live-events.index')->with('danger', 'Live event deleted successfully.');
     }
 }
 

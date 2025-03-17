@@ -149,10 +149,10 @@
                 </div>
                 <!-- Social Media Links -->
                 <div class="mt-4">
-                    <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <a href=" https://www.linkedin.com/company/kenya-economics-students-association/" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" class="text-light"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>

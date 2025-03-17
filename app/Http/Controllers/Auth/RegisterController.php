@@ -59,12 +59,14 @@ class RegisterController extends Controller
             if ($request->hasFile('PASSPORT_PHOTO')) {
                 $file = $request->file('PASSPORT_PHOTO');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('passport_photos', $filename, 'public');
-
-                // Save only the relative file path in the database
-                $validatedData['PASSPORT_PHOTO'] = 'passport_photos/' . $filename;
+            
+                // Move file directly to the public/profile_photos folder
+                $file->move(public_path('profile_photos'), $filename);
+            
+                // Save only the relative path in the database
+                $validatedData['PASSPORT_PHOTO'] = 'profile_photos/' . $filename;
             }
-
+            
             // Generate unique membership number
             $validatedData['MEMBERSHIP_NUMBER'] = 'KESA' . str_pad(User::count() + 1, 5, '0', STR_PAD_LEFT);
 

@@ -148,7 +148,10 @@
         </div><br>
         <div class="mb-3">
             <label for="PASSPORT_PHOTO" class="form-label">Upload Passport Sized Photo</label><br>
-            <img src="{{ url('storage/' . $user->PASSPORT_PHOTO) }}" class="card-img-top rounded-circle" alt="Upload profile Picture" style="width: 50px; height: 50px; object-fit: cover;">
+            <img src="{{ asset($user->PASSPORT_PHOTO) }}" 
+                class="card-img-top rounded-circle" 
+                alt="Upload profile Picture" 
+                style="width: 50px; height: 50px; object-fit: cover;">
             <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" class="form-control">
         </div>
 

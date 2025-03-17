@@ -7,7 +7,10 @@
             <div class="col-md-3">
                 <div class="card mb-4">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ url('storage/' . $user->PASSPORT_PHOTO) }}" class="card-img-top rounded-circle" alt="Upload profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="{{ asset($user->PASSPORT_PHOTO) }}" 
+                    class="card-img-top rounded-circle" 
+                    alt="Upload profile Picture" 
+                    style="width: 150px; height: 150px; object-fit: cover;">
                 </div>
                     <div class="card-body text-left" style=" width: 300px;">
                         <h5 class="card-title">{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</h5>

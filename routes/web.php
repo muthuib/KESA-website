@@ -135,10 +135,13 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 
 //COLLABORATORS ROUTES
 Route::middleware('auth')->group(function () {
-    Route::post('/collaborators', [CollaboratorsController::class, 'store'])->name('collaborators.store');
-    Route::resource('collaborators', CollaboratorsController::class);
-    // Route to show collaborations
-    Route::get('/collaborators', [CollaboratorsController::class, 'index'])->name('collaborators.index');
+    Route::get('/collaborator', [CollaboratorsController::class, 'index'])->name('collaborators.index'); // List all collaborators
+    Route::get('/collaborator/create', [CollaboratorsController::class, 'create'])->name('collaborators.create'); // Show form to create a new collaborator
+    Route::post('/collaborator', [CollaboratorsController::class, 'store'])->name('collaborators.store'); // Store new collaborator in DB
+    Route::get('/collaborator/{id}', [CollaboratorsController::class, 'show'])->name('collaborators.show'); // Show a single collaborator
+    Route::get('/collaborator/{id}/edit', [CollaboratorsController::class, 'edit'])->name('collaborators.edit'); // Show edit form
+    Route::put('/collaborator/{id}', [CollaboratorsController::class, 'update'])->name('collaborators.update'); // Update a collaborator
+    Route::delete('/collaborator/{id}', [CollaboratorsController::class, 'destroy'])->name('collaborators.destroy'); // Delete a collaborator
     });
     
 Route::get('/fetch-collaborations', [CollaboratorsController::class, 'fetchCollaborations'])->name('collaborations.fetch');

@@ -10,11 +10,12 @@
                     <div class="card shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
                             <!-- Logo with fallback -->
-                            <img src="{{ file_exists(public_path('storage/' . $collaboration->LOGO_PATH)) 
-                                        ? asset('storage/' . $collaboration->LOGO_PATH) 
-                                        : asset('images/default-logo.png') }}" 
-                                 alt="{{ $collaboration->NAME }}" 
-                                 class="img-fluid mb-3" style="max-height: 100px; object-fit: contain;">
+                            <img src="{{ file_exists(public_path($collaboration->LOGO_PATH)) 
+                                    ? asset($collaboration->LOGO_PATH) 
+                                    : asset('images/default-logo.png') }}" 
+                            alt="{{ $collaboration->NAME }}" 
+                            class="img-fluid mb-3" 
+                            style="max-height: 100px; object-fit: contain;">
                             <!-- Name -->
                             <h5 class="card-title">{{ $collaboration->NAME ?? 'Unknown Partner' }}</h5>
                             <!-- Description -->
@@ -44,11 +45,13 @@
                         @foreach ($collaborations->slice(4) as $collaboration) <!-- Display extra collaborators -->
                             <div style="display: inline-block; text-align: center; margin-right: 30px;">
                                 <!-- Logo -->
-                                <img src="{{ file_exists(public_path('storage/' . $collaboration->LOGO_PATH)) 
-                                            ? asset('storage/' . $collaboration->LOGO_PATH) 
-                                            : asset('images/default-logo.png') }}" 
-                                     alt="{{ $collaboration->NAME }}" 
-                                     style="max-height: 50px; object-fit: contain; display: block; margin: 0 auto;">
+                                <img src="{{ file_exists(public_path($collaboration->LOGO_PATH)) 
+                                        ? asset($collaboration->LOGO_PATH) 
+                                        : asset('images/default-logo.png') }}" 
+                                alt="{{ $collaboration->NAME }}" 
+                                class="img-fluid mb-3" 
+                                style="max-height: 50px; object-fit: contain;">
+
                                 <!-- Name -->
                                 <p class="mt-2" style="font-size: 14px;">{{ $collaboration->NAME ?? 'Unknown Partner' }}</p>
                             </div>

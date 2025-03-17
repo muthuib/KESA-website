@@ -28,9 +28,9 @@
                         <td>{{ $index + 1 }}</td> <!-- Dynamic numbering -->
                         <td>{{ $collaborator->NAME }}</td>
                         <td>
-                            <img src="{{ asset('storage/' . $collaborator->LOGO_PATH) }}" 
-                                 alt="{{ $collaborator->NAME }}" 
-                                 style="width: 50px; height: 50px; object-fit: contain;">
+                        <img src="{{ asset($collaborator->LOGO_PATH) }}" 
+                            alt="{{ $collaborator->NAME }}" 
+                            style="width: 50px; height: 50px; object-fit: contain;">
                         </td>
                         <td>{{ $collaborator->DESCRIPTION }}</td>
                         <td>
