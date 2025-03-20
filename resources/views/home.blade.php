@@ -3,24 +3,137 @@
 <!-- Main Content Container -->
 <div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;">
     <!-- Main Row -->
-    <div class="row align-items-center g-3">
-        <!-- Logo -->
-        <div class="col-12 col-md-3 d-flex justify-content-start">
-            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" 
-                 style="width: 200px; margin-top: 25px;" class="img-fluid">
-        </div>
+    <div class="row align-items-center g-3 d-flex">
+        <!-- Logo and Text Container -->
+        <div class="col-12 d-flex align-items-center">
+            <!-- Logo -->
+            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="img-fluid logo-img">
 
-        <!-- Text Section -->
-        <div class="col-12 col-md-9 text-center text-md-start">
-            <h1 class="display-6 fw-bold" style="font-size: 20px; margin: 0;">
-                Welcome to the Economics Students Association of Kenya
-            </h1>
-            <p class="lead mt-2" style="margin: 0;">
-                Explore our content, events, and resources. Stay updated with the latest news and debates!
-            </p>
+            <!-- Text Section -->
+            <div class="text-content">
+                <h1 class="display-6 fw-bold heading-text">
+                    Welcome to the Economics Students Association of Kenya
+                </h1>
+                <p class="lead mt-2 description-text">
+                    Explore our content, events, and resources. Stay updated with the latest news and debates!
+                </p>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Custom CSS -->
+<style>
+    /* Default Styles for Large Screens */
+    .logo-img {
+        width: 200px;
+        margin-top: 30px;
+        margin-right: 15px; /* Add space between logo and text */
+    }
+
+    .text-content {
+        display: flex;
+        flex-direction: column; /* Stack text content vertically */
+    }
+
+    .heading-text {
+        font-size: 18px !important;
+        margin-left: 200px;
+        margin-top: 40px;
+        margin-bottom: 0px; /* Reduce space below h1 */
+    }
+
+    .description-text {
+        font-size: 14px;
+        margin-left: 150;
+        margin-top: 0px; /* Reduce space above p */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) { /* Apply styles for small devices */
+        .logo-img {
+            width: 100px; /* Reduce logo size */
+            margin-top: 35;
+            margin-right: 1px;
+            margin-left: 3px;
+        }
+
+        .heading-text {
+            font-size: 10px !important; /* Reduce heading font size */
+            margin-top: 35;
+            margin-left: 3px;
+        }
+
+        .description-text {
+            font-size: 8px !important; /* Reduce paragraph font size */
+            margin-left: 3px;
+        }
+
+        .text-content {
+            flex: 1; /* Allow text to use remaining space */
+        }
+    }
+
+    @media (max-width: 400px) { /* Apply even smaller styles for extra-small devices */
+        .heading-text {
+            font-size: 8px !important; 
+            margin-left: 3px;
+        }
+
+        .description-text {
+            font-size: 7px !important;
+            margin-left: 3px;
+        }
+    }
+    /* device responsiveness for slideshows */
+    /* Default for large screens */
+#guestSlideshow {
+    width: 100%;
+    height: 60vh; /* Adjusted for better proportionality */
+}
+
+#guestSlideshow .carousel-item img {
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 992px) {
+    #guestSlideshow {
+        height: 40vh; /* Reduce height */
+    }
+
+    #guestSlideshow .carousel-item img {
+        height: 40vh;
+    }
+
+    #guestSlideshow .carousel-caption h2 {
+        font-size: 20px; /* Reduce caption size */
+    }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 576px) {
+    #guestSlideshow {
+        height: 20vh; /* Further reduce height */
+    }
+
+    #guestSlideshow .carousel-item img {
+        height: 20vh;
+    }
+
+    #guestSlideshow .carousel-caption {
+        text-align: center;
+        bottom: 10px; /* Adjust caption position */
+    }
+
+    #guestSlideshow .carousel-caption h2 {
+        font-size: 16px; /* Make text smaller */
+        padding: 5px 10px;
+    }
+}
+
+</style>
 
 <!-- Slideshow outside the container for full-screen width -->
 @if($slides->isNotEmpty())
@@ -89,15 +202,15 @@
 @endif
 
 <!-- Newsletter Subscription Section -->
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm" style="margin-top: 150px;">
                 <div class="card-body">
-                    <h4 class="card-title text-center mb-4">Subscribe to Our Newsletter</h4>
+                    <h4 class="card-title text-center mb-4">Subscribe to Our Newsletter</h4> -->
                     
                     <!-- Display error message if email is already subscribed -->
-                    @if(session('error'))
+                    <!-- @if(session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
@@ -107,7 +220,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="email" class="form-label">Your Email Address</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required readonly>
                         </div>
                         <div class="form-group text-center mt-4">
                             <button type="submit" class="btn btn-primary">Subscribe</button>
@@ -117,7 +230,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Thank You Modal -->
 @if(session('success'))
@@ -140,7 +253,7 @@
 @endif
 
 <!-- Explore Section -->
-<div class="container mt-5">
+<!-- <div class="container mt-5" style="margin-top: 2000px;">
     <div class="row mt-5">
         <div class="col-md-4 col-sm-6">
             <div class="card shadow-sm">
@@ -173,10 +286,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Collaborations Section -->
-@include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
+    @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
 <!-- What People Say About Us Section -->
 @include('feedback.display', ['feedbacks' => App\Models\Feedback::all()])

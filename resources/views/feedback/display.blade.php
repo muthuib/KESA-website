@@ -1,45 +1,43 @@
 @section('content')
-<div class="container mt-5 px-3" style="background-color: #f3f4f6; font-family: Arial, sans-serif;">
+<div class="container mt-5 px-3" style="background-color: #ffffff; font-family: Arial, sans-serif; overflow-x: hidden;">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10">
-            <div class="feedback-section" style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <h1 class="text-center" style="font-size: 28px; color: #111827; font-weight: bold; margin-bottom: 20px;">What People Say About Us</h1>
+            <div class="feedback-section p-4 rounded shadow-sm" style="background-color: #ffffff;">
+                <h1 class="text-center feedback-title">What People Say About Us</h1>
 
-                <!-- Individual Feedbacks Section in Cards -->
-                <div id="feedback-container" class="feedback-section-content" style="display: flex; flex-wrap: nowrap; padding-bottom: 20px;">
-                    @foreach ($feedbacks as $feedback)
-                        <div class="feedback-card" style="flex-shrink: 0; margin-right: 15px; width: 300px;">
-                            <div id="card-{{ $feedback->id }}" class="card" style="border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-                                <div class="card-body" style="padding: 20px;">
-                                    <h2 class="card-title" style="font-size: 18px; font-weight: bold; color: #111827;">{{ $feedback->email }}</h2>
-                                    <p class="card-text" style="font-size: 14px; color: #6b7280; margin-bottom: 10px;">
-                                        Rating: <span style="color: #f59e0b; font-weight: bold;">{{ $feedback->rating }}/5</span>
-                                    </p>
-                                    <p id="feedback-{{ $feedback->id }}" class="card-text" style="font-size: 16px; color: #374151; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-height: 50px;">
-                                        "{{ $feedback->message }}"
-                                    </p>
+                <!-- Feedback Container with Marquee -->
+                <div id="feedback-wrapper" class="overflow-hidden">
+                    <div id="feedback-container" class="d-flex flex-nowrap pb-3">
+                        @foreach ($feedbacks->take(10) as $feedback)
+                            <div class="feedback-card mx-2">
+                                <div id="card-{{ $feedback->id }}" class="card shadow-sm border">
+                                    <div class="card-body p-3">
+                                        <h2 class="feedback-email">{{ $feedback->email }}</h2>
+                                        <p class="feedback-rating">Rating: <span class="text-warning font-weight-bold">{{ $feedback->rating }}/5</span></p>
+                                        <p id="feedback-{{ $feedback->id }}" class="feedback-message">
+                                                "{{ \Illuminate\Support\Str::words($feedback->message, 8, '...') }}"
+                                            </p>
 
-                                    @if(strlen($feedback->message) > 50)
-                                        <button id="read-more-btn-{{ $feedback->id }}" onclick="toggleReadMore({{ $feedback->id }})" 
-                                                style="background-color: transparent; border: none; color: #2563eb; cursor: pointer; font-size: 14px; margin-top: 5px;">
-                                            Read More
-                                        </button>
-                                    @endif
+                                            @if(str_word_count($feedback->message) > 8)
+                                                <button id="read-more-btn-{{ $feedback->id }}" onclick="toggleReadMore({{ $feedback->id }}, '{{ addslashes($feedback->message) }}')" class="read-more-btn">
+                                                    Read More
+                                                </button>
+                                            @endif
 
-                                    @auth
-                                        <form action="{{ url('/feedback/' . $feedback->id) }}" method="POST" style="position: absolute; top: 10px; right: 10px;" onsubmit="return confirmDelete()">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    style="background-color: #dc2626; color: #ffffff; border: none; padding: 8px 10px; border-radius: 5px; font-size: 14px; cursor: pointer;">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    @endauth
+                                        
+
+                                        @auth
+                                            <form action="{{ url('/feedback/' . $feedback->id) }}" method="POST" class="delete-form" onsubmit="return confirmDelete()">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="delete-btn">Delete</button>
+                                            </form>
+                                        @endauth
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,86 +45,158 @@
 </div>
 
 <script>
-    function toggleReadMore(id) {
-        const feedbackElement = document.getElementById(`feedback-${id}`);
-        const cardElement = document.getElementById(`card-${id}`);
-        const button = document.getElementById(`read-more-btn-${id}`);
+  function toggleReadMore(id, fullText) {
+    const feedbackElement = document.getElementById(`feedback-${id}`);
+    const button = document.getElementById(`read-more-btn-${id}`);
 
-        if (feedbackElement.style.whiteSpace === 'nowrap') {
-            // Expand the feedback content and card
-            feedbackElement.style.whiteSpace = 'normal';
-            feedbackElement.style.textOverflow = 'unset';
-            feedbackElement.style.maxHeight = 'none';
-            button.textContent = 'Read Less';
-            
-            // Adjust the height of the card
-            cardElement.style.height = 'auto';
-        } else {
-            // Collapse the feedback content and card
-            feedbackElement.style.whiteSpace = 'nowrap';
-            feedbackElement.style.textOverflow = 'ellipsis';
-            feedbackElement.style.maxHeight = '50px';
-            button.textContent = 'Read More';
-
-            // Reset the height of the card
-            cardElement.style.height = '150px';
-        }
+    if (button.textContent === 'Read More') {
+        feedbackElement.textContent = `"${fullText}"`;
+        button.textContent = 'Read Less';
+    } else {
+        const truncatedText = fullText.split(" ").slice(0, 8).join(" ") + "...";
+        feedbackElement.textContent = `"${truncatedText}"`;
+        button.textContent = 'Read More';
     }
+}
 
-    // JavaScript function to confirm deletion
     function confirmDelete() {
         return confirm('Do you want to delete this feedback?');
     }
 
-    // Apply marquee effect to all feedback cards
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const feedbackContainer = document.getElementById('feedback-container');
-        const feedbackItems = feedbackContainer.getElementsByClassName('feedback-card');
-
-        if (feedbackItems.length > 3) {
+        if (feedbackContainer.children.length > 3) {
             feedbackContainer.classList.add('marquee');
         }
     });
 </script>
 
-
 <style>
-    /* Apply marquee animation to the entire feedback container */
+    /* Prevent horizontal scrolling */
+    body, html {
+        overflow-x: hidden;
+    }
+
+    /* Feedback Section Styles */
+    .feedback-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #111827;
+    }
+
+    .feedback-email {
+        font-size: 18px;
+        font-weight: bold;
+        color: #111827;
+    }
+
+    .feedback-rating {
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .feedback-message {
+        font-size: 16px;
+        color: #374151;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-height: 50px;
+    }
+
+    .read-more-btn {
+        background: none;
+        border: none;
+        color: #2563eb;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .delete-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .delete-btn {
+        background-color: #dc2626;
+        color: #ffffff;
+        border: none;
+        padding: 8px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    /* Marquee Animation */
     .marquee {
         display: flex;
-        animation: marquee 15s linear infinite;
+        gap: 15px;
+        animation: marquee 40s linear infinite;
+        will-change: transform;
     }
 
     @keyframes marquee {
         0% {
-            transform: translateX(0);
+            transform: translateX(100%);
         }
         100% {
             transform: translateX(-100%);
         }
     }
 
-    /* Prevent overflow and keep cards in place */
-    .feedback-card {
-        flex-shrink: 0;
-        margin-right: 15px;
-    }
-
-    /* Ensure cards do not wrap on larger screens */
-    .row {
-        flex-wrap: wrap !important;
-    }
-
-    /* Media Queries for Responsiveness */
+    /* Ensure no horizontal scroll on small screens */
     @media (max-width: 767px) {
-        .feedback-card {
-            width: 100% !important; /* Cards stack vertically */
+        .feedback-title {
+            font-size: 16px !important;
+        }
+
+        .feedback-email {
+            font-size: 14px !important;
+        }
+
+        .feedback-rating {
+            font-size: 12px !important;
+        }
+
+        .feedback-message {
+            font-size: 10px !important;
+        }
+
+        .read-more-btn {
+            font-size: 10px !important;
+        }
+
+        .marquee {
+            animation: marquee 60s linear infinite;
+        }
+
+        #feedback-wrapper {
+            overflow-x: hidden;
+        }
+
+        #feedback-container {
+            display: flex;
+            flex-wrap: nowrap;
+            width: max-content;
         }
     }
 
     @media (max-width: 991px) {
-        .feedback-card {
-            width: 48% !important; /* Two cards per row on medium screens */
+        .feedback-title {
+            font-size: 24px !important;
+        }
+
+        .feedback-email {
+            font-size: 16px !important;
+        }
+
+        .feedback-rating {
+            font-size: 14px !important;
+        }
+
+        .feedback-message {
+            font-size: 12px !important;
         }
     }
 </style>
