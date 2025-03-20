@@ -43,9 +43,8 @@ class FeedbackController extends Controller
        // Display feedbacks in the view
     public function display()
     {
-        // Fetch all feedbacks from the database
-        $feedbacks = Feedback::all();
-
+        $feedbacks = Feedback::latest()->take(10)->get();
+       return view('your-view-name', compact('feedbacks'));
         // Return the 'feedback.display' view and pass the feedback data
         return view('feedback.display', compact('feedbacks'));
     }

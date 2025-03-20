@@ -8,113 +8,206 @@
     <!-- Link to your CSS file -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            background-image: url('pictures/econ.jpg'); /* Add the background image URL */
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        }
+    body,
+    html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        background-image: url('pictures/econ.jpg'); /* Add the background image URL */
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
+    }
 
+    .register-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 50px;
+        min-height: 100%;
+    }
+
+    .register-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+        height: auto; /* Allow height to adjust based on content */
+        margin-top: 70px;
+        
+    }
+
+    .register-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        position: relative; /* Required for the asterisk positioning */
+    }
+
+    .form-group input[required]::before, 
+    .form-group select[required]::before, 
+    .form-group textarea[required]::before {
+        content: ' *'; /* Asterisk character */
+        color: red; /* Asterisk color set to red */
+        font-size: 14px; /* Font size */
+        font-weight: bold; /* Bold font weight */
+        position: absolute; /* Position asterisk to the left */
+        left: 5px; /* Position it correctly */
+        top: 50%; /* Center asterisk vertically */
+        transform: translateY(-50%); /* Center asterisk vertically */
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    .success {
+        color: #155724;
+        background-color: #d4edda;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #c3e6cb;
+    }
+
+    .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    /* Logo container */
+    .logo-container {
+        display: flex;
+        justify-content: center; /* Center the logo horizontally */
+        margin-top: 10px; /* Add some top margin */
+    }
+
+    /* Logo image */
+    .logo {
+        width: 140px; /* Default size for larger screens */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    /* Responsive adjustments for small devices */
+    @media (max-width: 768px) {
         .register-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 50px;
-            min-height: 100%;
+            padding-top: 20px; /* Reduce padding for smaller screens */
+            
         }
 
         .register-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
+            padding: 15px; /* Reduce padding for smaller screens */
+            margin: 10px; /* Reduce margin for smaller screens */
+            margin-top: 70px;
+            width: 450px;
+            
         }
 
         .register-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
+            font-size: 1.0rem; /* Reduce heading size for smaller screens */
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+        .form-row {
+            flex-direction: column; /* Stack form fields vertically on small screens */
+            gap: 7px; /* Reduce gap between stacked fields */
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            position: relative; /* Required for the asterisk positioning */
-        }
-
-        .form-group input[required]::before, 
-        .form-group select[required]::before, 
-        .form-group textarea[required]::before {
-            content: ' *'; /* Asterisk character */
-            color: red; /* Asterisk color set to red */
-            font-size: 14px; /* Font size */
-            font-weight: bold; /* Bold font weight */
-            position: absolute; /* Position asterisk to the left */
-            left: 5px; /* Position it correctly */
-            top: 50%; /* Center asterisk vertically */
-            transform: translateY(-50%); /* Center asterisk vertically */
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
+            padding: 8px; /* Reduce padding for smaller screens */
+            font-size: 10px; /* Reduce font size for smaller screens */
         }
 
         button[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
+            padding: 10px; /* Reduce button padding for smaller screens */
+            font-size: 10px; /* Reduce button font size for smaller screens */
         }
 
-        button[type="submit"]:hover {
-            background-color: #218838;
-        }
-
-        .success {
-            color: #155724;
-            background-color: #d4edda;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #c3e6cb;
-        }
-
+        .success,
         .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 10px; /* Reduce font size for messages */
         }
-    </style>
+    }
+    /* Logo adjustments for small screens */
+        .logo-container {
+            text-align: center; /* Center the logo horizontally */
+        }
+        .logo {
+            width: 100px; /* Reduce logo size for small screens */
+            margin-left: 0; /* Remove left margin */
+        }
+        
+    /* Further adjustments for very small devices (e.g., phones) */
+    @media (max-width: 480px) {
+        .register-container {
+            padding: 10px; /* Further reduce padding for very small screens */
+            margin-top: 70px;
+            width: 400px;
+        }
+
+        .register-container h2 {
+            font-size: 0.80rem; /* Further reduce heading size */
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 6px; /* Further reduce padding for very small screens */
+            font-size: 12px; /* Further reduce font size for very small screens */
+        }
+
+        button[type="submit"] {
+            padding: 8px; /* Further reduce button padding for very small screens */
+            font-size: 10px; /* Further reduce button font size for very small screens */
+        }
+        .logo {
+            width: 80px; /* Further reduce logo size for very small screens */
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -122,7 +215,7 @@
     @include('dashboard.topnav')
 
     <div class="register-wrapper">
-        <div class="register-container" style="margin-top: 30px; margin-bottom: 90px; height: 1245px;">
+        <div class="register-container">
             @if (session('success'))
                 <div class="success">
                     {{ session('success') }}
@@ -136,9 +229,8 @@
             @endif
 
             <!-- Logo -->
-            <div class="col-12 col-md-3 d-flex justify-content-start">
-                <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" 
-                     style="width: 140px; margin-top: 2px; margin-left: 260px;" class="img-fluid">
+            <div class="logo-container">
+                <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid">
             </div>
 
             <h2 style="color:rgb(61, 15, 81);">KESA Member Registration</h2>
