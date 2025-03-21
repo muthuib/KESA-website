@@ -10,7 +10,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
 
 <body>
@@ -102,7 +105,8 @@
             <i class="fab fa-facebook text-white" style="font-size: 24px;"></i>
         </a>
         <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" target="_blank" class="text-decoration-none">
-            <i class="fab fa-twitter text-white" style="font-size: 24px;"></i>
+        <img src="/assets/images/x-logo.png" alt="Twitter X" width="22" height="22">
+        </a>
         </a>
         <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" target="_blank" class="text-decoration-none">
             <i class="fab fa-instagram text-white" style="font-size: 24px;"></i>
@@ -127,19 +131,12 @@
             @guest
             <div class="menu-item"><a href="{{ route('home') }}">Home</a></div><br>
             @endguest
-            <!-- About us Dropdown -->
+            <!-- about us dropdown -->
             <div class="menu-item dropdown">
-                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">About Us</a>
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">About Us</a> <br>
                 <ul class="dropdown-menu">
-                <li>
-                        <a class="dropdown-item" href="{{ route('about.vision') }}" style="color: black; font-weight: bold;">Vision</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.mission') }}" style="color: black; font-weight: bold;">Mission</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.objectives') }}" style="color: black; font-weight: bold;">Objectives</a>
-                    </li>
+                <li><a class="dropdown-item" href="{{ route('about.display') }}">Who we are</a></li>
+                        <li><a class="dropdown-item" href="{{ route('team-members.display') }}">Our people</a></li>
                 </ul>
             </div>
             <div class="menu-item"><a href="{{ route('events.showAll') }}">Events</a></div>
@@ -148,7 +145,7 @@
                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Economics hub</a>
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{ route('resources.show') }}">Resources</a></li>
-                        <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li>
+                        <!-- <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li> -->
                         <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
                 </ul>
             </div>
@@ -156,12 +153,12 @@
             <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div>
             @guest
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}" style="background-color: blue; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                <a class="nav-link" href="{{ route('register') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
                     Register
                 </a>
             </li>
             <li class="nav-item" style="margin-top: 10px;">
-                <a class="nav-link" href="{{ route('login') }}" style="background-color: green; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                <a class="nav-link" href="{{ route('login') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
                     Login
                 </a>
             </li>
@@ -204,34 +201,19 @@
                     </a>
                 </li>
             @endguest
-                
-                 <!-- About Us Dropdown -->
-            <li class="nav-item dropdown" style="position: relative;">
-                <!-- Main Tab -->
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
-                    style="@if(request()->routeIs('about.vision') || request()->routeIs('about.mission') || request()->routeIs('about.objectives')) 
-                            color: aqua; font-weight: bold; text-decoration: none; 
-                        @else 
-                            color: white; font-weight: bold; text-decoration: none; 
-                        @endif">
-                    About Us
-                </a>
-                <!-- Dropdown Menu -->
-                <ul class="dropdown-menu" id="dropdown-menu" 
-                    style="background-color:white; position: absolute; top: 100%; left: 0; padding: 10px; border-radius: 5px; display: none;">              
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.vision') }}" style="color: black; font-weight: bold;">Vision</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.mission') }}" style="color: black; font-weight: bold;">Mission</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.objectives') }}" style="color: black; font-weight: bold;">Objectives</a>
-                    </li>
-                </ul>
-            </li>
-         <!-- End of About us dropdown -->
-                <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Events</a>
+                <!-- About us Dropdown (Fixed) -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" style="@if(request()->routeIs('about.display') || request()->routeIs('team-members.display')) 
+                                color: aqua; font-weight: bold; text-decoration: none; 
+                            @else 
+                                color: white; font-weight: bold; text-decoration: none; 
+                            @endif">About Us</a>
+                    <ul class="dropdown-menu" id="economicsHubMenu">
+                        <li><a class="dropdown-item" href="{{ route('about.display') }}">Who we are</a></li>
+                        <li><a class="dropdown-item" href="{{ route('team-members.display') }}">Our people</a></li>
+                    </ul>
+                </li>
+            <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; @else color: white; font-weight: bold; text-decoration: none; @endif">Events</a>
                     <!-- Economics Hub Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" style="@if(request()->routeIs('resources.show') || request()->routeIs('app') || request()->routeIs('feedback.create')) 
@@ -241,7 +223,7 @@
                             @endif">Economics Hub</a>
                     <ul class="dropdown-menu" id="economicsHubMenu">
                         <li><a class="dropdown-item" href="{{ route('resources.show') }}">Resources</a></li>
-                        <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li>
+                        <!-- <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li> -->
                         <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
                     </ul>
                 </li>
@@ -333,14 +315,14 @@
                 @guest
                     <!-- Register Button -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}" style="background-color: blue; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                        <a class="nav-link" href="{{ route('register') }}" style="background-color: brown; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
                             Register
                         </a>
                     </li>
 
                     <!-- Login Button -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}" style="background-color: green; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                        <a class="nav-link" href="{{ route('login') }}" style="background-color: brown; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
                             Login
                         </a>
                     </li>

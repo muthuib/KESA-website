@@ -14,7 +14,10 @@ class About extends Model
     protected $fillable = [
         'VISION',
         'MISSION',
-        'OBJECTIVES'
+        'OBJECTIVES',
+        'ABOUT',
+        'MOTTO',
+        'BELIEF'
     ];
      // If your table uses custom primary key name (still 'id' in this case, so optional)
     //since our columns are in uppercase we will define this key to move it from default laravel snake case id.
