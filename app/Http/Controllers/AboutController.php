@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\About;
+use App\Models\AboutSlide;
+use App\Models\TeamMember;
 
 class AboutController extends Controller
 {
@@ -29,6 +31,9 @@ class AboutController extends Controller
                'vision' => 'required|string|max:255',
                'mission' => 'required|string|max:255',
                'objectives' => 'required|string|max:255',
+               'motto' => 'required|string|max:255',
+               'about' => 'required|string|max:255',
+               'belief' => 'required|string|max:255',
            ]);
    
            // Create a new About Us entry
@@ -36,6 +41,9 @@ class AboutController extends Controller
                'VISION' => $request->vision,
                'MISSION' => $request->mission,
                'OBJECTIVES' => $request->objectives,
+               'MOTTO' => $request->motto,
+               'ABOUT' => $request->about,
+               'BELIEF' => $request->belief,
            ]);
    
            return redirect()->route('about.index')->with('success', 'About Us created successfully.');
@@ -56,6 +64,9 @@ class AboutController extends Controller
             'vision' => 'required|string|',
             'mission' => 'required|string|',
             'objectives' => 'required|string|',
+            'motto' => 'required|string|',
+            'about' => 'required|string|',
+            'belief' => 'required|string|',
         ]);
     
         $about = About::findOrFail($id);
@@ -63,6 +74,9 @@ class AboutController extends Controller
             'VISION' => $request->vision,
             'MISSION' => $request->mission,
             'OBJECTIVES' => $request->objectives,
+            'MOTTO' => $request->motto,
+            'ABOUT' => $request->about,
+            'BELIEF' => $request->belief,
         ]);
     
         return redirect()->route('about.index')->with('success', 'About Us updated successfully.');
@@ -94,6 +108,39 @@ class AboutController extends Controller
         $about = About::first();
         return view('about.objectives', compact('about'));
     }
+     /**
+     * Show only the Objectives page.
+     */
+    public function about()
+    {
+        $about = About::first();
+        return view('about.about', compact('about'));
+    }
+     /**
+     * Show only the Objectives page.
+     */
+    public function motto()
+    {
+        $about = About::first();
+        return view('about.motto', compact('about'));
+    }
+     /**
+     * Show only the Objectives page.
+     */
+    public function belief()
+    {
+        $about = About::first();
+        return view('about.belief', compact('about'));
+    }
+    public function display()
+        {
+            $about = About::first();
+            $slides = AboutSlide::all();
+            $teamMembers = TeamMember::all(); // Retrieve team members dynamically
+
+            return view('about.display', compact('about', 'slides', 'teamMembers'));
+        }
+
         public function destroy($id)
     {
         // Find the 'About Us' record

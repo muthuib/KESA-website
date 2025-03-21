@@ -63,11 +63,11 @@
                     System Settings
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="systemSettingsDropdown">
-                    <li>
-                        <a class="dropdown-item" href="{{ route('about.index') }}">
-                            <i class="fas fa-info-circle"></i> About Us
-                        </a>
-                    </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('about.index') }}">
+                        <i class="fas fa-info-circle"></i> About Us
+                    </a>
+                </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('contact.index') }}">
                             <i class="fas fa-phone"></i> Contact Us

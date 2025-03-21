@@ -98,9 +98,9 @@
             <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
                 <h5 class="text-uppercase font-weight-bold footer-title">Contact Us</h5>
                 <ul class="list-unstyled mt-3">
-                    <li class="footer-text"><i class="fas fa-map-marker-alt"></i> 123 Street Name, City, Kenya</li>
-                    <li class="footer-text"><i class="fas fa-phone-alt"></i> +254700000000</li>
-                    <li class="footer-text"><i class="fas fa-envelope"></i> info@example.com</li>
+                    <li class="footer-text"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                    <li class="footer-text"><i class="fas fa-phone-alt"></i> </li>
+                    <li class="footer-text"><i class="fas fa-envelope"></i> admin@kesakenya.org</li>
                 </ul>
             </div>
 
@@ -132,7 +132,7 @@
                 <h5 class="text-uppercase font-weight-bold footer-title">Follow Us</h5>
                 <div class="mt-3">
                     <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" class="text-light me-3"><img src="/assets/images/x-logo.png" alt="Twitter X" width="17" height="17"></i></a>
                     <a href=" https://www.linkedin.com/company/kenya-economics-students-association/" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
                     <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" class="text-light"><i class="fab fa-instagram"></i></a>
                 </div>

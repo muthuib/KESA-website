@@ -34,6 +34,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\LiveEventController;
+use App\Http\Controllers\AboutSlideController;
+use App\Http\Controllers\TeamMemberController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -188,21 +190,37 @@ Route::delete('admin.newsletters/{newsletter}', [NewsletterController::class, 'd
 //ABOUT US ROUTES
 // Route::get('/about', [AboutUsController::class, 'index'])->name('about.index');
 Route::middleware(['role:admin'])->group(function () {
-//DASHBOARD ANALYTICS ROUTES
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
-
-//ABOUT ROUTES
-Route::get('/about', [AboutController::class, 'index'])->name('about.index');
-Route::get('about/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
-Route::put('about/{id}', [AboutController::class, 'update'])->name('about.update');
-Route::get('about/create', [AboutController::class, 'create'])->name('about.create');
-Route::post('about', [AboutController::class, 'store'])->name('about.store');
-Route::delete('about/{id}', [AboutController::class, 'destroy'])->name('about.destroy');
-});
-Route::get('/about/vision', [AboutController::class, 'vision'])->name('about.vision');
-Route::get('/about/mission', [AboutController::class, 'mission'])->name('about.mission');
-Route::get('/about/objectives', [AboutController::class, 'objectives'])->name('about.objectives');
-
+    //DASHBOARD ANALYTICS ROUTES
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+    
+    //ABOUT ROUTES
+    Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+    Route::get('about/{id}/edit', [AboutController::class, 'edit'])->name('about.edit');
+    Route::put('about/{id}', [AboutController::class, 'update'])->name('about.update');
+    Route::get('about/create', [AboutController::class, 'create'])->name('about.create');
+    Route::post('about', [AboutController::class, 'store'])->name('about.store');
+    Route::delete('about/{id}', [AboutController::class, 'destroy'])->name('about.destroy');
+    });
+    Route::get('/about/display', [AboutController::class, 'display'])->name('about.display');
+    Route::get('/about/vision', [AboutController::class, 'vision'])->name('about.vision');
+    Route::get('/about/mission', [AboutController::class, 'mission'])->name('about.mission');
+    Route::get('/about/objectives', [AboutController::class, 'objectives'])->name('about.objectives');
+    Route::get('/about/motto', [AboutController::class, 'motto'])->name('about.motto');
+    Route::get('/about/about', [AboutController::class, 'about'])->name('about.about');
+    Route::get('/about/belief', [AboutController::class, 'belief'])->name('about.belief');
+    
+    //ABOUT US SLIDES
+    Route::middleware(['role:admin'])->group(function () {
+        Route::middleware('auth')->group(function () {
+    Route::get('/about-slides', [AboutSlideController::class, 'index'])->name('about-slides.index');
+    Route::get('/about-slides/create', [AboutSlideController::class, 'create'])->name('about-slides.create');
+    Route::post('/about-slides', [AboutSlideController::class, 'store'])->name('about-slides.store');
+    Route::get('/about-slides/{aboutSlide}', [AboutSlideController::class, 'show'])->name('about-slides.show');
+    Route::get('/about-slides/{aboutSlide}/edit', [AboutSlideController::class, 'edit'])->name('about-slides.edit');
+    Route::put('/about-slides/{aboutSlide}', [AboutSlideController::class, 'update'])->name('about-slides.update');
+    Route::delete('/about-slides/{aboutSlide}', [AboutSlideController::class, 'destroy'])->name('about-slides.destroy');
+    });
+    });
 //USER DASHBOARD
 Route::middleware('auth')->group(function () {
 Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
@@ -288,3 +306,17 @@ Route::delete('/live-events/destroy/{id}', [LiveEventController::class, 'destroy
 });
 });
 Route::get('/live-events/list', [LiveEventController::class, 'list'])->name('live-events.list');
+
+//TEAM MEMBERS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/team-members', [TeamMemberController::class, 'index'])->name('team-members.index');
+Route::get('/team-members/create', [TeamMemberController::class, 'create'])->name('team-members.create');
+Route::post('/team-members', [TeamMemberController::class, 'store'])->name('team-members.store');
+Route::get('/team-members/{teamMember}', [TeamMemberController::class, 'show'])->name('team-members.show');
+Route::get('/team-members/{teamMember}/edit', [TeamMemberController::class, 'edit'])->name('team-members.edit');
+Route::put('/team-members/{teamMember}', [TeamMemberController::class, 'update'])->name('team-members.update');
+Route::delete('/team-members/{teamMember}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
+});
+});
+Route::get('/team-member', [TeamMemberController::class, 'display'])->name('team-members.display');
