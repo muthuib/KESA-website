@@ -13,7 +13,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            background-image: url('pictures/econ.jpg'); /* Background image */
+            background-image: url('pictures/econ.jpg'); /* Background image */   
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -31,7 +31,7 @@
         /* Login Container */
         .login-container {
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+            padding: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -103,27 +103,27 @@
         }
 
         /* Centering logo */
-        .logo-container {
+        .logo-containers {
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
         }
 
-        .logo-container img {
+        .logo-containers img {
             max-width: 50%; /* Default size */
             height: auto;
         }
 
         /* Tablet Screens */
         @media (max-width: 768px) {
-            .logo-container img {
+            .logo-containers img {
                 max-width: 40%;
             }
         }
 
         /* Mobile Screens */
         @media (max-width: 480px) {
-            .logo-container img {
+            .logo-containers img {
                 max-width: 30%;
             }
 
@@ -155,7 +155,7 @@
         <div class="login-container">
             
             <!-- Logo -->
-            <div class="logo-container">
+            <div class="logo-containers">
                 <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo">
             </div>
 

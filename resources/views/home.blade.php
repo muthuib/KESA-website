@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 <!-- Main Content Container -->
-<div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;">
+<!-- <div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;"> -->
     <!-- Main Row -->
-    <div class="row align-items-center g-3 d-flex">
+    <!-- <div class="row align-items-center g-3 d-flex"> -->
         <!-- Logo and Text Container -->
-        <div class="col-12 d-flex align-items-center">
+        <!-- <div class="col-12 d-flex align-items-center"> -->
             <!-- Logo -->
-            <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="img-fluid logo-img">
+            <!-- <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="img-fluid logo-img"> -->
 
             <!-- Text Section -->
-            <div class="text-content">
+            <!-- <div class="text-content">
                 <h1 class="display-6 fw-bold heading-text">
                     Welcome to the Economics Students Association of Kenya
                 </h1>
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Custom CSS -->
 <style>
@@ -132,6 +132,20 @@
         padding: 5px 10px;
     }
 }
+#guestSlideshow {
+    width: 100%;
+    height: 100vh; /* Ensures it covers the full screen */
+    margin-top: 90px; /* Default for large screens */
+}
+
+/* Adjust margin-top for small and medium screens */
+@media (max-width: 991px) { /* Bootstrap lg breakpoint */
+    #guestSlideshow {
+        margin-top: 60px;
+        height: 60vh; /* Adjust height for better fit */
+    }
+}
+
 
 </style>
 
@@ -165,7 +179,7 @@
             <img src="{{ asset($slide->IMAGE_PATH) }}" 
                  class="d-block w-100" 
                  alt="Slide Image" 
-                 style="height: 100vh; object-fit: cover; z-index: 1;">
+                 style="height: 100vh; object-fit: cover; z-index: 1; width: 100vw; height: 100vh;">
             
             <!-- Caption -->
             <div class="carousel-caption text-left d-flex align-items-center justify-content-start h-100" style="z-index: 3;">
@@ -288,8 +302,9 @@
     </div>
 </div> -->
 
+    <!-- memberships Section -->
+    @include('partials.memberships', ['memberships' => App\Models\Membership::all()])
 <!-- Collaborations Section -->
     @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
-
 <!-- What People Say About Us Section -->
 @include('feedback.display', ['feedbacks' => App\Models\Feedback::all()])

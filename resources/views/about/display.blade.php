@@ -48,7 +48,7 @@
             <div class="col-lg-6 col-md-12">
                 <div class="about-section">
                     <h3 class="text-center mb-3" style="margin-top: 40px;">About Us</h3>
-                    <div class="quill-content">
+                    <div class="quill-content" style="font-size: 16px;">
                         {!! $about->ABOUT ?? '<p class="text-center">About not set yet.</p>' !!}
                     </div>
                 </div>
@@ -90,7 +90,7 @@
            <!-- Objectives Section -->
 <div class="about-section">
     <h3 class="text-left mb-3">Our Objectives</h3>
-    <div class="quill-content text-left">
+    <div class="quill-contents text-left">
         {!! $about->OBJECTIVES ?? '<p class="text-left">Objectives not set yet.</p>' !!}
     </div>
 </div>
@@ -98,8 +98,8 @@
 
 <!-- Belief/Values Section -->
 <div class="about-section">
-    <h3 class="text-left mb-3">Our Values</h3>
-    <div class="quill-content text-left">
+    <h3 class="text-left mb-3">Our Core Values</h3>
+    <div class="quill-contents text-left">
         {!! $about->BELIEF ?? '<p class="text-left">Values not set yet.</p>' !!}
     </div>
 </div>
@@ -125,7 +125,8 @@
             from { width: 0; }
             to { width: 100%; }
         }
-        .quill-content {
+       
+        .quill-contents {
             text-align: left !important;
         }
 
@@ -150,11 +151,16 @@
             line-height: 1.6;
             padding: 10px;
             color: #333;
+            /* text-align: center; */
         }
 
         @media (max-width: 767px) {
             .quill-content {
                 font-size: 14px;
+                line-height: 1.5;
+            }
+            .quill-contents {
+                font-size: 13px;
                 line-height: 1.5;
             }
         }

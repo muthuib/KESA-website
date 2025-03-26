@@ -26,7 +26,7 @@
     {{-- Sidebar Toggle Button for Small Devices --}}
     @auth
     <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
-            style="position: fixed; top: 10px; left: 10px; z-index: 1050;">
+            style="position: fixed; top: 10px; left: 80px; z-index: 1050;">
         <i class="fas fa-bars"></i> Menu
     </button>
 @endauth
@@ -37,7 +37,7 @@
         @include('dashboard.sidebar')
     @endauth
         <!-- Main Content -->
-        <div id="layoutSidenav_content" style="flex-grow: 1; overflow-y: auto; top: 80px">
+        <div id="layoutSidenav_content" style="flex-grow: 1; overflow-y: auto; top: 100px">
             @auth
                 <!-- Start of Alert messages -->
                 @if (session('success'))
@@ -77,6 +77,8 @@
             </main>
 
             <!-- Footer -->
+             <!-- display footer if not fetched through ajax -->
+             @if(empty($isAjax))
 @guest
 <footer class="text-light pt-5 pb-4" style="background-color: rgb(42, 22, 22);">
     <div class="container">
@@ -157,6 +159,7 @@
     </div>
     <!-- end of footer -->
     @endguest
+   
      <!-- Footer2 to be vissible only to logged in users -->
  @auth
  <footer class="py-4 bg-light mt-auto">
@@ -173,7 +176,7 @@
             </footer>
             @endauth
     <!-- end of footer -->
-
+    @endif
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>

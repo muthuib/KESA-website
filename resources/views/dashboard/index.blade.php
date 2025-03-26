@@ -64,12 +64,7 @@
                 <div class="mb-4">
                     <h3>Recent Activities</h3>
                     <ul class="list-group">
-                        @foreach($recentActivities as $activity)
-                            <li class="list-group-item">
-                                {{ $activity->description }}
-                                <span class="text-muted float-end">{{ $activity->created_at->diffForHumans() }}</span>
-                            </li>
-                        @endforeach
+                       
                     </ul>
                     <a href="{{ route('user-dashboard') }}" class="btn btn-link">View All Activities</a>
                 </div>

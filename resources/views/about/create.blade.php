@@ -13,9 +13,9 @@
         <form action="{{ route('about.store') }}" method="POST">
             @csrf
 
-            <!-- About Milestones Consultancy Field -->
+            <!-- About KESA Field -->
             <div class="mb-3">
-                <label for="about" class="form-label" style="color: brown; font-size: 20px; font-weight: bold;">About Milestones Consultancy</label>
+                <label for="about" class="form-label" style="color: brown; font-size: 20px; font-weight: bold;">About KESA</label>
                 <div id="about" class="quill-editor" style="min-height: 200px;">{!! old('about') !!}</div>
                 <input type="hidden" name="about" id="about-hidden">
                 @error('about')

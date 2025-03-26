@@ -23,7 +23,7 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="bio" class="form-label">Bio</label>
             <textarea name="bio" id="bio" rows="4" class="form-control"></textarea>
             @error('bio')
@@ -36,7 +36,7 @@
             @error('cv_link')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-        </div>
+        </div> -->
         <div class="mb-3">
             <label for="image" class="form-label">Profile Image</label>
             <input type="file" name="image" id="image" class="form-control" required>

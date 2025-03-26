@@ -61,8 +61,8 @@
         </div>
         @empty
         <div class="col-12">
-            <div class="alert alert-info">
-                No resources are available at the moment. Please check back later!
+            <div class="alert alert-info" style="text-align: center;">
+                No publicatins are available at the moment. Please check back later!
             </div>
         </div>
         @endforelse

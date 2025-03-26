@@ -14,10 +14,10 @@ public function index()
 {
     $user = Auth::user(); // Assuming Auth is properly configured
     $notifications = $user->notifications()->latest()->take(5)->get();
-    $recentActivities = Activity::where('USER_ID', $user->ID)->latest()->take(5)->get();
+    // $recentActivities = Activity::where('USER_ID', $user->ID)->latest()->take(5)->get();
     
 
-    return view('dashboard.index', compact('user', 'notifications', 'recentActivities'));
+    return view('dashboard.index', compact('user', 'notifications'));
 }
         public function edit($id)
         {
