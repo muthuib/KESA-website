@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="margin-top: 70px;">
+<div class="container" style="margin-top: 100px;">
     <h1 class="text-center my-4">Upcoming Events</h1>
 
     <div class="row">
@@ -15,14 +15,16 @@
                     $hasUpcomingEvents = true;
                 @endphp
                 <div class="col-12 mb-4">
-                    <div class="card h-100 shadow-sm" style="width: 100%; margin-left: 0px;">
+                    <div class="card h-100 shadow-sm w-100">
                         <div class="card-body">
-                            <h5 class="card-title" style="font-size: 35px;"><strong>Event Title:</strong> {{ $event->name }}</h5>
+                            <h5 class="card-title fw-bold text-md-start text-center event-title">
+                                Event Title: {{ $event->name }}
+                            </h5>
 
-                            <div class="row">
+                            <div class="row align-items-center">
                                 <!-- Event Details on the Left -->
                                 <div class="col-md-8">
-                                    <p class="card-text">
+                                    <p class="card-text event-text">
                                         <strong>Location:</strong> {{ $event->location }} <br>
                                         <strong>Venue:</strong> {{ $event->venue }} <br>
                                         <strong>Date:</strong> {{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }} <br>
@@ -46,18 +48,14 @@
 
                                 <!-- Event Image on the Right -->
                                 @if($event->image)
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 text-center">
                                         <div class="event-image">
-                                            <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="img-fluid rounded" style="max-height: 1250px; width: 700px; height: 350px;">
+                                            <img src="{{ asset($event->image) }}" alt="{{ $event->name }}" class="img-fluid rounded event-img">
                                         </div>
                                     </div>
                                 @endif
                             </div>
                         </div>
-
-                        <!-- <div class="card-footer text-center">
-                            <a href="{{ route('tickets.buy', ['event' => $event->id]) }}" class="btn btn-primary">Book Ticket</a>
-                        </div> -->
                     </div>
                 </div>
             @endif
@@ -74,6 +72,70 @@
         @endif
     </div>
 </div>
+
+<style>
+    /* Default large screen settings */
+    .event-title {
+        font-size: 2rem; /* Large size for bigger screens */
+    }
+
+    .event-text {
+        font-size: 1.125rem; /* Standard readable size */
+    }
+
+    .event-img {
+        width: 700px;
+        height: 350px;
+        max-width: 100%;
+    }
+
+    /* Medium screens (tablets, 768px and below) */
+    @media (max-width: 992px) {
+        .event-title {
+            font-size: 1.5rem; /* Reduce title font size */
+        }
+
+        .event-text {
+            font-size: 1rem; /* Reduce text size */
+        }
+
+        .event-img {
+            width: 100%; /* Adjust image to fit smaller screens */
+            height: auto;
+        }
+    }
+
+    /* Small screens (mobile, 576px and below) */
+    @media (max-width: 768px) {
+        .event-title {
+            font-size: 1.25rem; /* Even smaller for mobile */
+        }
+
+        .event-text {
+            font-size: 0.95rem; /* Reduce text size for smaller screens */
+        }
+
+        .event-img {
+            max-width: 90%;
+            height: auto;
+        }
+    }
+
+    /* Extra small screens (very small devices, <576px) */
+    @media (max-width: 576px) {
+        .event-title {
+            font-size: 1rem; /* Smallest title size */
+        }
+
+        .event-text {
+            font-size: 0.875rem; /* Compact text */
+        }
+
+        .event-img {
+            max-width: 100%; /* Full width for tiny screens */
+        }
+    }
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

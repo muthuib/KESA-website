@@ -36,6 +36,12 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\LiveEventController;
 use App\Http\Controllers\AboutSlideController;
 use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\FounderController;
+use App\Http\Controllers\ExecutiveController;
+use App\Http\Controllers\MembershipController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -256,10 +262,15 @@ Route::get('/payment-error', function () {
 //EVENT AND EVENT REGISTRATION ROUTES
 Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
-Route::resource('events', EventController::class); //for crud
+Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 });
 });
-Route::get('/events', [EventController::class, 'showAllEvents'])->name('events.showAll'); // Route for displaying events to users (Show All)
+Route::get('/event', [EventController::class, 'showAllEvents'])->name('events.showAll'); // Route for displaying events to users (Show All)
 Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/admin/events', [EventController::class, 'index'])->name('events.index'); // Route for managing events (Index)
@@ -320,3 +331,81 @@ Route::delete('/team-members/{teamMember}', [TeamMemberController::class, 'destr
 });
 });
 Route::get('/team-member', [TeamMemberController::class, 'display'])->name('team-members.display');
+
+//SEARCH ROUTES
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+//PUBLICATIONS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/publication', [PublicationController::class, 'index'])->name('publications.index');
+Route::get('/publications/create', [PublicationController::class, 'create'])->name('publications.create');
+Route::post('/publication', [PublicationController::class, 'store'])->name('publications.store');
+Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
+Route::get('/publications/{publication}/edit', [PublicationController::class, 'edit'])->name('publications.edit');
+Route::put('/publications/{publication}', [PublicationController::class, 'update'])->name('publications.update');
+Route::delete('/publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
+});
+});
+Route::get('/publications/download/{publication}', [PublicationController::class, 'download'])->name('publications.download');
+Route::get('/publication/display', [PublicationController::class, 'display'])->name('publications.display');
+
+//ACTIVITIES ROUTES
+// List all activities (Index)
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/activity', [ActivityController::class, 'index'])->name('activities.index');
+Route::get('/activity/create', [ActivityController::class, 'create'])->name('activities.create');
+Route::post('/activity', [ActivityController::class, 'store'])->name('activities.store');
+Route::get('/activity/{id}', [ActivityController::class, 'show'])->name('activities.show');
+Route::get('/activitity/{id}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
+Route::put('/activity/{id}', [ActivityController::class, 'update'])->name('activities.update');
+Route::get('/activities/display', [ActivityController::class, 'display'])->name('activities.display');
+Route::delete('/activity/{id}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+});
+});
+Route::get('/activities/display', [ActivityController::class, 'display'])->name('activities.display');
+
+// FOUNDERS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/founder', [FounderController::class, 'index'])->name('founders.index'); // List all founders
+Route::get('/founders/create', [FounderController::class, 'create'])->name('founders.create'); // Show create form
+Route::post('/founder', [FounderController::class, 'store'])->name('founders.store'); // Store new founder
+Route::get('/founders/{founder}', [FounderController::class, 'show'])->name('founders.show'); // Show single founder
+Route::get('/founders/{founder}/edit', [FounderController::class, 'edit'])->name('founders.edit'); // Show edit form
+Route::put('/founders/{founder}', [FounderController::class, 'update'])->name('founders.update'); // Update founder
+Route::delete('/founders/{founder}', [FounderController::class, 'destroy'])->name('founders.destroy'); // Delete founder
+});
+});
+Route::get('/founderss', [FounderController::class, 'display'])->name('founders.display'); // Custom display method
+
+// EXECUTIVES ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+Route::get('/executive', [ExecutiveController::class, 'index'])->name('executives.index');
+Route::get('/executives/create', [ExecutiveController::class, 'create'])->name('executives.create');
+Route::post('/executive', [ExecutiveController::class, 'store'])->name('executives.store');
+Route::get('/executives/{executive}', [ExecutiveController::class, 'show'])->name('executives.show');
+Route::get('/executives/{executive}/edit', [ExecutiveController::class, 'edit'])->name('executives.edit');
+Route::put('/executives/{executive}', [ExecutiveController::class, 'update'])->name('executives.update');
+Route::delete('/executives/{executive}', [ExecutiveController::class, 'destroy'])->name('executives.destroy');
+});
+});
+Route::get('/executivess', [ExecutiveController::class, 'display'])->name('executives.display');
+
+// MEMBERSHIPS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/memberships', [MembershipController::class, 'index'])->name('memberships.index'); // List all memberships
+        Route::get('/memberships/create', [MembershipController::class, 'create'])->name('memberships.create'); // Show create form
+        Route::post('/memberships', [MembershipController::class, 'store'])->name('memberships.store'); // Store new membership
+        Route::get('/memberships/{membership}', [MembershipController::class, 'show'])->name('memberships.show'); // Show single membership
+        Route::get('/memberships/{membership}/edit', [MembershipController::class, 'edit'])->name('memberships.edit'); // Show edit form
+        Route::put('/memberships/{membership}', [MembershipController::class, 'update'])->name('memberships.update'); // Update membership
+        Route::delete('/memberships/{membership}', [MembershipController::class, 'destroy'])->name('memberships.destroy'); // Delete membership
+    });
+});
+
+// Custom display method (if needed)
+Route::get('/membership', [MembershipController::class, 'display'])->name('memberships.display');

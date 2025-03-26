@@ -72,7 +72,7 @@
                             @if($event->image)
                                 <div class="mt-3">
                                     <strong>Current Image:</strong><br>
-                                    <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="img-fluid" style="max-width: 300px; width: 50px;">
+                                    <img src="{{ asset($event->image) }}" alt="{{ $event->name }}" class="img-fluid" style="max-width: 300px; width: 50px;">
                                 </div>
                             @endif
                         </div>

@@ -6,10 +6,16 @@
     <a href="{{  route('about.index') }}" class="btn btn-dark" style="position: absolute; top: 20px; right: 20px; z-index: 10; padding: 10px;">
         <i class="fas fa-backward" style="font-size: 18px; color: white;"></i> Back
     </a>
-    <h2 class="text-center mb-4">Our Team Members</h2>
+    <h2 class="text-center mb-4">Our People</h2>
     <div class="text-end mb-3">
         <a href="{{ route('team-members.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus-circle"></i> Add New Team Member
+            <i class="fas fa-plus-circle"></i> Add New Board Member
+        </a>
+        <a href="{{ route('executives.create') }}" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Add New Executive Member
+        </a>
+        <a href="{{ route('founders.create') }}" class="btn btn-info">
+            <i class="fas fa-plus-circle"></i> Add New Founder Member
         </a>
     </div>
     <div class="row">
@@ -18,7 +24,7 @@
             <div class="card h-100 shadow-sm">
                 @if($member->image)
                 <div class="text-center">
-                    <img src="{{ asset($member->image) }}" alt="{{ $member->name }}" class="card-img-top" style="height: 220px; width: 220px; object-fit: cover; border-radius: 50%; margin: 0 auto;">
+                    <img src="{{ asset($member->image) }}" alt="{{ $member->name }}" class="card-img-top" style="height: 220px; width: 220px; object-fit: contain; border-radius: 50%; margin: 0 auto;">
                 </div>
                 @endif
                 <div class="card-body">
@@ -53,6 +59,35 @@
         @endforelse
     </div>
 </div>
+
+<!-- EXECUTIVE MEMBERS SECTION -->
+<!-- load via ajax -->
+<div id="executives-container"></div>
+
+<!-- FOUNDERS SECTION (Loaded via AJAX) -->
+<div id="founders-container"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("{{ route('executives.index') }}")
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("executives-container").innerHTML = html;
+            })
+            .catch(error => console.error('Error loading executives:', error));
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("{{ route('founders.index') }}")
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("founders-container").innerHTML = html;
+            })
+            .catch(error => console.error('Error loading founders:', error));
+    });
+</script>
 @endsection
 
 <!-- Inline CSS for Bio Collapse -->

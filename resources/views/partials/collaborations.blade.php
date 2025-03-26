@@ -1,7 +1,7 @@
 <!-- Collaborations Section -->
 @if($collaborations->isNotEmpty())
     <div class="container mt-5">
-        <h3 style="margin-top: 330px;">Our Partners and Collaborators</h3>
+        <h3 style="text-align: center; color: maroon; font-size: 30px;">Our Partners</h3>
         
         <!-- Static Grid for First Few Collaborators -->
         <div class="row mt-4">
@@ -9,29 +9,31 @@
                 <div class="col-6 col-sm-6 col-md-3 text-center mb-4">
                     <div class="card shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
-                            <!-- Logo with fallback -->
-                            <img src="{{ file_exists(public_path($collaboration->LOGO_PATH)) 
-                                    ? asset($collaboration->LOGO_PATH) 
-                                    : asset('images/default-logo.png') }}" 
-                            alt="{{ $collaboration->NAME }}" 
-                            class="img-fluid mb-3 collaboration-logo">
-
+                           <!-- Centered Logo with Fallback -->
+                            <div class="text-center">
+                                <img src="{{ file_exists(public_path($collaboration->LOGO_PATH)) 
+                                            ? asset($collaboration->LOGO_PATH) 
+                                            : asset('images/default-logo.png') }}" 
+                                    alt="{{ $collaboration->NAME }}" 
+                                    class="img-fluid mb-3 collaboration-logo" 
+                                    style="width: 70px; display: block; margin: 0 auto;">
+                            </div>
                             <!-- Name -->
                             <h5 class="card-title collaboration-title">{{ $collaboration->NAME ?? 'Unknown Partner' }}</h5>
 
                             <!-- Description -->
-                            <p class="card-text text-muted collaboration-description">
+                            <!-- <p class="card-text text-muted collaboration-description">
                                 {{ $collaboration->DESCRIPTION ?? 'No description available.' }}
-                            </p>
+                            </p> -->
 
                             <!-- Website -->
-                            @if(!empty($collaboration->WEBSITE))
+                            <!-- @if(!empty($collaboration->WEBSITE))
                                 <a href="{{ $collaboration->WEBSITE }}" 
                                    class="btn btn-outline-primary btn-sm mt-auto" 
                                    target="_blank">Visit Website</a>
                             @else
                                 <span class="text-muted small">No website available</span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                 </div>

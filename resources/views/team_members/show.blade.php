@@ -16,7 +16,7 @@
             <h4 class="card-title">{{ $teamMember->name }}</h4>
             <p class="card-text"><strong>{{ $teamMember->designation }}</strong></p>
             <!-- Bio Section with Read More/Read Less -->
-            <div class="card-text bio-text collapsed" id="bioText">
+            <!-- <div class="card-text bio-text collapsed" id="bioText">
                 {!! $teamMember->bio !!}
             </div>
             @if(strlen(strip_tags($teamMember->bio)) > 100)
@@ -24,7 +24,7 @@
             @endif
             @if($teamMember->cv_link)
                 <a href="{{ $teamMember->cv_link }}" target="_blank" class="btn btn-primary mt-3">Download CV</a>
-            @endif
+            @endif -->
         </div>
     </div>
 </div>

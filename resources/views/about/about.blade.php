@@ -10,7 +10,7 @@
     <style>
         /* Ensure text wraps and is readable */
         .quill-content {
-            font-size: 18px;
+            font-size: 20px;
             line-height: 1.6;
             color: #333;
         }

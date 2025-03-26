@@ -205,6 +205,7 @@
         }
         .logo {
             width: 80px; /* Further reduce logo size for very small screens */
+           
         }
     }
 </style>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="margin-top: 80px;">
+<div class="container" style="margin-top: 90px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Live Events & Meetings</h2>
     </div>
@@ -45,7 +45,7 @@
                 <i class="fas fa-backward"></i> Back to Events
             </button>
         </div>
-
+      <p style = "color: brown; font-weight: bold; font-size: 25px;">* Click on the video to start watching</p>
         <h3>Now Watching: <span id="eventTitle"></span></h3>
         <div class="embed-responsive embed-responsive-16by9">
             <iframe id="videoFrame" width="100%" height="450px" frameborder="0" allowfullscreen></iframe>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TeamMember;
+use App\Models\Executive;
 
 class TeamMemberController extends Controller
 {
