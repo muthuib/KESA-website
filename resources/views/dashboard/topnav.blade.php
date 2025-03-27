@@ -152,7 +152,7 @@
             }
             /* adjusting space between tabs */
             .navbar-nav .nav-item {
-                margin-right: 30px; /* Adjust spacing as needed */
+                margin-right: 26px; /* Adjust spacing as needed */
             }
             #navbarNav {
                 margin-left: 160px; /* Apply left margin by default */
@@ -214,7 +214,7 @@
          <span class="navbar-toggler-icon"></span>
         </button> -->
         <button class="navbar-toggler" id="openPopup">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-ico" style="color: white;">Menu</span>
         </button>
 <!-- Pop-Up Menu -->
 <div id="customPopup">
@@ -232,13 +232,19 @@
                         <li><a class="dropdown-item" href="{{ route('team-members.display') }}">Our people</a></li>
                 </ul>
             </div>
-            <div class="menu-item"><a href="{{ route('events.showAll') }}">Events</a></div>
+            <!-- Events dropdown -->
+            <div class="menu-item dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Events</a> <br>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ route ('events.showAll') }}">Upcoming Events</a></li>
+                        <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
+                </ul>
+            </div>
             <!-- resource HUB Dropdown -->
             <div class="menu-item dropdown">
                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Resource hub</a>
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{ route('publications.display') }}">Publications</a></li>
-                <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
                         <!-- <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li> -->
                         <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
                 </ul>
@@ -256,7 +262,23 @@
                     Login
                 </a>
             </li>
-        
+             <!-- search icon -->
+            <!-- Search Button for Popup Menu -->
+                <div class="popup-menu">
+                    <div class="ms-auto">
+                        <button class="btn btn-outline-light searchToggle" data-target="searchFormContainer2" style="color: black;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <!-- Search Form for Popup Menu -->
+                    <div id="searchFormContainer2" class="search-form-container position-absolute top-100 end-0 p-3 shadow rounded d-none" style="background-color: brown; margin-right: 0px;">
+                        <form class="d-flex" action="{{ route('search') }}" method="GET">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 250px;">
+                            <button class="btn btn-outline-light" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
             @endguest
             @auth
                     <!-- Logout Button -->
@@ -307,7 +329,21 @@
                         <li><a class="dropdown-item" href="{{ route('team-members.display') }}">Our people</a></li>
                     </ul>
                 </li>
-            <a href="{{ route('events.showAll') }}" class="nav-link" style="@if(request()->routeIs('events.showAll')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">Events</a>
+            <!-- events dropdown -->
+            <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" 
+                    style="@if(request()->routeIs('events.showAll') || request()->routeIs('activities.display')) 
+                                color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; 
+                            @else 
+                                color: white; font-weight: bold; text-decoration: none; margin-top: 22px; 
+                            @endif">
+                        Event
+                    </a>
+                    <ul class="dropdown-menu custom-dropdown" aria-labelledby="eventsDropdown">
+                        <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">All Events</a></li>
+                        <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Activities</a></li>
+                    </ul>
+                </li>
                     <!-- Economics Hub Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" style="@if(request()->routeIs('publications.display') || request()->routeIs('app') || request()->routeIs('feedback.create')) 
@@ -432,19 +468,16 @@
                     </li>
                     <li class="nav-item">
                     <!-- search icon -->
-                    
-                    <div class="container-fluid"  style="margin-right: 100px;  margin-top: 22px;">
-                        
-                        <!-- Other navbar items -->
-                        <!-- Search Icon -->
+                    <!-- Search Button for Main Menu -->
+                    <div class="container-fluid" style="margin-right: 100px; margin-top: 22px;">
                         <div class="ms-auto">
-                            <button class="btn btn-outline-ligh" id="searchToggle" style="color: white;">
+                            <button class="btn btn-outline-ligh searchToggle" data-target="searchFormContainer1" style="color: white;">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
 
-                        <!-- Search Form (Initially Hidden) -->
-                        <div id="searchFormContainer" class="position-absolute top-100 end-0 bg-dan p-3 shadow rounded d-none" style="background-color: brown;  margin-right: 150px;">
+                        <!-- Search Form for Main Menu -->
+                        <div id="searchFormContainer1" class="search-form-container position-absolute top-100 end-0 p-3 shadow rounded d-none" style="background-color: brown; margin-right: 150px;">
                             <form class="d-flex" action="{{ route('search') }}" method="GET">
                                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 700px;">
                                 <button class="btn btn-outline-light" type="submit">Search</button>
@@ -454,21 +487,22 @@
                 
                 </li>
                 <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const searchToggle = document.getElementById("searchToggle");
-                    const searchFormContainer = document.getElementById("searchFormContainer");
+                document.querySelectorAll('.searchToggle').forEach(button => {
+                        button.addEventListener('click', function () {
+                            let targetId = this.getAttribute('data-target');
+                            let targetForm = document.getElementById(targetId);
+                            
+                            // Hide all search forms first
+                            document.querySelectorAll('.search-form-container').forEach(form => {
+                                if (form.id !== targetId) {
+                                    form.classList.add('d-none');
+                                }
+                            });
 
-                    searchToggle.addEventListener("click", function () {
-                        searchFormContainer.classList.toggle("d-none");
+                            // Toggle the target search form
+                            targetForm.classList.toggle('d-none');
+                        });
                     });
-
-                    // Close the search form when clicking outside
-                    document.addEventListener("click", function (event) {
-                        if (!searchToggle.contains(event.target) && !searchFormContainer.contains(event.target)) {
-                            searchFormContainer.classList.add("d-none");
-                        }
-                    });
-                });
 
                 // Check zoom level
                // show the toggler button when zoomed at 50% on small devices and also when zoomed above 120% on all screens
@@ -605,7 +639,7 @@
         /* Reduce font size when screen width decreases */
         @media (max-width: 1200px) {
             .navbar-nav .nav-link {
-                font-size: 12px;
+                font-size: 11px;
             }
             /* Reduce logo size */
             .logo-container img {
@@ -680,5 +714,18 @@
         gap: 5px; /* Reduce spacing further */
     }
 }
+/* Change hover color for events dropdown */
+.custom-dropdown .dropdown-item:hover {
+    background-color: maroon !important; /* Change to your desired hover color */
+    color: white !important;
+}
+
+/* Change active color */
+/* .custom-dropdown .dropdown-item.active, 
+.custom-dropdown .dropdown-item:active {
+    background-color: aqua !important; 
+    color: white !important;
+} */
+
 
 </style>

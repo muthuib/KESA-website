@@ -27,7 +27,7 @@
     @auth
     <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
             style="position: fixed; top: 10px; left: 80px; z-index: 1050;">
-        <i class="fas fa-bars"></i> Menu
+        <i class="fas fa-bars"></i> Dashboard
     </button>
 @endauth
     {{-- Only logged-in users will see the sidebar --}}
@@ -80,7 +80,7 @@
              <!-- display footer if not fetched through ajax -->
              @if(empty($isAjax))
 @guest
-<footer class="text-light pt-5 pb-4" style="background-color: rgb(42, 22, 22);">
+<footer class="text-light pt-5 pb-4" style="background-color: rgb(88, 57, 57);">
     <div class="container">
         <div class="row text-center text-lg-start justify-content-lg-center">
             
@@ -187,5 +187,8 @@
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- implements pop up for read more in activities/display -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

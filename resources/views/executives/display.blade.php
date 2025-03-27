@@ -8,7 +8,7 @@
         @if($executives->isNotEmpty())
             <div class="team-container">  <!-- Use the CSS Grid Wrapper -->
                 @foreach($executives as $executive)
-                    <div class="team-card">
+                    <div class="team-card shadow border-secondary">
                         @if($executive->image)
                             <div class="text-center">
                                 <img src="{{ asset($executive->image) }}" alt="{{ $executive->name }}" class="team-img">
