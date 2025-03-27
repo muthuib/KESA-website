@@ -28,8 +28,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="video" class="form-label">Upload Video *</label>
-            <input type="file" id="video" name="video" class="form-control" accept="video/*" required>
+            <label for="media" class="form-label">Upload Video/Image *</label>
+            <input type="file" id="media" name="media" class="form-control" accept="video/*,image/*" required>
         </div>
 
         <div class="mb-3">

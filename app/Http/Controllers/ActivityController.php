@@ -25,22 +25,22 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'video'       => 'nullable|file|mimes:mp4,avi,mov,wmv|max:51200', // max size in kilobytes
+            'title'        => 'required|string|max:255',
+            'media'        => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200', // 50MB max
             'youtube_link' => 'nullable|url|max:255',
-            'description' => 'nullable|string',
+            'description'  => 'nullable|string',
         ]);
-
-        // Handle file upload for the video
-        if ($request->hasFile('video')) {
-            $video = $request->file('video');
-            $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('activities'), $videoName);
-            $validated['video'] = 'activities/' . $videoName;
+    
+        // Handle file upload for both images and videos
+        if ($request->hasFile('media')) {
+            $media = $request->file('media');
+            $mediaName = time() . '.' . $media->getClientOriginalExtension();
+            $media->move(public_path('activities'), $mediaName);
+            $validated['media'] = 'activities/' . $mediaName;
         }
-
+    
         Activity::create($validated);
-
+    
         return redirect()->route('activities.index')->with('success', 'Activity created successfully.');
     }
 
@@ -62,27 +62,27 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         $activity = Activity::findOrFail($id);
-
+    
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'video'       => 'nullable|file|mimes:mp4,avi,mov,wmv|max:51200',
+            'title'        => 'required|string|max:255',
+            'media'        => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200',
             'youtube_link' => 'nullable|url|max:255',
-            'description' => 'nullable|string',
+            'description'  => 'nullable|string',
         ]);
-
-        // Handle video update if a new file is provided
-        if ($request->hasFile('video')) {
-            if ($activity->video && file_exists(public_path($activity->video))) {
-                unlink(public_path($activity->video));
+    
+        // Handle media update if a new file is provided
+        if ($request->hasFile('media')) {
+            if ($activity->media && file_exists(public_path($activity->media))) {
+                unlink(public_path($activity->media));
             }
-            $video = $request->file('video');
-            $videoName = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('activities'), $videoName);
-            $validated['video'] = 'activities/' . $videoName;
+            $media = $request->file('media');
+            $mediaName = time() . '.' . $media->getClientOriginalExtension();
+            $media->move(public_path('activities'), $mediaName);
+            $validated['media'] = 'activities/' . $mediaName;
         }
-
+    
         $activity->update($validated);
-
+    
         return redirect()->route('activities.index')->with('success', 'Activity updated successfully.');
     }
 

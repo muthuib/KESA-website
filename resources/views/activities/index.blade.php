@@ -26,7 +26,11 @@
                     <td>{{ $activity->title }}</td>
                     <td>{{ Str::limit($activity->description, 50) }}</td>
                     <td>
-                        <a href="{{ asset($activity->video) }}" target="_blank">Download</a>
+                        @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
+                            <a href="{{ asset($activity->media) }}" target="_blank">Download Video</a>
+                        @elseif(Str::endsWith($activity->media, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
+                            <img src="{{ asset($activity->media) }}" alt="Uploaded Image" style="max-width: 70px; max-height: 70px;">
+                        @endif
                     </td>
                     <td>
                         @if($activity->youtube_link)

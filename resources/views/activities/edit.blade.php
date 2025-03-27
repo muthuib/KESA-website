@@ -27,12 +27,10 @@
             <label for="title" class="form-label">Event Title *</label>
             <input type="text" id="title" name="title" value="{{ old('title', $activity->title) }}" class="form-control" required>
         </div>
-
         <div class="mb-3">
-            <label for="video" class="form-label">Upload New Video (Leave blank to keep current video)</label>
-            <input type="file" id="video" name="video" class="form-control" accept="video/*">
+            <label for="media" class="form-label">Upload New Video/Image (Leave blank to keep current media)</label>
+            <input type="file" id="media" name="media" class="form-control" accept="video/*,image/*">
         </div>
-
         <div class="mb-3">
             <label for="youtube_link" class="form-label">YouTube Link (Optional)</label>
             <input type="url" id="youtube_link" name="youtube_link" class="form-control" 
