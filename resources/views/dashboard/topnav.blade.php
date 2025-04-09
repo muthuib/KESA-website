@@ -213,9 +213,33 @@
         <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
         </button> -->
-        <button class="navbar-toggler" id="openPopup">
-            <span class="navbar-toggler-ico" style="color: white;">Menu</span>
+         <!-- search icon -->
+<!-- Container for menu and search (visible on small and medium devices only) -->
+<div class="d-flex justify-content-end align-items-center d-lg-none px-3 w-100">
+    <!-- Menu Button -->
+    <button class="navbar-toggler me-2" id="openPopup">
+        <span class="navbar-toggler-ico" style="color: white;">Menu</span>
+    </button>
+
+    <!-- Search Button + Form -->
+    <div class="position-relative">
+        <!-- Search Button -->
+        <button class="btn btn-outline-ligh searchToggle" data-target="searchFormContainer2" style="color: white; margin-right: 80px; margin-top: 0px;">
+            <i class="fas fa-search"></i>
         </button>
+
+        <!-- Search Form (Initially Hidden) -->
+        <div id="searchFormContainer2" class="position-absolute top-100 end-0 p-3 shadow rounded d-none"
+            style="background-color: brown; margin-top: 5px; z-index: 999;">
+            <form class="d-flex" action="{{ route('search') }}" method="GET">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 180px;">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <!-- Pop-Up Menu -->
 <div id="customPopup">
     <div class="popup-content">
@@ -262,23 +286,7 @@
                     Login
                 </a>
             </li>
-             <!-- search icon -->
-            <!-- Search Button for Popup Menu -->
-                <div class="popup-menu">
-                    <div class="ms-auto">
-                        <button class="btn btn-outline-light searchToggle" data-target="searchFormContainer2" style="color: black;">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-
-                    <!-- Search Form for Popup Menu -->
-                    <div id="searchFormContainer2" class="search-form-container position-absolute top-100 end-0 p-3 shadow rounded d-none" style="background-color: brown; margin-right: 0px;">
-                        <form class="d-flex" action="{{ route('search') }}" method="GET">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 250px;">
-                            <button class="btn btn-outline-light" type="submit">Search</button>
-                        </form>
-                    </div>
-                </div>
+            
             @endguest
             @auth
                     <!-- Logout Button -->
@@ -340,8 +348,8 @@
                         Event
                     </a>
                     <ul class="dropdown-menu custom-dropdown" aria-labelledby="eventsDropdown">
-                        <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">All Events</a></li>
-                        <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Activities</a></li>
+                        <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">Upcoming Events</a></li>
+                        <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Past Events</a></li>
                     </ul>
                 </li>
                     <!-- Economics Hub Dropdown (Fixed) -->
@@ -353,7 +361,6 @@
                             @endif">Resource Hub</a>
                     <ul class="dropdown-menu" id="economicsHubMenu">
                         <li><a class="dropdown-item" href="{{ route('publications.display') }}">Publications</a></li>
-                        <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
                         <!-- <li><a class="dropdown-item" href="{{ route('app') }}">Research</a></li> -->
                         <li><a class="dropdown-item" href="{{ route('feedback.create') }}">Feedback</a></li>
                     </ul>
