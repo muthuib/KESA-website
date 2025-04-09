@@ -14,61 +14,71 @@
     </p>
 
     <div class="row">
-        @foreach($activities as $activity)
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <p class="text-center" style="font-size: 20px; font-weight: bold; color: brown;">
-                    {{ $activity->title }}
-                </p>
-                <div class="card shadow mb-4" style="height: 500px">
-                    <div class="card-body text-center">
-                        @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
-                            <!-- Display Video -->
-                            <video width="100%" height="auto" controls>
-                                <source src="{{ asset($activity->media) }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                            <div class="mt-3">
-                                <a href="{{ asset($activity->media) }}" class="btn btn-outline-primary" download>
-                                    <i class="fas fa-download"></i> Download Video
-                                </a>
-                            </div>
-                        @elseif(Str::endsWith($activity->media, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
-                            <!-- Display Image -->
-                            <img src="{{ asset($activity->media) }}" alt="Uploaded Image" class="img-fluid" style="max-width: 100%; height: auto;">
-                        @endif
-                        <!-- Truncated Description with Read More next to it -->
-                        @php
-                            $truncatedDescription = Str::limit($activity->description, 100);
-                            $isTruncated = strlen($activity->description) > 100;
-                        @endphp
+    @foreach($activities as $activity)
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <p class="text-center" style="font-size: 20px; font-weight: bold; color: brown;">
+                {{ $activity->title }}
+            </p>
 
-                        <!-- Display the truncated description -->
-                        <p class="short-text" style="text-align: left; display: inline;">
-                            {{ $truncatedDescription }}.
+            <div class="card shadow mb-4" style="height: 420px">
+                <div class="card-body text-center">
+
+                    <!-- Display media -->
+                    @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
+                        <!-- Display Video -->
+                        <video width="100%" height="auto" controls style="max-width: 100%; max-height: 210px; object-fit: cover;">
+                            <source src="{{ asset($activity->media) }}" type="video/mp4"> 
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="mt-3">
+                            <a href="{{ asset($activity->media) }}" class="btn btn-outline-primary" download>
+                                <i class="fas fa-download"></i> Download Video
+                            </a>
+                        </div>
+                    @elseif(Str::endsWith($activity->media, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
+                        <!-- Display Image -->
+                        <img src="{{ asset($activity->media) }}" alt="Uploaded Image" class="img-fluid" 
+                             style="max-width: 100%; max-height: 210px; object-fit: cover;">
+                    @endif
+
+                    <!-- Calculate truncated description inside the loop -->
+                    @php
+                        $truncatedDescription = Str::limit($activity->description, 100);
+                        $isTruncated = strlen($activity->description) > 100;
+                    @endphp
+
+                    <!-- Description starts below the media -->
+                    <div class="mt-2 text-left">
+                        <p class="short-text" style="display: inline;">
+                            {{ $truncatedDescription }}
+
+                            <!-- "Read More" appears inline at the end of the truncated description -->
+                            @if($isTruncated)
+                                <button class="btn btn-sm btn-link read-more" data-toggle="modal" data-target="#descriptionModal"
+                                    data-title="{{ $activity->title }}"
+                                    data-description="{{ $activity->description }}"
+                                    style="padding: 0; border: none; background: none; color: #007bff; text-decoration: none; display: inline;">
+                                    Read More
+                                </button>
+                            @endif
                         </p>
-
-                        <!-- Show "Read More" only if the description is actually truncated -->
-                        @if($isTruncated)
-                            <button class="btn btn-sm btn-link read-more" data-toggle="modal" data-target="#descriptionModal"
-                                data-title="{{ $activity->title }}" 
-                                data-description="{{ $activity->description }}" 
-                                style="margin-top: 0px; display: inline; padding: 0; border: none; background: none; color: #007bff; text-decoration: none;">
-                                Read More
-                            </button>
-                        @endif
-                        <!-- Display YouTube Link Below Media -->
-                        @if(!empty($activity->youtube_link))
-                            <div class="mt-2">
-                                <a href="{{ $activity->youtube_link }}" class="btn btn-outline-danger" target="_blank">
-                                    <i class="fab fa-youtube"></i> Watch on YouTube
-                                </a>
-                            </div>
-                        @endif
                     </div>
+
+                    <!-- Display YouTube Link Below Media -->
+                    @if(!empty($activity->youtube_link))
+                        <div class="mt-2">
+                            <a href="{{ $activity->youtube_link }}" class="btn btn-outline-danger" target="_blank">
+                                <i class="fab fa-youtube"></i> Watch on YouTube
+                            </a>
+                        </div>
+                    @endif
+
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
+</div>
+
 
     @if($activities->isEmpty())
         <p class="text-center text-muted bg-info">No Past events available at the moment.</p>

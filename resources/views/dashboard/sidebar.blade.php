@@ -36,12 +36,6 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ route('activities.index') }}" style="font-size: 18px; color: black; padding: 5px 8px; margin-bottom: 1px;">
-                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
-                           Past events
-                        </a>
-                    </li>
-                    <li>
                         <a class="nav-link" href="{{ route('feedback.index') }}" style="font-size: 18px; color: black; padding: 5px 8px; margin-bottom: 1px;">
                             <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                             Feedbacks
@@ -62,6 +56,12 @@
                         <i class="fas fa-calendar-check"></i> Upcoming Events
                     </a>
                 </li>
+                <li>
+                        <a class="nav-link" href="{{ route('activities.index') }}" style="font-size: 18px; color: black; padding: 5px 8px; margin-bottom: 1px;">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                           Past events
+                        </a>
+                    </li>
                 <li>
                     <a class="dropdown-item" href="{{ route('live-events.index') }}">
                         <i class="fas fa-broadcast-tower"></i> Live Events
