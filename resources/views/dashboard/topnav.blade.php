@@ -275,6 +275,7 @@
             </div>
             <div class="menu-item"><a href="{{ route('contact.display') }}">Contact</a></div>
             <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div>
+            <div class="menu-item"><a href="{{ route('news.display') }}">News</a></div>
             @guest
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('register') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
@@ -440,7 +441,14 @@
                             </a>
                         </li>
                     </ul>
-
+                    <ul class="nav responsive-nav">
+                        <!-- Live Media tab -->
+                        <li class="nav-item">
+                            <a href="{{ route('news.display') }}" class="nav-link responsive-text"style="@if(request()->routeIs('news.display')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">
+                               News
+                            </a>
+                        </li>
+                    </ul>
                 <!-- Guest Links -->
                 <!-- @guest
                     <li class="nav-item dropdown">

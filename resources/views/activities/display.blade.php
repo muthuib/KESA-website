@@ -9,128 +9,153 @@
     <p class="text-center d-none d-lg-block" style="font-size: 18px;">
         KESA has successfully organized and hosted numerous impactful events aimed at fostering education, research, and collaboration among scholars, professionals, and students.
     </p>
-    <p class="text-center d-lg-none" style="font-size: 16px;">
+    <p class="text-center d-lg-none" style="font-size: 14px;">
         KESA has hosted impactful events fostering education, research, and collaboration.
     </p>
 
     <div class="row">
-    @foreach($activities as $activity)
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <p class="text-center" style="font-size: 20px; font-weight: bold; color: brown;">
-                {{ $activity->title }}
-            </p>
+        @foreach($activities as $activity)
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm p-3">
+                <div class="row">
+                    <!-- Media Column -->
+                    <div class="col-md-3">
+                        @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
+                            <video class="media-item mb-2" controls>
+                                <source src="{{ asset($activity->media) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        @elseif(Str::endsWith($activity->media, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
+                            <img src="{{ asset($activity->media) }}" alt="Uploaded Image" class="img-fluid mb-2 media-item">
+                        @endif
 
-            <div class="card shadow mb-4" style="height: 420px">
-                <div class="card-body text-center">
-
-                    <!-- Display media -->
-                    @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
-                        <!-- Display Video -->
-                        <video width="100%" height="auto" controls style="max-width: 100%; max-height: 210px; object-fit: cover;">
-                            <source src="{{ asset($activity->media) }}" type="video/mp4"> 
-                            Your browser does not support the video tag.
-                        </video>
-                        <div class="mt-3">
-                            <a href="{{ asset($activity->media) }}" class="btn btn-outline-primary" download>
-                                <i class="fas fa-download"></i> Download Video
-                            </a>
-                        </div>
-                    @elseif(Str::endsWith($activity->media, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
-                        <!-- Display Image -->
-                        <img src="{{ asset($activity->media) }}" alt="Uploaded Image" class="img-fluid" 
-                             style="max-width: 100%; max-height: 210px; object-fit: cover;">
-                    @endif
-
-                    <!-- Calculate truncated description inside the loop -->
-                    @php
-                        $truncatedDescription = Str::limit($activity->description, 100);
-                        $isTruncated = strlen($activity->description) > 100;
-                    @endphp
-
-                    <!-- Description starts below the media -->
-                    <div class="mt-2 text-left">
-                        <p class="short-text" style="display: inline;">
-                            {{ $truncatedDescription }}
-
-                            <!-- "Read More" appears inline at the end of the truncated description -->
-                            @if($isTruncated)
-                                <button class="btn btn-sm btn-link read-more" data-toggle="modal" data-target="#descriptionModal"
-                                    data-title="{{ $activity->title }}"
-                                    data-description="{{ $activity->description }}"
-                                    style="padding: 0; border: none; background: none; color: #007bff; text-decoration: none; display: inline;">
-                                    Read More
-                                </button>
+                        <div>
+                            @if(!empty($activity->youtube_link))
+                                <a href="{{ $activity->youtube_link }}" class="btn btn-outline-danger btn-sm me-2 mb-2" target="_blank">
+                                    <i class="fab fa-youtube"></i> Watch
+                                </a>
                             @endif
-                        </p>
+                            @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
+                                <a href="{{ asset($activity->media) }}" class="btn btn-outline-primary btn-sm mb-2" download>
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            @endif
+                        </div>
                     </div>
 
-                    <!-- Display YouTube Link Below Media -->
-                    @if(!empty($activity->youtube_link))
-                        <div class="mt-2">
-                            <a href="{{ $activity->youtube_link }}" class="btn btn-outline-danger" target="_blank">
-                                <i class="fab fa-youtube"></i> Watch on YouTube
-                            </a>
+                    <!-- Info and Description -->
+                    <div class="col-md-9 d-flex flex-column">
+                        <h6 class="text-secondary fw-bold">{{ $activity->title }}</h6>
+
+                        @if($activity->date)
+                            <p class="mb-1"><i class="fas fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($activity->date)->format('F j, Y') }}</p>
+                        @endif
+
+                        @if($activity->start_time && $activity->end_time)
+                            <p class="mb-1">
+                                <i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($activity->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($activity->end_time)->format('g:i A') }}
+                            </p>
+                        @endif
+
+                        @if($activity->location)
+                            <p class="mb-3"><i class="fas fa-map-marker-alt text-primary"></i> {{ $activity->location }}</p>
+                        @endif
+
+                        @php
+                            // Clean and prepare the description
+                            $description = strip_tags($activity->description ?? '');
+                            $desktopLimit = 360;
+
+                            // Truncate and add a hyphen at the end of the last word
+                            $truncated = Str::limit($description, $desktopLimit, '');
+                            $truncatedWithHyphen = preg_replace('/\w+$/', '$0-', $truncated);
+
+                            $remaining = Str::substr($description, $desktopLimit);
+                            $hasMore = strlen($description) > $desktopLimit;
+                            $uniqueId = 'desc_' . $activity->id;
+                        @endphp
+
+                        <!-- Truncated View -->
+                        <div class="description-toggle text-justify">
+                            <span id="{{ $uniqueId }}_short" class="d-block">
+                                {{ $truncatedWithHyphen }}
+                                @if($hasMore)
+                                    <button class="btn btn-sm btn-link toggle-description" data-id="{{ $uniqueId }}" id="{{ $uniqueId }}_readmore">Read More</button>
+                                @endif
+                            </span>
                         </div>
-                    @endif
-
+                    </div>
                 </div>
+
+                <!-- Full Description in Block Format -->
+                @if($hasMore)
+                    <div class="full-description mt-3" id="{{ $uniqueId }}_full" style="display: none;">
+                        <p class="text-justify">{{ $remaining }}</p>
+                        <button class="btn btn-sm btn-link toggle-description" data-id="{{ $uniqueId }}">Read Less</button>
+                    </div>
+                @endif
             </div>
         </div>
-    @endforeach
-</div>
+        @endforeach
 
-
-    @if($activities->isEmpty())
-        <p class="text-center text-muted bg-info">No Past events available at the moment.</p>
-    @endif
-</div>
-
-<!-- Modal Structure -->
-<div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="descriptionModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalDescription"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+        @if($activities->isEmpty())
+            <p class="text-center text-muted bg-info">No Past events available at the moment.</p>
+        @endif
     </div>
 </div>
-
 @endsection
 
-<!-- Script to Handle Modal Content -->
+<!-- Toggle Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('#descriptionModal').on('show.bs.modal', function(event) {
-            let button = $(event.relatedTarget); 
-            let title = button.data('title');
-            let description = button.data('description');
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-description').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const shortEl = document.getElementById(`${id}_short`);
+                const fullEl = document.getElementById(`${id}_full`);
+                const readMoreBtn = document.getElementById(`${id}_readmore`);
 
-            let modal = $(this);
-            modal.find('.modal-title').text(title);
-            modal.find('#modalDescription').text(description);
+                if (shortEl.style.display === 'none') {
+                    fullEl.style.display = 'none';
+                    shortEl.style.display = 'block';
+                    if (readMoreBtn) readMoreBtn.style.display = 'inline';
+                } else {
+                    shortEl.style.display = 'none';
+                    fullEl.style.display = 'block';
+                    if (readMoreBtn) readMoreBtn.style.display = 'none';
+                }
+            });
         });
     });
 </script>
 
-<!-- Custom Styling -->
+<!-- Styles -->
 <style>
-    .read-more {
-        color: #007bff;
-        cursor: pointer;
-        text-decoration: none;
-        border: none;
-        background: none;
+    .media-item {
+        width: 100%;
+        max-height: 180px;
+        object-fit: cover;
     }
 
-    .read-more:hover {
-        text-decoration: underline;
+    .toggle-description {
+        font-size: 0.85rem;
+        padding-left: 5px;
+    }
+
+    .description-toggle {
+        line-height: 1.6;
+        margin-top: 5px;
+    }
+
+    .full-description {
+        margin-top: 15px;
+        font-size: 1rem;
+        text-align: justify;
+    }
+
+    @media (max-width: 768px) {
+        .media-item {
+            max-height: 200px;
+        }
     }
 </style>

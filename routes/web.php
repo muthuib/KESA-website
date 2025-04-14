@@ -42,6 +42,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\FounderController;
 use App\Http\Controllers\ExecutiveController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\NewsController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -409,3 +410,17 @@ Route::middleware(['role:admin'])->group(function () {
 
 // Custom display method (if needed)
 Route::get('/membership', [MembershipController::class, 'display'])->name('memberships.display');
+
+// WEB ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/new', [NewsController::class, 'index'])->name('news.index');
+        Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
+        Route::post('/new', [NewsController::class, 'store'])->name('news.store');
+        Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit');
+        Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update');
+        Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
+    });
+});
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/new/display', [NewsController::class, 'display'])->name('news.display');
