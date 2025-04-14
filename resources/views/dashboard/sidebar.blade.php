@@ -69,6 +69,12 @@
                 </li>
             </ul>
         </li>
+         <!-- Manage news -->
+         <a class="nav-link" href="{{ route('news.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
+                <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
+                Manage News
+            </a>
+
             <!-- Manage Users -->
             <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>

@@ -25,26 +25,32 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'        => 'required|string|max:255',
-            'media'        => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200', // 50MB max
-            'youtube_link' => 'nullable|url|max:255',
-            'description'  => 'nullable|string',
+            'title'         => 'required|string|max:255',
+            'activity_title'=> 'nullable|string|max:255',
+            'name'          => 'nullable|string|max:255',
+            'location'      => 'nullable|string|max:255',
+            'date'          => 'nullable|date',
+            'start_time'    => 'nullable|date_format:H:i',
+            'end_time'      => 'nullable|date_format:H:i',
+            'media'         => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200',
+            'youtube_link'  => 'nullable|url|max:255',
+            'description'   => 'nullable|string',
         ]);
-    
-        // Handle file upload for both images and videos
+
+        // Handle file upload
         if ($request->hasFile('media')) {
             $media = $request->file('media');
             $mediaName = time() . '.' . $media->getClientOriginalExtension();
             $media->move(public_path('activities'), $mediaName);
             $validated['media'] = 'activities/' . $mediaName;
         }
-    
+
         Activity::create($validated);
-    
+
         return redirect()->route('activities.index')->with('success', 'Activity created successfully.');
     }
 
-    // Display a single activity (video playback view)
+    // Display a single activity
     public function show($id)
     {
         $activity = Activity::findOrFail($id);
@@ -62,15 +68,21 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         $activity = Activity::findOrFail($id);
-    
+
         $validated = $request->validate([
-            'title'        => 'required|string|max:255',
-            'media'        => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200',
-            'youtube_link' => 'nullable|url|max:255',
-            'description'  => 'nullable|string',
+            'title'         => 'required|string|max:255',
+            'activity_title'=> 'nullable|string|max:255',
+            'name'          => 'nullable|string|max:255',
+            'location'      => 'nullable|string|max:255',
+            'date'          => 'nullable|date',
+            'start_time'    => 'nullable|date_format:H:i',
+            'end_time'      => 'nullable|date_format:H:i',
+            'media'         => 'nullable|file|mimes:mp4,avi,mov,wmv,jpg,jpeg,png,gif,webp|max:51200',
+            'youtube_link'  => 'nullable|url|max:255',
+            'description'   => 'nullable|string',
         ]);
-    
-        // Handle media update if a new file is provided
+
+        // Handle media update
         if ($request->hasFile('media')) {
             if ($activity->media && file_exists(public_path($activity->media))) {
                 unlink(public_path($activity->media));
@@ -80,13 +92,13 @@ class ActivityController extends Controller
             $media->move(public_path('activities'), $mediaName);
             $validated['media'] = 'activities/' . $mediaName;
         }
-    
+
         $activity->update($validated);
-    
+
         return redirect()->route('activities.index')->with('success', 'Activity updated successfully.');
     }
 
-    // Display all activities
+    // Display all activities (frontend view)
     public function display()
     {
         $activities = Activity::orderBy('created_at', 'desc')->get();
@@ -97,8 +109,8 @@ class ActivityController extends Controller
     public function destroy($id)
     {
         $activity = Activity::findOrFail($id);
-        if ($activity->video && file_exists(public_path($activity->video))) {
-            unlink(public_path($activity->video));
+        if ($activity->media && file_exists(public_path($activity->media))) {
+            unlink(public_path($activity->media));
         }
         $activity->delete();
 

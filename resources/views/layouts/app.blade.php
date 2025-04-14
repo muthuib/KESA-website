@@ -18,6 +18,9 @@
     <!-- Quill Editor CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- code for quilli editor for news-->
+    @yield('styles')
+
 </head>
 <body class="sb-nav-fixed">
     {{-- Include Top Navigation --}}
@@ -190,5 +193,7 @@
     <!-- implements pop up for read more in activities/display -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- code for quilli editor for news -->
+@yield('scripts')
 
 </body>

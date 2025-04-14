@@ -11,6 +11,22 @@
 
     <p>{{ $activity->description }}</p>
 
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <strong>Activity Title:</strong> {{ $activity->activity_title ?? '-' }}<br>
+            <strong>Organizer Name:</strong> {{ $activity->name ?? '-' }}<br>
+            <strong>Venue:</strong> {{ $activity->location ?? '-' }}
+        </div>
+        <div class="col-md-6">
+            <strong>Date:</strong> 
+            {{ $activity->date ? \Carbon\Carbon::parse($activity->date)->format('F j, Y') : '-' }}<br>
+            <strong>Start Time:</strong> 
+            {{ $activity->start_time ? \Carbon\Carbon::parse($activity->start_time)->format('h:i A') : '-' }}<br>
+            <strong>End Time:</strong> 
+            {{ $activity->end_time ? \Carbon\Carbon::parse($activity->end_time)->format('h:i A') : '-' }}
+        </div>
+    </div>
+
     <div class="card shadow mb-4">
         <div class="card-body text-center">
             @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
