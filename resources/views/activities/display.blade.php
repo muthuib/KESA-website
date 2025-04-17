@@ -15,9 +15,16 @@
 
     <div class="row">
         @foreach($activities as $activity)
+        @php
+            $plainText = strip_tags($activity->description);
+            $preview = Str::limit($plainText, 370, '');
+            $remaining = strlen($plainText) > 370;
+            $uniqueId = 'desc_' . $activity->id;
+        @endphp
+
         <div class="col-12 mb-4">
             <div class="card shadow-sm p-3">
-                <div class="row">
+                <div class="row g-3">
                     <!-- Media Column -->
                     <div class="col-md-3">
                         @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
@@ -44,7 +51,7 @@
                     </div>
 
                     <!-- Info and Description -->
-                    <div class="col-md-9 d-flex flex-column">
+                    <div class="col-md-9">
                         <h6 class="text-secondary fw-bold">{{ $activity->title }}</h6>
 
                         @if($activity->date)
@@ -61,45 +68,53 @@
                             <p class="mb-3"><i class="fas fa-map-marker-alt text-primary"></i> {{ $activity->location }}</p>
                         @endif
 
-                        @php
-                            // Clean and prepare the description
-                            $description = strip_tags($activity->description ?? '');
-                            $desktopLimit = 360;
-
-                            // Truncate and add a hyphen at the end of the last word
-                            $truncated = Str::limit($description, $desktopLimit, '');
-                            $truncatedWithHyphen = preg_replace('/\w+$/', '$0-', $truncated);
-
-                            $remaining = Str::substr($description, $desktopLimit);
-                            $hasMore = strlen($description) > $desktopLimit;
-                            $uniqueId = 'desc_' . $activity->id;
-                        @endphp
-
-                        <!-- Truncated View -->
-                        <div class="description-toggle text-justify">
-                            <span id="{{ $uniqueId }}_short" class="d-block">
-                                {{ $truncatedWithHyphen }}
-                                @if($hasMore)
-                                    <button class="btn btn-sm btn-link toggle-description" data-id="{{ $uniqueId }}" id="{{ $uniqueId }}_readmore">Read More</button>
-                                @endif
-                            </span>
+                        <!-- Inline Truncated Description + Read More -->
+                        <div class="description-preview text-muted">
+                            @if($remaining)
+                                <span class="truncated-text">{{ $preview }}...</span>
+                                <button class="btn btn-sm btn-link toggle-description p-0" data-target="{{ $uniqueId }}" data-action="show">Read More</button>
+                            @else
+                                <span>{!! preg_replace('/(<p><br><\/p>\s*)+$/', '', $activity->description) !!}</span>
+                            @endif
                         </div>
                     </div>
-                </div>
 
-                <!-- Full Description in Block Format -->
-                @if($hasMore)
-                    <div class="full-description mt-3" id="{{ $uniqueId }}_full" style="display: none;">
-                        <p class="text-justify">{{ $remaining }}</p>
-                        <button class="btn btn-sm btn-link toggle-description" data-id="{{ $uniqueId }}">Read Less</button>
-                    </div>
-                @endif
+                    <!-- Full Description -->
+                    @if($remaining)
+                        <div class="col-12">
+                            <div class="description-wrapper collapsed" id="{{ $uniqueId }}">
+                                {!! preg_replace('/(<p><br><\/p>\s*)+$/', '', $activity->description) !!}
+                                <button class="btn btn-sm btn-link toggle-description p-0 m-0 align-baseline ms-1" data-target="{{ $uniqueId }}" data-action="hide">Read Less</button>
+
+                                {{-- Additional Images Section --}}
+                                @if($activity->media1 || $activity->media2 || $activity->media3)
+                                    <div class="card shadow mb-4 mt-3">
+                                        <div class="card-header">
+                                            <h5 class="mb-0"><i class="fas fa-images text-info"></i> More Images from the Event</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row text-center">
+                                                @foreach (['media1', 'media2', 'media3'] as $img)
+                                                    @if ($activity->$img)
+                                                        <div class="col-md-4 mb-3">
+                                                            <img src="{{ asset($activity->$img) }}" alt="Additional Image" class="img-fluid rounded shadow" style="max-height: 300px;">
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
         @endforeach
 
         @if($activities->isEmpty())
-            <p class="text-center text-muted bg-info">No Past events available at the moment.</p>
+            <p class="text-center text-muted bg-info p-3 rounded">No past events available at the moment.</p>
         @endif
     </div>
 </div>
@@ -108,21 +123,28 @@
 <!-- Toggle Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.toggle-description').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                const id = this.dataset.id;
-                const shortEl = document.getElementById(`${id}_short`);
-                const fullEl = document.getElementById(`${id}_full`);
-                const readMoreBtn = document.getElementById(`${id}_readmore`);
+        document.querySelectorAll('.toggle-description').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const desc = document.getElementById(targetId);
+                const action = button.getAttribute('data-action');
+                const card = button.closest('.card');
+                const previewContainer = card.querySelector('.description-preview');
+                const truncatedText = previewContainer.querySelector('.truncated-text');
+                const readMoreButton = previewContainer.querySelector('button[data-action="show"]');
 
-                if (shortEl.style.display === 'none') {
-                    fullEl.style.display = 'none';
-                    shortEl.style.display = 'block';
-                    if (readMoreBtn) readMoreBtn.style.display = 'inline';
-                } else {
-                    shortEl.style.display = 'none';
-                    fullEl.style.display = 'block';
-                    if (readMoreBtn) readMoreBtn.style.display = 'none';
+                if (action === 'show') {
+                    desc.classList.remove('collapsed');
+                    truncatedText.style.display = 'none';
+                    readMoreButton.style.display = 'none';
+                } else if (action === 'hide') {
+                    desc.classList.add('collapsed');
+                    truncatedText.style.display = 'inline';
+                    readMoreButton.style.display = 'inline';
+                    window.scrollTo({
+                        top: previewContainer.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
@@ -135,22 +157,55 @@
         width: 100%;
         max-height: 180px;
         object-fit: cover;
+        border-radius: 0.5rem;
+    }
+
+    .description-preview {
+        font-size: 0.95rem;
+    }
+
+    .description-wrapper {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .description-wrapper.collapsed {
+        max-height: 0;
+        opacity: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+    .description-wrapper:not(.collapsed) {
+        max-height: none;
+        opacity: 1;
     }
 
     .toggle-description {
         font-size: 0.85rem;
-        padding-left: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #007bff;
+        background: none;
+        border: none;
     }
 
-    .description-toggle {
-        line-height: 1.6;
-        margin-top: 5px;
+    .truncated-text {
+        display: inline;
     }
 
-    .full-description {
-        margin-top: 15px;
-        font-size: 1rem;
-        text-align: justify;
+    /* Remove extra margin/padding from last child in long descriptions */
+    .description-wrapper > *:last-child {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Hide trailing empty Quill paragraphs */
+    .description-wrapper p:empty,
+    .description-wrapper p:has(br:only-child) {
+        display: none !important;
     }
 
     @media (max-width: 768px) {

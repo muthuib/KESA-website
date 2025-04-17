@@ -3,9 +3,8 @@
 @section('content')
 <div class="container py-4">
     <h2>Edit Past Event</h2>
-    
-    <!-- Back Button at Top Right -->
-    <a href="{{ route('activities.index') }}" class="btn btn-dark" style="position: absolute; top: 20px; right: 20px; z-index: 10; padding: 10px;">
+
+    <a href="{{ route('activities.index') }}" class="btn btn-dark" style="position: absolute; top: 20px; right: 20px; z-index: 10;">
         <i class="fas fa-backward"></i> Back
     </a>
 
@@ -19,7 +18,7 @@
         </div>
     @endif
 
-    <form action="{{ route('activities.update', $activity->id) }}" method="POST" enctype="multipart/form-data">
+    <form id="activity-form" action="{{ route('activities.update', $activity->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -27,16 +26,6 @@
             <label for="title" class="form-label">Event Title *</label>
             <input type="text" id="title" name="title" value="{{ old('title', $activity->title) }}" class="form-control" required>
         </div>
-
-        <!-- <div class="mb-3">
-            <label for="activity_title" class="form-label">Activity Title</label>
-            <input type="text" id="activity_title" name="activity_title" value="{{ old('activity_title', $activity->activity_title) }}" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="name" class="form-label">Organizer Name</label>
-            <input type="text" id="name" name="name" value="{{ old('name', $activity->name) }}" class="form-control">
-        </div> -->
 
         <div class="mb-3">
             <label for="location" class="form-label">Venue</label>
@@ -65,14 +54,31 @@
 
         <div class="mb-3">
             <label for="youtube_link" class="form-label">YouTube Link (Optional)</label>
-            <input type="url" id="youtube_link" name="youtube_link" class="form-control" 
-                   placeholder="https://www.youtube.com/watch?v=example" 
-                   value="{{ old('youtube_link', $activity->youtube_link) }}">
+            <input type="url" id="youtube_link" name="youtube_link" class="form-control"
+                placeholder="https://www.youtube.com/watch?v=example"
+                value="{{ old('youtube_link', $activity->youtube_link) }}">
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea id="description" name="description" rows="4" class="form-control">{{ old('description', $activity->description) }}</textarea>
+            <div id="quill-editor" style="height: 300px;">{!! old('description', $activity->description) !!}</div>
+            <input type="hidden" name="description" id="description">
+        </div>
+
+        <!-- Media upload fields below the description -->
+        <div class="mb-3">
+            <label for="media1" class="form-label">Upload Image 1 (Leave blank to keep current)</label>
+            <input type="file" id="media1" name="media1" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+            <label for="media2" class="form-label">Upload Image 2 (Leave blank to keep current)</label>
+            <input type="file" id="media2" name="media2" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+            <label for="media3" class="form-label">Upload Image 3 (Leave blank to keep current)</label>
+            <input type="file" id="media3" name="media3" class="form-control" accept="image/*">
         </div>
 
         <button type="submit" class="btn btn-primary">
@@ -80,4 +86,33 @@
         </button>
     </form>
 </div>
+
+<!-- Quill JS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            placeholder: 'Edit event description...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Set description value before form submit
+        document.getElementById('activity-form').addEventListener('submit', function () {
+            document.getElementById('description').value = quill.root.innerHTML;
+        });
+    });
+</script>
+
 @endsection

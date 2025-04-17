@@ -70,19 +70,27 @@ class NewsController extends Controller
             'date' => 'required|date',
             'image' => 'nullable|image'
         ]);
-
+    
+        $data = $request->only('title', 'content', 'date');
+    
+        // If a new image is uploaded
         if ($request->hasFile('image')) {
+            // Delete old image if exists
             if ($news->image && File::exists(public_path($news->image))) {
                 File::delete(public_path($news->image));
             }
-            $news->image = 'news/' . time() . '.' . $request->image->extension();
-            $request->image->move(public_path('news'), $news->image);
+    
+            $imageName = 'news/' . time() . '.' . $request->image->extension();
+            $request->image->move(public_path('news'), $imageName);
+    
+            $data['image'] = $imageName;
         }
-
-        $news->update($request->only('title', 'content', 'date', 'image'));
-
+    
+        $news->update($data);
+    
         return redirect()->route('news.index')->with('success', 'News updated successfully!');
     }
+    
     public function show(News $news)
         {
             return view('news.show', compact('news'));

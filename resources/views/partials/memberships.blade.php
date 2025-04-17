@@ -1,7 +1,7 @@
 <!-- Memberships Section -->
 @if($memberships->isNotEmpty())
     <div class="container mt-5">
-        <h3 style="margin-top: 360px; text-align: center; color: maroon; font-size: 30px;">Our Members</h3>
+        <h3 style=" text-align: center; color: maroon; font-size: 30px;">Our Members</h3>
         
         <!-- Static Grid for First Few Members -->
         <div class="row mt-4">
@@ -49,7 +49,7 @@
     </div>
 @else
     <div class="container mt-5">
-        <h3 class="text-center" style="margin-top: 360px;">Our Members</h3>
+        <h3 class="text-center">Our Members</h3>
         <p class="text-center text-muted">No members available at the moment.</p>
     </div>
 @endif

@@ -83,6 +83,7 @@
              <!-- display footer if not fetched through ajax -->
              @if(empty($isAjax))
 @guest
+@if (!View::hasSection('hide_footer'))
 <footer class="text-light pt-5 pb-4" style="background-color: rgb(88, 57, 57);">
     <div class="container">
         <div class="row text-center text-lg-start justify-content-lg-center">
@@ -92,10 +93,10 @@
                 <h5 class="text-uppercase font-weight-bold footer-title">Quick Links</h5>
                 <ul class="list-unstyled mt-3">
                     <li><a href="/" class="text-light footer-text">Home</a></li>
-                    <li><a href="/about" class="text-light footer-text">About Us</a></li>
-                    <li><a href="/services" class="text-light footer-text">Services</a></li>
-                    <li><a href="/contact" class="text-light footer-text">Contact</a></li>
-                    <li><a href="/faq" class="text-light footer-text">FAQ</a></li>
+                    <li><a href="{{ route('about.display') }}" class="text-light footer-text">About Us</a></li>
+                    <li><a href="{{ route('activities.display') }}" class="text-light footer-text">Past events</a></li>
+                    <li><a href="{{ route('contact.display') }}" class="text-light footer-text">Contact</a></li>
+                    <!-- <li><a href="/faq" class="text-light footer-text">FAQ</a></li> -->
                 </ul>
             </div>
 
@@ -155,12 +156,11 @@
         </div>
     </div>
 </footer>
-
-
-            
+     
         </div>
     </div>
     <!-- end of footer -->
+    @endif
     @endguest
    
      <!-- Footer2 to be vissible only to logged in users -->
@@ -193,7 +193,8 @@
     <!-- implements pop up for read more in activities/display -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- code for quilli editor for news -->
-@yield('scripts')
+    <!-- code for quilli editor for news -->
+    @yield('scripts')
+    
 
 </body>
