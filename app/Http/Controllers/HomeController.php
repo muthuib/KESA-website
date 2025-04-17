@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Slide;
 use App\Models\Collaboration;
 use App\Models\Feedback;
+use App\Models\Impact;
 use App\Http\Controllers\CollaboratorsController;
 
 
@@ -15,15 +16,15 @@ class HomeController extends Controller
 
 //Pass slides to the home view
 public function index()
-    {
-        $slides = Slide::all(); // Fetch all slides
-        $collaborations = Collaboration::all(); // Fetch all collaborations
-        $feedbacks = Feedback::all(); // Fetch feedbacks
+{
+    $slides = Slide::all(); 
+    $collaborations = Collaboration::all(); 
+    $feedbacks = Feedback::all(); 
+    $impact = Impact::first(); // 👈 This is what was missing
 
-        // Pass variables to the view
-        return view('home', compact('slides', 'feedbacks', 'collaborations'));
-        
-    }
+    return view('home', compact('slides', 'feedbacks', 'collaborations', 'impact'));
+}
+
     //show data in home view
     // public function showCollaborations()
     // {

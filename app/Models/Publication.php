@@ -14,5 +14,8 @@ class Publication extends Model
         'title',
         'description',
         'file_path',
+        'authors',
+        'file_size',
+        'downloads',
     ];
 }

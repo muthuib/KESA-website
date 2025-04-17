@@ -74,6 +74,11 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
                 Manage News
             </a>
+            <!-- Manage Testimonials -->
+            <a class="nav-link" href="{{ route('testimonials.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
+                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                Testimonials
+            </a>
 
             <!-- Manage Users -->
             <a class="nav-link" href="{{ route('users.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
@@ -96,6 +101,7 @@
                     <li><a class="dropdown-item" href="{{ route('memberships.index') }}" style="padding: 5px 10px;"><i class="fas fa-handshake"></i> Add Memberships</a></li>
                     <li><a class="dropdown-item" href="{{ route('send.newsletter') }}" style="padding: 5px 10px;"><i class="fas fa-paper-plane"></i> Send Newsletters</a></li>
                     <li><a class="dropdown-item" href="{{ route('newsletters.index') }}" style="padding: 5px 10px;"><i class="fas fa-newspaper"></i> View Newsletters</a></li>
+                    <li><a class="dropdown-item" href="{{ route('impacts.index') }}" style="padding: 5px 10px;"><i class="fas fa-chart-bar"></i>Add impacts stats</a></li>
                 </ul>
             </div>
             @endif

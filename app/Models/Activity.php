@@ -18,7 +18,10 @@ class Activity extends Model
         'start_time',
         'end_time',
         'media',
+        'media1',
+        'media2',
+        'media3',
         'youtube_link',
-        'description'
+        'description',
     ];
 }

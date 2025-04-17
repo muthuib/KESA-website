@@ -43,6 +43,8 @@ use App\Http\Controllers\FounderController;
 use App\Http\Controllers\ExecutiveController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ImpactController;
+use App\Http\Controllers\TestimonialController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -350,6 +352,8 @@ Route::delete('/publications/{publication}', [PublicationController::class, 'des
 });
 Route::get('/publications/download/{publication}', [PublicationController::class, 'download'])->name('publications.download');
 Route::get('/publication/display', [PublicationController::class, 'display'])->name('publications.display');
+Route::get('/publications/download/{id}', [App\Http\Controllers\PublicationController::class, 'download'])->name('publications.download');
+
 
 //ACTIVITIES ROUTES
 // List all activities (Index)
@@ -424,3 +428,31 @@ Route::middleware(['role:admin'])->group(function () {
 });
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/new/display', [NewsController::class, 'display'])->name('news.display');
+
+// IMPACTS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/impacts', [ImpactController::class, 'index'])->name('impacts.index');
+        Route::get('/impacts/create', [ImpactController::class, 'create'])->name('impacts.create');
+        Route::post('/impacts', [ImpactController::class, 'store'])->name('impacts.store');
+        Route::get('/impacts/{impact}', [ImpactController::class, 'show'])->name('impacts.show');
+        Route::get('/impacts/{impact}/edit', [ImpactController::class, 'edit'])->name('impacts.edit');
+        Route::put('/impacts/{impact}', [ImpactController::class, 'update'])->name('impacts.update');
+        Route::delete('/impacts/{impact}', [ImpactController::class, 'destroy'])->name('impacts.destroy');
+   });
+});
+
+// TESTIMONIALS ROUTES
+Route::middleware(['role:admin'])->group(function () {
+Route::middleware('auth')->group(function () {
+    Route::get('/testimonial', [TestimonialController::class, 'index'])->name('testimonials.index');
+    Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('testimonials.create');
+    Route::post('/testimonial', [TestimonialController::class, 'store'])->name('testimonials.store');
+    Route::get('/testimonials/{testimonial}', [TestimonialController::class, 'show'])->name('testimonials.show');
+    Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('testimonials.edit');
+    Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
+    Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
+  });
+});
+Route::get('/testimonials/display', [App\Http\Controllers\TestimonialController::class, 'display'])->name('testimonials.display');
+

@@ -1,27 +1,5 @@
 @extends('layouts.app')
 
-<!-- Main Content Container -->
-<!-- <div class="container mt-5 px-3" style="margin-left: 0; margin-right: 0; height: auto;"> -->
-    <!-- Main Row -->
-    <!-- <div class="row align-items-center g-3 d-flex"> -->
-        <!-- Logo and Text Container -->
-        <!-- <div class="col-12 d-flex align-items-center"> -->
-            <!-- Logo -->
-            <!-- <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="img-fluid logo-img"> -->
-
-            <!-- Text Section -->
-            <!-- <div class="text-content">
-                <h1 class="display-6 fw-bold heading-text">
-                    Welcome to the Economics Students Association of Kenya
-                </h1>
-                <p class="lead mt-2 description-text">
-                    Explore our content, events, and resources. Stay updated with the latest news and debates!
-                </p>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <!-- Custom CSS -->
 <style>
     /* Default Styles for Large Screens */
@@ -214,38 +192,6 @@
     <p>Our homepage layout is being updated. Continue exploring our platform, and thank you for your patience!</p>
 </div>
 @endif
-
-<!-- Newsletter Subscription Section -->
-<!-- <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm" style="margin-top: 150px;">
-                <div class="card-body">
-                    <h4 class="card-title text-center mb-4">Subscribe to Our Newsletter</h4> -->
-                    
-                    <!-- Display error message if email is already subscribed -->
-                    <!-- @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    
-                    <form method="POST" action="{{ route('subscribe') }}">
-                        @csrf
-                        <div class="form-group">
-                            <label for="email" class="form-label">Your Email Address</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required readonly>
-                        </div>
-                        <div class="form-group text-center mt-4">
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <!-- Thank You Modal -->
 @if(session('success'))
 <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
@@ -265,46 +211,53 @@
     </div>
 </div>
 @endif
+ <!-- impacts Section -->
+ @php
+    $impact = App\Models\Impact::first();
+@endphp
+@include('impacts._overview', ['impact' => App\Models\Impact::first() ?? (object)[
+    'total_people' => 0,
+    'total_events' => 0,
+    'total_trainings' => 0
+]])
 
-<!-- Explore Section -->
-<!-- <div class="container mt-5" style="margin-top: 2000px;">
-    <div class="row mt-5">
-        <div class="col-md-4 col-sm-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">News & Updates</h5>
-                    <p class="card-text">Stay informed with the latest happenings in our community.</p>
-                    <a href="{{ route('app') }}" class="btn btn-primary">Learn More</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-calendar-alt fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Events & Debates</h5>
-                    <p class="card-text">Join upcoming events and engage in enriching discussions.</p>
-                    <a href="{{ route('events.showAll') }}" class="btn btn-success">Explore</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-book fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Resources</h5>
-                    <p class="card-text">Access valuable resources to enhance your knowledge and skills.</p>
-                    <a href="{{ route('resources.show') }}" class="btn btn-warning">Get Resources</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
+@section('scripts')
+
+<script>
+    function animateCount(id, endValue, duration = 1500) {
+        const element = document.getElementById(id);
+        let start = 0;
+        const stepTime = Math.abs(Math.floor(duration / endValue));
+
+        const timer = setInterval(() => {
+            start++;
+            element.textContent = start.toLocaleString();
+
+            if (start >= endValue) clearInterval(timer);
+        }, stepTime);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if the impact data exists, otherwise use 0 as the default value
+        animateCount('totalPeople', {{ $impact->total_people ?? 0 }});
+        animateCount('totalEvents', {{ $impact->total_events ?? 0 }});
+        animateCount('totalTrainings', {{ $impact->total_trainings ?? 0 }});
+    });
+</script>
+
+@endsection
+
 
     <!-- memberships Section -->
     @include('partials.memberships', ['memberships' => App\Models\Membership::all()])
 <!-- Collaborations Section -->
     @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
+
 <!-- What People Say About Us Section -->
-@include('feedback.display', ['feedbacks' => App\Models\Feedback::all()])
+@include('testimonials.display', ['testimonials' => App\Models\Testimonial::latest()->get()])
+
+
+
+
+
+
