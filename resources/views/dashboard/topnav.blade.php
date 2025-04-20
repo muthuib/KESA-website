@@ -175,10 +175,11 @@
                     margin-right: 1px; /* Reduce spacing further */
                 }
             }
-
-           
-
-
+            /* style for memberships dropdown */
+            .dropdown-menu .dropdown-item:hover {
+                    background-color: maroon;
+                    color: white;
+                }
  </style>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: brown; gap: 15px;">
          <!-- Logo Container -->
@@ -188,58 +189,31 @@
                 class="img-fluid" 
                 style="width: 90px; height: 90px; border-radius: 50%; object-fit: contain; background-color: white; padding: 8px; margin-top: 20px; border: 3px solid white;">
         </div>
-
-        <!-- Social media icons -->
-        <!-- <div style="display: flex; gap: 15px; align-items: center;">
-                <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" target="_blank" class="text-decoration-none">
-                    <i class="fab fa-facebook text-white" style="font-size: 24px;"></i>
-                </a>
-                
-                <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" target="_blank" class="text-decoration-none">
-                <img src="/assets/images/x-logo.png" alt="Twitter X" class="twitter-img">
-
-                <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" target="_blank" class="text-decoration-none">
-                    <i class="fab fa-instagram text-white" style="font-size: 24px;"></i>
-                </a>
-
-                <a href="https://www.linkedin.com/company/kenya-economics-students-association/" target="_blank" class="text-decoration-none">
-                    <i class="fab fa-linkedin text-white" style="font-size: 24px;"></i>
-                </a>
-            </div>
-
-      <p class="motto-text" style="color:rgb(9, 220, 248);"><b>Motto:</b> <k class="motto-key" style="color: #ffffff;"><b>Unity of Purpose</b></k></p>  -->
-      
-        <!-- Toggler Button for Collapsible Navbar -->
-        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-        </button> -->
          <!-- search icon -->
-<!-- Container for menu and search (visible on small and medium devices only) -->
-<div class="d-flex justify-content-end align-items-center d-lg-none px-3 w-100">
-    <!-- Menu Button -->
-    <button class="navbar-toggler me-2" id="openPopup">
-        <span class="navbar-toggler-ico" style="color: white;">Menu</span>
-    </button>
+            <!-- Container for menu and search (visible on small and medium devices only) -->
+            <div class="d-flex justify-content-end align-items-center d-lg-none px-3 w-100">
+                <!-- Menu Button -->
+                <button class="navbar-toggler me-2" id="openPopup">
+                    <span class="navbar-toggler-ico" style="color: white;">Menu</span>
+                </button>
 
-    <!-- Search Button + Form -->
-    <div class="position-relative">
-        <!-- Search Button -->
-        <button class="btn btn-outline-ligh searchToggle" data-target="searchFormContainer2" style="color: white; margin-right: 80px; margin-top: 0px;">
-            <i class="fas fa-search"></i>
-        </button>
+                <!-- Search Button + Form -->
+                <div class="position-relative">
+                    <!-- Search Button -->
+                    <button class="btn btn-outline-ligh searchToggle" data-target="searchFormContainer2" style="color: white; margin-right: 80px; margin-top: 0px;">
+                        <i class="fas fa-search"></i>
+                    </button>
 
-        <!-- Search Form (Initially Hidden) -->
-        <div id="searchFormContainer2" class="position-absolute top-100 end-0 p-3 shadow rounded d-none"
-            style="background-color: brown; margin-top: 5px; z-index: 999;">
-            <form class="d-flex" action="{{ route('search') }}" method="GET">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 180px;">
-                <button class="btn btn-outline-light" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-
+                    <!-- Search Form (Initially Hidden) -->
+                    <div id="searchFormContainer2" class="position-absolute top-100 end-0 p-3 shadow rounded d-none"
+                        style="background-color: brown; margin-top: 5px; z-index: 999;">
+                        <form class="d-flex" action="{{ route('search') }}" method="GET">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" style="width: 180px;">
+                            <button class="btn btn-outline-light" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 <!-- Pop-Up Menu -->
 <div id="customPopup">
     <div class="popup-content">
@@ -277,10 +251,22 @@
             <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div><br>
             <div class="menu-item"><a href="{{ route('news.display') }}">Blog</a></div>
             @guest
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
-                    Register
+            <li class="nav-item dropdown" style="margin-right: 15px;">
+                <a class="nav-link dropdown-toggle" href="#" id="membershipDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; color: black; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                    Membership
                 </a>
+                <ul class="dropdown-menu" aria-labelledby="membershipDropdown2">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('benefits') }}">
+                            Member Benefits
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('memberships.types') }}">
+                            Our Members
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item" style="margin-top: 10px;">
                 <a class="nav-link" href="{{ route('login') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
@@ -449,32 +435,25 @@
                             </a>
                         </li>
                     </ul>
-                <!-- Guest Links -->
-                <!-- @guest
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: blue; color:white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Register</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #00FF7F;">
-                            <li><a class="dropdown-item" href="{{ route('register') }}" style="color: blue; font-weight: bold;">Member Registration</a></li>
-                            <li><a class="dropdown-item" href="{{ route('registration') }}" style="color: blue; font-weight: bold;">Partner Registration</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: green; color:white; margin-right: 1
-                        5px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">Login</a>
-                        <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown" style="background-color:rgb(104, 202, 69);">
-                            <li><a class="dropdown-item" href="{{  route('login') }}"style="color: blue; font-weight: bold;">Member</a></li>
-                            <li><a class="dropdown-item" href="{{  route('partnerlogin') }}"style="color: blue; font-weight: bold;">Partner</a></li>
-                        </ul>
-                    </li>
-                @endguest -->
                 @guest
                     <!-- Register Button -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}" style="background-color: brown; color: white; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px; margin-top: 22px;">
-                            Register
+                    <li class="nav-item dropdown" style="margin-top: 22px; margin-right: 15px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="membershipDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: brown; color: white; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
+                            Membership
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="membershipDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('benefits') }}">
+                                    Member Benefits
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('memberships.types') }}">
+                                    Our Members
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-
                     <!-- Login Button -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}" style="background-color: brown; color: white; font-weight: bold; border-radius: 5px; padding: 7px 10px; margin-top: 22px;">

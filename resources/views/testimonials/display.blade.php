@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="feedback-section p-4 rounded shadow-sm bg-white w-100">
-                <h1 class="feedback-title mb-4 text-center">What People Say About Us</h1>
+                <h1 class="feedback-title mb-4 text-center">Testimonials</h1>
 
                 <!-- Testimonial Container -->
                 <div id="testimonial-wrapper" class="marquee overflow-hidden">
