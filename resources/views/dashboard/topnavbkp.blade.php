@@ -1,79 +1,61 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-@auth
-    <div class="d-flex justify-content-between align-items-left mb-3">
-        <h2 class="mb-0"></h2>
-        <a href="{{ route('activity.index') }}" class="btn btn-dark" style="margin-top: 5px;">
-            <i class="fas fa-backward"></i> Back
-        </a>
-    </div>
-@endauth
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Toggle Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</head>
 
-<!-- Full-width header with secondary background -->
-<div class="text-dark py-4 px-0 responsive-header"
-     style="margin-top: {{ Auth::check() ? '0' : '120px' }}; margin-bottom: 8px; background-color: rgb(244, 237, 237);">
-    <div class="container-fluid px-4">
-        <h2 class="mb-0 news-title w-100">{{ $activity->title }}</h2>
-    </div>
-</div>
-
-<div class="container mt-5">
-    <div class="news-detail">
-        @if($activities->image)
-            <img src="{{ asset($news->image) }}" class="news-image mb-3" alt="News Image">
-        @endif
-
-        <p class="text-left text-muted">
-            <strong>{{ \Carbon\Carbon::parse($activities->date)->format('l, F j, Y') }}</strong>
-        </p>
-
-        <div class="mt-3 news-content" style="line-height: 1.7; font-size: 1.1rem; text-align: left;">
-            {!! $activities->description !!}
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: brown;">
+        <a class="navbar-brand ps-3" href="#">Brand</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        About Us
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Vision</a></li>
+                        <li><a class="dropdown-item" href="#">Mission</a></li>
+                        <li><a class="dropdown-item" href="#">Objectives</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Events</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Economics Hub
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="economicsHubDropdown">
+                        <li><a class="dropdown-item" href="#">Resources</a></li>
+                        <li><a class="dropdown-item" href="#">Research</a></li>
+                        <li><a class="dropdown-item" href="#">Feedback</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Live Media</a>
+                </li>
+            </ul>
         </div>
+    </nav>
+
+    <div style="padding-top: 60px;">
+        <!-- Content here -->
     </div>
-</div>
+</body>
 
-<!-- Responsive Styling -->
-<style>
-    .news-image {
-        max-width: 60%;
-        height: auto;
-        float: left;
-        margin-right: 1rem;
-    }
-
-    .news-title {
-        text-align: left;
-        font-size: 32px;
-        font-weight: bold;
-        padding: 0px 0;
-    }
-
-    @media (max-width: 992px) {
-        .responsive-header {
-            margin-top: 90px !important;
-        }
-        .news-title {
-            font-size: 24px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .news-image {
-            float: none !important;
-            max-width: 100% !important;
-            margin-right: 0 !important;
-            display: block;
-        }
-
-        .news-content {
-            text-align: left;
-        }
-
-        .news-title {
-            font-size: 18px;
-        }
-    }
-</style>
-@endsection
+</html>

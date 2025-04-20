@@ -21,12 +21,17 @@
             {{ $activity->end_time ? \Carbon\Carbon::parse($activity->end_time)->format('h:i A') : '-' }}
         </div>
     </div>
-
+    <div class="mb-4">
+        <h5 class="mt-3"><i class="fas fa-align-left text-primary"></i> Description</h5>
+        <div class="border p-3 rounded bg-light">
+            {!! $activity->description !!}
+        </div>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-body text-center">
             @if(Str::endsWith($activity->media, ['.mp4', '.mov', '.avi', '.mkv', '.flv', '.wmv']))
-                <video width="100%" controls>
-                    <source src="{{ asset($activity->media) }}" type="video/mp4">
+                <video width="100%" controls style = "width: 500px;">
+                    <source src="{{ asset($activity->media) }}" type="video/mp4"> 
                     Your browser does not support the video tag.
                 </video>
                 <div class="mt-3">
@@ -67,11 +72,5 @@
             </div>
         </div>
     @endif
-    <div class="mb-4">
-        <h5 class="mt-3"><i class="fas fa-align-left text-primary"></i> Description</h5>
-        <div class="border p-3 rounded bg-light">
-            {!! $activity->description !!}
-        </div>
-    </div>
 </div>
 @endsection

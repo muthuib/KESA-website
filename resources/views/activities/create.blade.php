@@ -50,6 +50,10 @@
             <label for="media" class="form-label">Upload Video/Image *</label>
             <input type="file" id="media" name="media" class="form-control" accept="video/*,image/*" required>
         </div>
+        <div class="mb-3">
+            <label for="youtube_link" class="form-label">YouTube Link (Optional)</label>
+            <input type="url" id="youtube_link" name="youtube_link" class="form-control" placeholder="https://www.youtube.com/watch?v=example">
+        </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
@@ -71,11 +75,6 @@
         <div class="mb-3">
             <label for="media3" class="form-label">Upload Additional Image 3 (Optional)</label>
             <input type="file" id="media3" name="media3" class="form-control" accept="image/*">
-        </div>
-
-        <div class="mb-3">
-            <label for="youtube_link" class="form-label">YouTube Link (Optional)</label>
-            <input type="url" id="youtube_link" name="youtube_link" class="form-control" placeholder="https://www.youtube.com/watch?v=example">
         </div>
 
         <button type="submit" class="btn btn-success">

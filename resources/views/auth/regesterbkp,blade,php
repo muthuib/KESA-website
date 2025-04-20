@@ -7,10 +7,6 @@
     <title>Register</title>
     <!-- Link to your CSS file -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
     body,
     html {
@@ -212,78 +208,6 @@
            
         }
     }
-    /* membership style cards */
-    .card-hover {
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
-        border-radius: 1rem;
-        overflow: hidden;
-    }
-
-    .card-hover:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .gradient-individual {
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        color: white;
-    }
-
-    .gradient-associate {
-        background: linear-gradient(135deg, #ff7e5f, #feb47b);
-        color: white;
-    }
-
-    .card-hover h5,
-    .card-hover p {
-        margin: 0;
-    }
-
-    .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-    @media (max-width: 768px) {
-        .card-hover {
-        padding: 0rem;
-        font-size: 0.8rem;
-        width: 250px;
-    }
-    .card-body {
-        padding: 1rem;
-    }
-
-    .card-title {
-        font-size: 13px;
-    }
-
-    .card-text {
-        font-size: 13px;
-    }
-
-    .card-icon {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-    }
-}
-#participationSection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-#participationSection label {
-    margin-right: 10px; /* Adjust space between labels and inputs */
-}
-
-#participationSection input[type="radio"] {
-    margin-right: 15px; /* Adjust space between radio buttons */
-}
-
-
 </style>
 </head>
 
@@ -309,71 +233,10 @@
             <div class="logo-container">
                 <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid">
             </div>
-            
 
-            <h2 style="color:rgb(61, 15, 81);">KESA Membership Registration</h2>
+            <h2 style="color:rgb(61, 15, 81);">KESA Member Registration</h2>
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-         <!-- Membership Selection Section
-         <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4 mb-3">
-                    <div class="card card-hover gradient-individual text-center" onclick="showForm('individual')">
-                        <div class="card-body">
-                            <div class="card-icon">
-                                <i class="fas fa-user-graduate"></i>
-                            </div>
-                            <h5 class="card-title">Individual Membership</h5>
-                            <p class="card-text text-left">For university graduates/students pursuing economics or related programs.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4 mb-3">
-                    <div class="card card-hover gradient-associate text-center" onclic="showForm('associate')">
-                        <div class="card-body">
-                            <div class="card-icon">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <h5 class="card-title">Associate Membership</h5>
-                            <p class="card-text text-left">For professionals, institutions, organizations and supporters of economics.</p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-             <!-- Membership Selection Dropdown -->
-            <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-                    <label for="membershipType" class="form-label fw-bold">Select Membership Type</label>
-                    <select class="form-select" id="membershipType" onchange="showForm(this.value)" style="width: 300px;">
-                        <option value="">-- Choose a Membership Type --</option>
-                        <option value="individual">Individual Membership</option>
-                        <option value="associate">Associate Membership</option>
-                        <option value="full">Full Membership</option>
-                        <option value="fellow">Fellow/Honorary Membership</option>
-                        <option value="organization">Organization/Association</option>
-                    </select>
-                </div>
-            </div>
-            <!-- display title of selected card -->
-            <h3 id="selectedMembershipTitle" style="text-align: center; display: none; color: brown; margin-bottom: 20px;"></h3>
-             <!-- Participation question (HIDDEN INITIALLY) -->
-            <div id="participationSection" style="display: none;" class="form-row justify-content-center">
-                <div class="col-12 col-md-6">
-                    <label class="fw-bold">Are you willing to participate in this registration?</label>
-                    <div class="d-flex justify-content-center align-items-center gap-3 mt-2">
-                        <div>
-                            <label for="participation_yes">Yes</label>
-                            <input type="radio" id="participation_yes" name="participation" value="Yes" onclick="toggleRegistrationForm(true)">
-                        </div>
-                        <div>
-                            <label for="participation_no">No</label>
-                            <input type="radio" id="participation_no" name="participation" value="No" onclick="toggleRegistrationForm(false)">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- individual registration form -->
-             <div id="registrationForm" style="display: none;">
-             <div id="form-individual" class="membership-form" style="display: none;">
 
                 <div class="form-row">
                     
@@ -436,8 +299,11 @@
                         @enderror
                     </div>
                 </div>
+
                 <!--   Row -->
                 <div class="form-row">
+                  
+
                     <div class="form-group">
                         <label for="GENDER">Gender *</label>
                         <select id="GENDER" name="GENDER" required>
@@ -487,15 +353,17 @@
                 </div>
                 <!-- School status -->
                 <div class="form-group">
-                    <label>Are you currently in school? *</label>
-                    <label for="SCHOOL_YES">Yes</label>
-                    <input type="radio" id="SCHOOL_YES" name="CURRENTLY_IN_SCHOOL" value="Yes" 
-                        {{ old('CURRENTLY_IN_SCHOOL') == 'Yes' ? 'checked' : '' }} >
+                <label>Are you currently in school? *</label>
+                <label for="SCHOOL_YES">Yes</label>
+                <input type="radio" id="SCHOOL_YES" name="CURRENTLY_IN_SCHOOL" value="Yes" 
+                    {{ old('CURRENTLY_IN_SCHOOL') == 'Yes' ? 'checked' : '' }} >
 
-                    <label for="SCHOOL_NO">No</label>
-                    <input type="radio" id="SCHOOL_NO" name="CURRENTLY_IN_SCHOOL" value="No" 
-                        {{ old('CURRENTLY_IN_SCHOOL') == 'No' ? 'checked' : '' }} >
-                </div>
+                <label for="SCHOOL_NO">No</label>
+                <input type="radio" id="SCHOOL_NO" name="CURRENTLY_IN_SCHOOL" value="No" 
+                    {{ old('CURRENTLY_IN_SCHOOL') == 'No' ? 'checked' : '' }} >
+            </div>
+
+
                 <div id="school_info" style="display: {{ old('SCHOOL_STATUS') == 'Yes' ? 'block' : 'none' }}">
                     <!-- School related fields for users currently in school -->
                     <div class="form-row">
@@ -561,31 +429,11 @@
                         @enderror
                     </div>
                 </div>
+
                 <button type="submit">Submit</button>
-                </div>
-                <!-- OTHER MEMBERSHIP FORMS -->
-                <div id="form-associate" class="membership-form" style="display: none;">
-                    <!-- Your Associate Membership form here -->
-                    <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Associate Membership Form will be updated soon</p>
-                </div>
-                    <div id="form-full" class="membership-form" style="display: none;">
-                        <!-- Your Full Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Full Membership Form will be updated soon</p>
-                    </div>
-
-                    <div id="form-fellow" class="membership-form" style="display: none;">
-                        <!-- Your Fellow/Honorary Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Fellow Membership Form will be updated soon </p>
-                    </div>
-
-                    <div id="form-organization" class="membership-form" style="display: none;">
-                        <!-- Your Organization/Association Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Organization Membership Formwill be updated soon</p>
-                    </div>
-             </div>
-            </div>
-        </form>
+            </form>
         </div>
+    </div>
 
     <!-- Include JavaScript for dynamic form updates -->
     <script>
@@ -611,65 +459,6 @@
             });
         });
     </script>
-<!-- MEMBERSHIPS SCRIPTS -->
-<script>
-    let selectedMembership = '';
-
-    function showForm(value) {
-        selectedMembership = value;
-
-        // Hide all forms first
-        document.querySelectorAll('.membership-form').forEach(form => {
-            form.style.display = 'none';
-        });
-
-        // Show participation question
-        document.getElementById('participationSection').style.display = value ? 'block' : 'none';
-
-        // Hide registration form until user answers Yes
-        document.getElementById('registrationForm').style.display = 'none';
-
-        // Hide the form title
-        document.getElementById('selectedMembershipTitle').style.display = 'none';
-
-        // Clear any selected participation
-        document.getElementsByName('participation').forEach(r => r.checked = false);
-    }
-
-    function toggleRegistrationForm(show) {
-        if (show && selectedMembership) {
-            document.getElementById('registrationForm').style.display = 'block';
-
-            // Show only the relevant form
-            document.querySelectorAll('.membership-form').forEach(form => {
-                form.style.display = 'none';
-            });
-
-            const formId = `form-${selectedMembership}`;
-            const formElement = document.getElementById(formId);
-
-            if (formElement) {
-                formElement.style.display = 'block';
-
-                // Update title
-                const titleMap = {
-                    individual: 'Individual Membership',
-                    associate: 'Associate Membership',
-                    full: 'Full Membership',
-                    fellow: 'Fellow/Honorary Membership',
-                    organization: 'Organization/Association Membership'
-                };
-
-                document.getElementById('selectedMembershipTitle').innerText = titleMap[selectedMembership] || '';
-                document.getElementById('selectedMembershipTitle').style.display = 'block';
-            }
-        } else {
-            document.getElementById('registrationForm').style.display = 'none';
-            document.getElementById('selectedMembershipTitle').style.display = 'none';
-        }
-    }
-</script>
-
 </body>
 
 </html>

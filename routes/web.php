@@ -45,6 +45,7 @@ use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\MemberBenefitsController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -414,6 +415,7 @@ Route::middleware(['role:admin'])->group(function () {
 
 // Custom display method (if needed)
 Route::get('/membership', [MembershipController::class, 'display'])->name('memberships.display');
+Route::get('/membership-types', [MemberBenefitsController::class, 'types'])->name('memberships.types');
 
 // WEB ROUTES
 Route::middleware(['role:admin'])->group(function () {
@@ -455,4 +457,9 @@ Route::middleware('auth')->group(function () {
   });
 });
 Route::get('/testimonials/display', [App\Http\Controllers\TestimonialController::class, 'display'])->name('testimonials.display');
+
+// MEMBER BENEFITS ROUTE
+Route::get('/member-benefits', [App\Http\Controllers\MemberBenefitsController::class, 'showBenefits'])->name('benefits');
+
+
 
