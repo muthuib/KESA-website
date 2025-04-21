@@ -46,6 +46,8 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\MemberBenefitsController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -460,6 +462,20 @@ Route::get('/testimonials/display', [App\Http\Controllers\TestimonialController:
 
 // MEMBER BENEFITS ROUTE
 Route::get('/member-benefits', [App\Http\Controllers\MemberBenefitsController::class, 'showBenefits'])->name('benefits');
+
+
+// CHANGE PASSWORD and FORGOT PASSWORD ROUTEs
+
+
+Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendTemporaryPassword'])->name('password.email');
+Route::get('/change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showChangePasswordForm'])->name('password.change');
+Route::post('/change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'changePassword'])->name('password.update');
+
+
+
+
+
 
 
 

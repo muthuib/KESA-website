@@ -544,7 +544,7 @@
                 </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="top: 60px;">
                         <li>
-                            <a class="dropdown-item" href="{{ route('app') }}">
+                            <a class="dropdown-item" href="{{ route('password.change') }}">
                                 <i class="fas fa-key"></i> Change Password
                             </a>
                         </li>

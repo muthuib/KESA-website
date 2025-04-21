@@ -20,14 +20,24 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
+        // Attempt to authenticate the user
         if (Auth::attempt(['EMAIL' => $credentials['EMAIL'], 'password' => $credentials['password']])) {
-            // Set a success message in session
-            // Flash success message with user's first name and last name
-            session()->flash('success', 'You have logged in successfully. Welcome, ' . Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME . ' to KESA');
+            $user = Auth::user();
 
+            // Check if the user needs to change their password
+            if ($user->must_change_password) {
+                // Redirect to the change password page if necessary
+                return redirect()->route('password.change');
+            }
+
+            // Set a success message in the session
+            session()->flash('success', 'You have logged in successfully. Welcome, ' . $user->FIRST_NAME . ' ' . $user->LAST_NAME . ' to KESA');
+
+            // Redirect to the intended page (user dashboard)
             return redirect()->intended('/user-dashboard');
         }
 
+        // If authentication fails, return back with error messages
         return back()->withErrors([
             'EMAIL' => 'The provided credentials do not match our records.',
         ]);
@@ -44,5 +54,4 @@ class LoginController extends Controller
         // Redirect to the login page with a success message
         return redirect('/login')->with('success', 'You have been logged out successfully.');
     }
-
 }
