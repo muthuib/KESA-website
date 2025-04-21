@@ -30,7 +30,7 @@
 
         /* Login Container */
         .login-container {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #ffffff;
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -208,7 +208,8 @@
 
                 <!-- Forgot Password Link -->
                 <p style="text-align: left; margin-top: 12px;">
-                    <a href="{{ route('register') }}" style="color: #007bff;">Forgot Password?</a>
+                    <a href="{{ route('password.request') }}" style="color: #007bff;">Forgot Password?</a>
+
                 </p>
 
                 <!-- Link to Register -->
