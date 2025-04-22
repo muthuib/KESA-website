@@ -19,7 +19,18 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <!-- code for quilli editor for news-->
-    @yield('styles')
+
+    <!-- WEBSITE FONT STYLE -->
+      <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!--  CSS -->
+    <style>
+        * {
+            font-family: 'Poppins';
+        }
+    </style>
+        @yield('styles')
 
 </head>
 <body class="sb-nav-fixed">
