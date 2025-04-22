@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="margin-top: 90px;">
+<div class="container" style="margin-top: 120px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Live Events & Meetings</h2>
     </div>

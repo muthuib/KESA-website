@@ -465,8 +465,6 @@ Route::get('/member-benefits', [App\Http\Controllers\MemberBenefitsController::c
 
 
 // CHANGE PASSWORD and FORGOT PASSWORD ROUTEs
-
-
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
 Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendTemporaryPassword'])->name('password.email');
 Route::get('/change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showChangePasswordForm'])->name('password.change');

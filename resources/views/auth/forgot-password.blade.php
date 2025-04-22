@@ -33,13 +33,15 @@
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            <div class="row g-2 align-items-end">
-                <div class="col-8">
+            <div class="row g-3">
+                <!-- Email input: full width on small/medium, 8 cols on large -->
+                <div class="col-12 col-lg-8">
                     <label class="form-label fw-semibold">Email address</label>
                     <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
                 </div>
 
-                <div class="col-4">
+                <!-- Send button: full width on small/medium, 4 cols on large -->
+                <div class="col-12 col-lg-4 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
                         Send
                     </button>
