@@ -583,7 +583,6 @@
     #dropdown-menu .dropdown-item {
         padding: 10px 20px;  /* Adjust padding to make items look bigger */
         font-size: 16px;  /* Change font size */
-        font-family: 'Arial', sans-serif;  /* Change font family */
         color: #333;  /* Default text color */
         transition: all 0.3s ease;  /* Smooth transition for hover effect */
     }

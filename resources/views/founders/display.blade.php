@@ -3,7 +3,7 @@
 @section('content')
     <!-- Meet the Founders Section -->
     <div class="container my-5">
-        <p class="section-subtitle" style="font-size: 30px;">Founders</p>
+        <p class="section-subtitle" style="font-size: 30px;">Founding Council</p>
 
         @if($founders->isNotEmpty())
             <div class="team-container">  <!-- Use the CSS Grid Wrapper -->

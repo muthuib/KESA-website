@@ -2,35 +2,35 @@
     <h2 class="mb-4 text-center">📊 Impact Overview</h2>
 
     <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3 g-3 justify-content-start text-center">
-        <!-- Total People -->
+        <!-- Total events -->
         <div class="col">
             <div class="card impact-card border-0 shadow-lg rounded-4 p-3 bg-light">
                 <div class="mb-2">
-                    <i class="fas fa-users impact-icon text-primary"></i>
+                <i class="fas fa-calendar-check impact-icon text-success"></i>
                 </div>
-                <h5 class="fw-bold impact-title">Total People Reached</h5>
+                <h5 class="fw-bold impact-title">Events Held</h5>
                 <h2 class="impact-count text-primary fw-bold" id="totalPeople">0</h2>
             </div>
         </div>
 
-        <!-- Total Events -->
+        <!-- Total people reached-->
         <div class="col">
             <div class="card impact-card border-0 shadow-lg rounded-4 p-3 bg-light">
                 <div class="mb-2">
-                    <i class="fas fa-calendar-check impact-icon text-success"></i>
+                <i class="fas fa-users impact-icon text-primary"></i>
                 </div>
-                <h5 class="fw-bold impact-title" style="text-align: center;">Events Held</h5>
+                <h5 class="fw-bold impact-title" style="text-align: center;">People Reached</h5>
                 <h2 class="impact-count text-success fw-bold" id="totalEvents">0</h2>
             </div>
         </div>
 
-        <!-- Total Trainings -->
+        <!-- Total leadership and fellows -->
         <div class="col">
             <div class="card impact-card border-0 shadow-lg rounded-4 p-3 bg-light">
                 <div class="mb-2">
                     <i class="fas fa-chalkboard-teacher impact-icon text-warning"></i>
                 </div>
-                <h5 class="fw-bold impact-title">Trainings Conducted</h5>
+                <h5 class="fw-bold impact-title">Certified Leadership Fellows</h5>
                 <h2 class="impact-count text-warning fw-bold" id="totalTrainings">0</h2>
             </div>
         </div>
