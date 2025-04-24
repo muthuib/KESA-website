@@ -5,7 +5,7 @@
         
         <!-- Static Grid for First Few Members -->
         <div class="row mt-4">
-            @foreach ($memberships->take(4) as $membership) 
+            @foreach ($memberships->take(8) as $membership) 
                 <div class="col-6 col-sm-6 col-md-3 text-center mb-4">
                     <div class="card shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
@@ -27,12 +27,12 @@
         </div>
 
         <!-- Marquee for Extra Members -->
-        @if($memberships->count() > 4)
+        @if($memberships->count() > 8)
             <div class="mt-4">
                 <h4 class="text-center">More Members</h4>
                 <div class="marquee-container">
                     <marquee behavior="scroll" direction="left" scrollamount="4">
-                        @foreach ($memberships->slice(4) as $membership)
+                        @foreach ($memberships->slice(8) as $membership)
                             <div class="marquee-item">
                                 <img src="{{ file_exists(public_path($membership->LOGO_PATH)) 
                                         ? asset($membership->LOGO_PATH) 

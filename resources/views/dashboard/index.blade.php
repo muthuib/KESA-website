@@ -1,84 +1,92 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-5">
-        <div class="row">
-            <!-- User Info Panel -->
-            <div class="col-md-3">
-                <div class="card mb-4">
-                <div class="d-flex justify-content-center">
-                <img src="{{ asset($user->PASSPORT_PHOTO) }}" 
-                    class="card-img-top rounded-circle" 
-                    alt="Upload profile Picture" 
-                    style="width: 150px; height: 150px; object-fit: cover;">
+<div class="container mt-5">
+    <div class="row">
+        <!-- User Info Panel -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4 animate__animated animate__fadeInLeft">
+                <div class="d-flex justify-content-center mt-3">
+                    <img src="{{ asset($user->PASSPORT_PHOTO) }}" class="rounded-circle shadow" alt="Profile Picture" style="width: 130px; height: 130px; object-fit: cover;">
                 </div>
-                    <div class="card-body text-left" style=" width: 300px;">
-                        <h5 class="card-title">{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</h5>
-                        <h3 style="color:blue; font-size: 14px;">
-                            Membership Number:
-                            <span class="card-title" style="font-size: 14px; color:brown;">
-                                @if($user->roles->isEmpty())
-                                    Not Approved, Waiting for Approval
-                                @else
-                                    {{ $user->MEMBERSHIP_NUMBER }}
-                                @endif
-                            </span>
-                        </h3>
-                        <p class="card-text">Welcome back! Here’s your personalized dashboard.</p>
-                        <a href="{{ route('profile.edit', $user->ID) }}" class="btn btn-primary btn-sm">Edit Profile</a>
-                    </div>
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</h5>
+                    <p class="text-muted mb-1" style="font-size: 14px;">
+                        Membership Number: 
+                        <span class="fw-bold text-primary">
+                            @if($user->roles->isEmpty())
+                                Pending Approval
+                            @else
+                                {{ $user->MEMBERSHIP_NUMBER }}
+                            @endif
+                        </span>
+                    </p>
+                    <a href="{{ route('profile.edit', $user->ID) }}" class="btn btn-outline-primary btn-sm mt-2">Edit Profile</a>
                 </div>
-
-                <!-- Navigation Links -->
-                <nav class="nav flex-column">
-                    <a class="nav-link" href="{{ route('user-dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ route('user-dashboard') }}">Notifications</a>
-                    <a class="nav-link" href="{{ route('user-dashboard') }}">Activities</a>
-                </nav>
             </div>
-            <!-- Main Content Section -->
-            <div class="col-md-9">
-                <!-- Hero Section: Welcome Message & Statistics -->
-                <div class="mb-4">
+
+            <!-- Navigation Links -->
+            <div class="list-group shadow-sm animate__animated animate__fadeInLeft">
+                <a href="{{ route('user-dashboard') }}" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="{{ route('user-dashboard') }}" class="list-group-item list-group-item-action">Notifications</a>
+                <a href="{{ route('user-dashboard') }}" class="list-group-item list-group-item-action">Activities</a>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-9">
+            <!-- Hero Welcome Message -->
+            <div class="bg-light p-4 rounded shadow-sm mb-4 animate__animated animate__fadeInUp">
                 @foreach($user->roles as $role)
-                <h1 style = "font-size: 35px;">Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} <h style="font-size: 25px; color:green;">({{ $role->name }})</h></h1>
+                    <h2 class="fw-bold mb-1">Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} <span class="text-success">({{ $role->name }})</span></h2>
                 @endforeach
-                    <p>Your go-to space for insights, notifications, and quick access to KESA resources.</p>
-                </div>
+                <p class="text-muted">Your personalized space for updates, tools, and resources within KESA.</p>
+            </div>
 
-                <!-- Notifications Section -->
-                <div class="mb-4">
-                    <h3>Recent Notifications</h3>
-                    <ul class="list-group">
-                        @foreach($notifications as $notification)
-                            <li class="list-group-item">
-                                {{ $notification->data['message'] }}
-                                <span class="text-muted float-end">{{ $notification->created_at->diffForHumans() }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <a href="{{ route('user-dashboard') }}" class="btn btn-link">View All Notifications</a>
+            <!-- Notifications Section -->
+            <div class="card shadow-sm mb-4 animate__animated animate__fadeInUp">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">🔔 Recent Notifications</h4>
+                    @if($notifications->count())
+                        <ul class="list-group list-group-flush">
+                            @foreach($notifications as $notification)
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ $notification->data['message'] }}
+                                    <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-muted">No notifications at the moment.</p>
+                    @endif
+                    <a href="{{ route('user-dashboard') }}" class="btn btn-sm btn-link mt-2">View All Notifications from your email</a>
                 </div>
+            </div>
 
-                <!-- Recent Activities Section -->
-                <div class="mb-4">
-                    <h3>Recent Activities</h3>
-                    <ul class="list-group">
-                       
+            <!-- Recent Activities Section -->
+            <div class="card shadow-sm mb-4 animate__animated animate__fadeInUp">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">📋 Recent Activities</h4>
+                    <ul class="list-group list-group-flush">
+                        <!-- You can dynamically add activities here -->
+                        <li class="list-group-item text-muted">No recent activities to display.</li>
                     </ul>
-                    <a href="{{ route('user-dashboard') }}" class="btn btn-link">View All Activities</a>
+                    <a href="{{ route('user-dashboard') }}" class="btn btn-sm btn-link mt-2">View All Activities</a>
                 </div>
+            </div>
 
-                <!-- Quick Links Section -->
-                <div class="mb-4">
-                    <h3>Quick Access</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item"><a href="{{ route('user-dashboard') }}" class="text-decoration-none">Events</a></li>
-                        <li class="list-group-item"><a href="{{ route('resources.index') }}" class="text-decoration-none">Resources</a></li>
-                        <li class="list-group-item"><a href="{{ route('user-dashboard') }}" class="text-decoration-none">Discussions</a></li>
-                    </ul>
+            <!-- Quick Access Section -->
+            <div class="card shadow-sm mb-4 animate__animated animate__fadeInUp">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">🚀 Quick Access</h4>
+                    <div class="list-group">
+                        <a href="{{ route('user-dashboard') }}" class="list-group-item list-group-item-action">Events</a>
+                        <a href="{{ route('resources.index') }}" class="list-group-item list-group-item-action">Resources</a>
+                        <a href="{{ route('user-dashboard') }}" class="list-group-item list-group-item-action">Discussions</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

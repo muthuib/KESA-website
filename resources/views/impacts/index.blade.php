@@ -6,9 +6,9 @@
 
     @if($impact)
         <div class="card p-4 mb-4 shadow-sm rounded">
-            <p><strong>Total People:</strong> {{ $impact->total_people }}</p>
-            <p><strong>Total Events:</strong> {{ $impact->total_events }}</p>
-            <p><strong>Total Trainings:</strong> {{ $impact->total_trainings }}</p>
+            <p><strong>Events Held:</strong> {{ $impact->total_people }}</p>
+            <p><strong>People Reached:</strong> {{ $impact->total_events }}</p>
+            <p><strong>Certified Leadership Fellows:</strong> {{ $impact->total_trainings }}</p>
 
             <div class="d-flex gap-2 mt-3">
                 <a href="{{ route('impacts.edit', $impact->id) }}" class="btn btn-warning d-flex align-items-center gap-2">

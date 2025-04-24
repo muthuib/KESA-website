@@ -5,7 +5,7 @@
         
         <!-- Static Grid for First Few Collaborators -->
         <div class="row mt-4">
-            @foreach ($collaborations->take(4) as $collaboration) 
+            @foreach ($collaborations->take(8) as $collaboration) 
                 <div class="col-6 col-sm-6 col-md-3 text-center mb-4">
                     <div class="card shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
@@ -41,12 +41,12 @@
         </div>
 
         <!-- Marquee for Extra Collaborators -->
-        @if($collaborations->count() > 4)
+        @if($collaborations->count() > 8)
             <div class="mt-4">
                 <h4 class="text-center">More Collaborators</h4>
                 <div class="marquee-container">
                     <marquee behavior="scroll" direction="left" scrollamount="4">
-                        @foreach ($collaborations->slice(4) as $collaboration)
+                        @foreach ($collaborations->slice(8) as $collaboration)
                             <div class="marquee-item">
                                 <img src="{{ file_exists(public_path($collaboration->LOGO_PATH)) 
                                         ? asset($collaboration->LOGO_PATH) 

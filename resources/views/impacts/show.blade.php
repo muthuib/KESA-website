@@ -14,7 +14,7 @@
                 <div class="mb-3">
                     <i class="fas fa-users fa-2x text-primary"></i>
                 </div>
-                <h5 class="fw-bold">Total People Reached</h5>
+                <h5 class="fw-bold">Eents Held</h5>
                 <h2 class="display-6 fw-bold text-primary" id="totalPeople">0</h2>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="mb-3">
                     <i class="fas fa-calendar-check fa-2x text-success"></i>
                 </div>
-                <h5 class="fw-bold">Events Held</h5>
+                <h5 class="fw-bold">People Reached</h5>
                 <h2 class="display-6 fw-bold text-success" id="totalEvents">0</h2>
             </div>
         </div>
@@ -36,7 +36,7 @@
                 <div class="mb-3">
                     <i class="fas fa-chalkboard-teacher fa-2x text-warning"></i>
                 </div>
-                <h5 class="fw-bold">Trainings Conducted</h5>
+                <h5 class="fw-bold">Certified Leadership Fellows</h5>
                 <h2 class="display-6 fw-bold text-warning" id="totalTrainings">0</h2>
             </div>
         </div>
