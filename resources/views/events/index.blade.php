@@ -13,7 +13,6 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Location</th>
                 <th>Date</th>
                 <th>Start Time</th>
                 <th>End Time</th>
@@ -25,12 +24,14 @@
             @foreach($events as $event)
                 <tr>
                     <td>{{ $event->name }}</td>
-                    <td>{{ $event->location }}</td>
                     <td>{{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}</td>
                     <td>{{ \Carbon\Carbon::parse($event->start_time)->format('H:i')  }}</td>
                     <td>{{ \Carbon\Carbon::parse($event->end_time)->format('H:i')  }}</td>
                     <td>
-                        @if(\Carbon\Carbon::parse($event->start_date)->isFuture())
+                        @php
+                            $eventDate = \Carbon\Carbon::parse($event->start_date);
+                        @endphp
+                        @if($eventDate->isToday() || $eventDate->isFuture())
                             <span class="badge bg-success">Active</span>
                         @else
                             <span class="badge bg-danger">Expired</span>

@@ -28,7 +28,8 @@ class EventController extends Controller
             // Validate request data
             $request->validate([
                 'name' => 'required|string|max:255',
-                'location' => 'required|string|max:255',
+                // 'location' => 'required|string|max:255',
+                'link' => 'nullable|string|max:255',
                 'venue' => 'required|string|max:255',
                 'start_date' => 'required|date',
                 'start_time' => 'required|date_format:H:i',
@@ -53,7 +54,8 @@ class EventController extends Controller
             // Create the event
             Event::create([
                 'name' => $request->name,
-                'location' => $request->location,
+                // 'location' => $request->location,
+                'link' => $request->link,
                 'venue' => $request->venue,
                 'start_date' => $request->start_date,
                 'start_time' => $start_time,
@@ -78,7 +80,8 @@ class EventController extends Controller
             // Validate request data
             $request->validate([
                 'name' => 'required|string|max:255',
-                'location' => 'required|string|max:255',
+                // 'location' => 'required|string|max:255',
+                'link' => 'nullable|string|max:255',
                 'venue' => 'required|string|max:255',
                 'start_date' => 'required|date',
                 'start_time' => 'required|date_format:H:i',
@@ -108,7 +111,8 @@ class EventController extends Controller
             // Update the event
             $event->update([
                 'name' => $request->name,
-                'location' => $request->location,
+                // 'location' => $request->location,
+                'link' => $request->link,
                 'venue' => $request->venue,
                 'start_date' => $request->start_date,
                 'start_time' => $start_time,

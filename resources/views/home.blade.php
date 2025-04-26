@@ -64,76 +64,115 @@
         }
     }
     /* device responsiveness for slideshows */
-    /* Default for large screens */
-#guestSlideshow {
-    width: 100%;
-    height: 60vh; /* Adjusted for better proportionality */
-}
 
-#guestSlideshow .carousel-item img {
+/* Modern Slideshow Enhancements */
+.slide-img {
+    width: 100%;
+    margin-top: 100px;
     height: 100vh;
-    object-fit: cover;
+    animation: zoomIn 10s ease-in-out infinite alternate;
+    filter: brightness(70%); /* Makes slide darker underneath overlay */
 }
 
-/* Medium screens (tablets) */
-@media (max-width: 992px) {
-    #guestSlideshow {
-        height: 40vh; /* Reduce height */
-    }
+.caption-box {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+.animate-caption {
+    animation: fadeInUp 2s ease;
+}
 
-    #guestSlideshow .carousel-item img {
-        height: 40vh;
+/* Animations */
+@keyframes zoomIn {
+    from {
+        transform: scale(1);
     }
-
-    #guestSlideshow .carousel-caption h2 {
-        font-size: 20px; /* Reduce caption size */
+    to {
+        transform: scale(1.1);
     }
 }
 
-/* Small screens (mobile) */
-@media (max-width: 576px) {
-    #guestSlideshow {
-        height: 20vh; /* Further reduce height */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-
-    #guestSlideshow .carousel-item img {
-        height: 20vh;
-    }
-
-    #guestSlideshow .carousel-caption {
-        text-align: center;
-        bottom: 10px; /* Adjust caption position */
-    }
-
-    #guestSlideshow .carousel-caption h2 {
-        font-size: 16px; /* Make text smaller */
-        padding: 5px 10px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-#guestSlideshow {
+
+/* Responsive height fixes */
+@media (max-width: 768px) {
+    .slide-img {
     width: 100%;
-    height: 100vh; /* Ensures it covers the full screen */
-    margin-top: 90px; /* Default for large screens */
+    margin-top: 75px;
+    height: 80vh;
+    animation: zoomIn 10s ease-in-out infinite alternate;
+    filter: brightness(70%); /* Makes slide darker underneath overlay */
+}
 }
 
-/* Adjust margin-top for small and medium screens */
-@media (max-width: 991px) { /* Bootstrap lg breakpoint */
-    #guestSlideshow {
-        margin-top: 60px;
-        height: 60vh; /* Adjust height for better fit */
+@media (max-width: 576px) {
+    .slide-img {
+    width: 100%;
+    margin-top: 75px;
+    height: 80vh;
+    animation: zoomIn 10s ease-in-out infinite alternate;
+    filter: brightness(70%); /* Makes slide darker underneath overlay */
+}
+
+    .caption-box {
+        padding: 10px 15px;
+    }
+
+    .caption-box h2 {
+        font-size: 18px;
     }
 }
 
+/* Impact Overview Section */
+.impact-overview {
+    position: relative;
+    /* background: rgba(0, 0, 0, 0.5); Semi-transparent background */
+    color: white;
+    padding: 1px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2; /* stays above background */
+    margin-top: -200px; /* pull it up over the slides */
+    width: 100%;
+}
+
+
+.impact-item {
+    text-align: center;
+}
+
+.impact-item h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.impact-item p {
+    font-size: 16px;
+    margin: 5px 0;
+}
 
 </style>
 
-<!-- Slideshow outside the container for full-screen width -->
+    <!-- Slides -->
+<!-- Slideshow with Modern Design -->
 @if($slides->isNotEmpty())
 <div id="guestSlideshow" 
-     class="carousel slide shadow-lg" 
-     data-bs-ride="carousel" 
-     style="width: 100%; height: 60vh;">
-    
+     class="carousel slide carousel-fade shadow-lg" 
+     data-bs-ride="carousel"
+     data-bs-interval="5000">
+
     <!-- Indicators -->
     <div class="carousel-indicators">
         @foreach ($slides as $index => $slide)
@@ -151,18 +190,12 @@
     <div class="carousel-inner">
         @foreach ($slides as $index => $slide)
         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-            <!-- Overlay -->
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); "></div>    
-            <!-- Slide Image -->
             <img src="{{ asset($slide->IMAGE_PATH) }}" 
-                 class="d-block w-100" 
-                 alt="Slide Image" 
-                 style="height: 100vh; object-fit: cover; z-index: 1; width: 100vw; height: 100vh;">
-            
-            <!-- Caption -->
-            <div class="carousel-caption text-left d-flex align-items-center justify-content-start h-100" style="z-index: 3;">
-                <div>
-                    <h2 class="text-light bg-dark bg-opacity-75 px-3 py-2 rounded">{{ $slide->CAPTION }}</h2>
+                 class="d-block w-100 slide-img" 
+                 alt="Slide Image">
+            <div class="carousel-caption d-flex align-items-center justify-content-start h-100">
+                <div class="caption-box animate-caption">
+                    <h2 class="text-light m-0">{{ $slide->CAPTION }}</h2>
                 </div>
             </div>
         </div>
@@ -174,21 +207,22 @@
             type="button" 
             data-bs-target="#guestSlideshow" 
             data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="carousel-control-prev-icon"></span>
         <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" 
             type="button" 
             data-bs-target="#guestSlideshow" 
             data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="carousel-control-next-icon"></span>
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
 @else
 <!-- No Slides Message -->
 <div class="alert alert-info text-center mt-4" role="alert">
-    <h4 class="alert-heading">No Slides Available</h4>
+    <h4 class="alert-heading" style="margin-top: 100px;">No Slides Available</h4>
     <p>Our homepage layout is being updated. Continue exploring our platform, and thank you for your patience!</p>
 </div>
 @endif
@@ -215,11 +249,13 @@
  @php
     $impact = App\Models\Impact::first();
 @endphp
+<div class="impact-overview">
 @include('impacts._overview', ['impact' => App\Models\Impact::first() ?? (object)[
     'total_people' => 0,
     'total_events' => 0,
     'total_trainings' => 0
 ]])
+</div>
 
 @section('scripts')
 
@@ -246,7 +282,6 @@
 </script>
 
 @endsection
-
 
     <!-- memberships Section -->
     @include('partials.memberships', ['memberships' => App\Models\Membership::all()])

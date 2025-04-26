@@ -10,7 +10,7 @@
         @endphp
 
         @foreach($events as $event)
-            @if(\Carbon\Carbon::parse($event->start_date)->isFuture()) <!-- Only show future events -->
+        @if(\Carbon\Carbon::parse($event->start_date)->isToday() || \Carbon\Carbon::parse($event->start_date)->isFuture())<!-- Only show today and future events -->
                 @php
                     $hasUpcomingEvents = true;
                 @endphp
@@ -25,12 +25,12 @@
                                 <!-- Event Details on the Left -->
                                 <div class="col-md-8">
                                     <p class="card-text event-text">
-                                        <strong>Location:</strong> {{ $event->location }} <br>
+                                        <!-- <strong>Location:</strong> {{ $event->location }} <br> -->
                                         <strong>Venue:</strong> {{ $event->venue }} <br>
                                         <strong>Date:</strong> {{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }} <br>
                                         <strong>Start Time:</strong> {{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }} <br>
                                         <strong>End Time:</strong> {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A') }} <br>
-
+                                        <strong>Registration Link:</strong> <a href="{{ $event->link }}" target="_blank" class="text-decoration-none">{{ $event->link }}</a> <br>
                                         <strong>Description:</strong>
                                         @if(strlen($event->description) > 600)
                                             <span class="short-description">
@@ -87,6 +87,13 @@
         width: 700px;
         height: 350px;
         max-width: 100%;
+    }
+    .event-title {
+    margin-bottom: 0; /* Remove margin below the title */
+    }
+
+    .event-text {
+        margin-top: 0; /* Remove margin at the top of the event text */
     }
 
     /* Medium screens (tablets, 768px and below) */
