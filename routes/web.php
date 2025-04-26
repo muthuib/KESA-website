@@ -268,8 +268,9 @@ Route::get('/payment-error', function () {
 //EVENT AND EVENT REGISTRATION ROUTES
 Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/events', [EventController::class, 'index'])->name('events.index'); // Route for managing events (Index)
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::post('/admin/events', [EventController::class, 'store'])->name('events.store');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
 Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
@@ -279,7 +280,7 @@ Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('eve
 Route::get('/event', [EventController::class, 'showAllEvents'])->name('events.showAll'); // Route for displaying events to users (Show All)
 Route::middleware(['role:admin'])->group(function () {
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/events', [EventController::class, 'index'])->name('events.index'); // Route for managing events (Index)
+
     Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');  // Use model binding here  
 });

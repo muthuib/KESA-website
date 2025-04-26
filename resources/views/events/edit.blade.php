@@ -35,10 +35,10 @@
                                 <label for="name" class="form-label">Event Name</label>
                                 <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $event->name) }}" placeholder="Enter event name" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <!-- <div class="col-md-6 mb-3">
                                 <label for="location" class="form-label">Location</label>
                                 <input type="text" name="location" id="location" class="form-control" value="{{ old('location', $event->location) }}" placeholder="Enter location" required>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- Venue and Date  -->
@@ -65,6 +65,12 @@
                             </div>
                         </div>
 
+                    <div class="row">
+                        <!-- Event Link (New field) -->
+                        <div class="col-md-6 mb-3">
+                            <label for="link" class="form-label">Event registration Link</label>
+                            <input type="url" name="link" id="link" class="form-control" value="{{ old('link', $event->link) }}" placeholder="Enter event page link">
+                        </div>
                         <!-- Event Image -->
                         <div class="col-md-6 mb-3">
                             <label for="image" class="form-label">Event Image</label>
@@ -76,6 +82,7 @@
                                 </div>
                             @endif
                         </div>
+                    </div>
 
                         <!-- Description -->
                         <div class="form-group mb-3">

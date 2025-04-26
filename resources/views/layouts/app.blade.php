@@ -52,6 +52,16 @@
     @endauth
         <!-- Main Content -->
         <div id="layoutSidenav_content" style="flex-grow: 1; overflow-y: auto; top: 100px">
+            
+        @if($errors->any())
+            <div class="alert alert-danger" style="margin-top: 90px;">
+                <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                </ul>
+            </div>
+        @endif
             @auth
                 <!-- Start of Alert messages -->
                 @if (session('success'))

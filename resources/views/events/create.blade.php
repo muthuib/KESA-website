@@ -22,10 +22,10 @@
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Enter event name" required>
                             </div>
                             <!-- Location -->
-                            <div class="col-md-6 mb-3">
+                            <!-- <div class="col-md-6 mb-3">
                                 <label for="location" class="form-label">Location</label>
-                                <input type="text" name="location" id="location" class="form-control" placeholder="Enter location" required>
-                            </div>
+                                <input type="text" name="location" id="location" class="form-control" placeholder="Enter location">
+                            </div> -->
                             <!-- Venue -->
                             <div class="col-md-6 mb-3">
                                 <label for="venue" class="form-label">Venue</label>
@@ -45,6 +45,11 @@
                             <div class="col-md-6 mb-3">
                                 <label for="end_time" class="form-label">End Time</label>
                                 <input type="time" name="end_time" id="end_time" class="form-control" required>
+                            </div>
+                            <!-- Event Link (New field) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="link" class="form-label">Event registrationLink</label>
+                                <input type="url" name="link" id="link" class="form-control" placeholder="Enter event page link">
                             </div>
                             <!-- Image Upload -->
                             <div class="col-md-6 mb-3">

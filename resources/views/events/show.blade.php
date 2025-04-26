@@ -14,15 +14,15 @@
         <div class="card-body">
             <!-- Event Title -->
             <h2 class="text-center text-uppercase text-success">{{ $event->name }}</h2>
-
             <!-- Event Details -->
-            <p><strong>📍 Location:</strong> {{ $event->location }}</p>
+            <!-- <p><strong>📍 Location:</strong> {{ $event->location }}</p> -->
             <p><strong>🏛 Venue:</strong> {{ $event->venue }}</p>
             <p><strong>📅 Date:</strong> {{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}</p>
             
             <!-- Display Start and End Time -->
             <p><strong>⏰ Start Time:</strong> {{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }}</p>
             <p><strong>⏳ End Time:</strong> {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A') }}</p>
+            <p><strong>Registration Link:</strong> <a href="{{ $event->link }}" target="_blank" class="text-decoration-none">{{ $event->link }}</a></p>
             
             <!-- Display Image -->
             @if($event->image)

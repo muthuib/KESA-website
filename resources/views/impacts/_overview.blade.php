@@ -1,5 +1,5 @@
-<div class="container py-5" style="margin-top: 40px;">
-    <h2 class="mb-4 text-center">📊 Impact Overview</h2>
+<div class="container py-5" style="margin-top: 0px;">
+    <!-- <h2 class="mb-4 text-center">Impact Overview</h2> -->
 
     <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3 g-3 justify-content-start text-center">
         <!-- Total events -->
