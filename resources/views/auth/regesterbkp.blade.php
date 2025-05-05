@@ -7,6 +7,10 @@
     <title>Register</title>
     <!-- Link to your CSS file -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
     body,
     html {
@@ -208,6 +212,78 @@
            
         }
     }
+    /* membership style cards */
+    .card-hover {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .card-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .gradient-individual {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+    }
+
+    .gradient-associate {
+        background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        color: white;
+    }
+
+    .card-hover h5,
+    .card-hover p {
+        margin: 0;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    @media (max-width: 768px) {
+        .card-hover {
+        padding: 0rem;
+        font-size: 0.8rem;
+        width: 250px;
+    }
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 13px;
+    }
+
+    .card-text {
+        font-size: 13px;
+    }
+
+    .card-icon {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+}
+#participationSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#participationSection label {
+    margin-right: 10px; /* Adjust space between labels and inputs */
+}
+
+#participationSection input[type="radio"] {
+    margin-right: 15px; /* Adjust space between radio buttons */
+}
+
+
 </style>
 </head>
 
@@ -233,10 +309,129 @@
             <div class="logo-container">
                 <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid">
             </div>
+            
 
-            <h2 style="color:rgb(61, 15, 81);">KESA Member Registration</h2>
+            <h2 style="color:rgb(61, 15, 81);">KESA Membership Registration</h2>
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+        
+<!-- Membership Type Selection -->
+<div class="mb-3">
+    <label for="mainMembershipType" class="form-label">Select Membership Type:</label>
+    <select id="mainMembershipType" class="form-select" onchange="handleMainSelection()">
+        <option value="">-- Choose --</option>
+        <option value="individual">Individual Membership</option>
+        <option value="organization">Organization Membership</option>
+    </select>
+</div>
+
+<!-- Sub-selection for Individual Membership -->
+<div id="individualSubOptions" class="mb-3" style="display: none;">
+    <label for="individualMembershipType" class="form-label">Select Individual Membership Type:</label>
+    <select id="individualMembershipType" class="form-select" onchange="showFormTitle()">
+        <option value="">-- Choose Sub-type --</option>
+        <option value="full">Full Membership</option>
+        <option value="associate">Associate Membership</option>
+    </select>
+</div>
+
+<!-- Title Display -->
+<h3 id="selectedMembershipTitle" style="color: brown; display: none;"></h3>
+
+<!-- Participation Question -->
+<div id="participationSection" class="mb-3" style="display: none;">
+    <label class="form-label">Are you willing to participate?</label><br>
+    <label><input type="radio" name="participation" value="Yes" onclick="handleParticipationClick('Yes')"> Yes</label>
+    <label><input type="radio" name="participation" value="No" onclick="handleParticipationClick('No')"> No</label>
+</div>
+
+<!-- Organization Form -->
+<div id="organizationForm" style="display: none;">
+    <h4>Organization Membership Form</h4>
+    <form>
+        <div class="mb-2">
+            <label for="orgName" class="form-label">Organization Name</label>
+            <input type="text" id="orgName" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="orgEmail" class="form-label">Email</label>
+            <input type="email" id="orgEmail" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="orgPhone" class="form-label">Phone</label>
+            <input type="text" id="orgPhone" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="orgAddress" class="form-label">Address</label>
+            <textarea id="orgAddress" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function handleMainSelection() {
+        const mainType = document.getElementById('mainMembershipType').value;
+        const individualOptions = document.getElementById('individualSubOptions');
+        const title = document.getElementById('selectedMembershipTitle');
+        const participation = document.getElementById('participationSection');
+        const orgForm = document.getElementById('organizationForm');
+
+        // Reset visibility
+        title.style.display = 'none';
+        participation.style.display = 'none';
+        orgForm.style.display = 'none';
+        individualOptions.style.display = 'none';
+
+        // Reset participation radios
+        const radios = document.getElementsByName('participation');
+        radios.forEach(radio => radio.checked = false);
+
+        if (mainType === 'individual') {
+            individualOptions.style.display = 'block';
+        } else if (mainType === 'organization') {
+            title.innerText = 'Organization Membership';
+            title.style.display = 'block';
+            participation.style.display = 'block';
+        }
+    }
+
+    function showFormTitle() {
+        const type = document.getElementById('individualMembershipType').value;
+        const title = document.getElementById('selectedMembershipTitle');
+        const participation = document.getElementById('participationSection');
+
+        if (type) {
+            title.innerText = type === 'full' ? 'Full Membership' : 'Associate Membership';
+            title.style.display = 'block';
+            participation.style.display = 'block';
+        } else {
+            title.style.display = 'none';
+            participation.style.display = 'none';
+        }
+
+        // Reset participation radios
+        const radios = document.getElementsByName('participation');
+        radios.forEach(radio => radio.checked = false);
+    }
+
+    function handleParticipationClick(value) {
+        const mainType = document.getElementById('mainMembershipType').value;
+        const orgForm = document.getElementById('organizationForm');
+
+        if (mainType === 'organization' && value === 'Yes') {
+            orgForm.style.display = 'block';
+        } else {
+            orgForm.style.display = 'none';
+        }
+    }
+</script>
+
+
+            <!-- individual registration form -->
+             <div id="registrationForm" style="display: none;">
+             <div id="form-full" class="membership-form" style="display: none;">
 
                 <div class="form-row">
                     
@@ -299,11 +494,8 @@
                         @enderror
                     </div>
                 </div>
-
                 <!--   Row -->
                 <div class="form-row">
-                  
-
                     <div class="form-group">
                         <label for="GENDER">Gender *</label>
                         <select id="GENDER" name="GENDER" required>
@@ -353,17 +545,15 @@
                 </div>
                 <!-- School status -->
                 <div class="form-group">
-                <label>Are you currently in school? *</label>
-                <label for="SCHOOL_YES">Yes</label>
-                <input type="radio" id="SCHOOL_YES" name="CURRENTLY_IN_SCHOOL" value="Yes" 
-                    {{ old('CURRENTLY_IN_SCHOOL') == 'Yes' ? 'checked' : '' }} >
+                    <label>Are you currently in school? *</label>
+                    <label for="SCHOOL_YES">Yes</label>
+                    <input type="radio" id="SCHOOL_YES" name="CURRENTLY_IN_SCHOOL" value="Yes" 
+                        {{ old('CURRENTLY_IN_SCHOOL') == 'Yes' ? 'checked' : '' }} >
 
-                <label for="SCHOOL_NO">No</label>
-                <input type="radio" id="SCHOOL_NO" name="CURRENTLY_IN_SCHOOL" value="No" 
-                    {{ old('CURRENTLY_IN_SCHOOL') == 'No' ? 'checked' : '' }} >
-            </div>
-
-
+                    <label for="SCHOOL_NO">No</label>
+                    <input type="radio" id="SCHOOL_NO" name="CURRENTLY_IN_SCHOOL" value="No" 
+                        {{ old('CURRENTLY_IN_SCHOOL') == 'No' ? 'checked' : '' }} >
+                </div>
                 <div id="school_info" style="display: {{ old('SCHOOL_STATUS') == 'Yes' ? 'block' : 'none' }}">
                     <!-- School related fields for users currently in school -->
                     <div class="form-row">
@@ -429,11 +619,31 @@
                         @enderror
                     </div>
                 </div>
+                <button type="submit">Create Account</button>
+                </div>
+                <!-- OTHER MEMBERSHIP FORMS -->
+                <div id="form-associate" class="membership-form" style="display: none;">
+                    <!-- Your Associate Membership form here -->
+                    <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Associate Membership Form will be updated soon</p>
+                </div>
+                    <div id="form-full" class="membership-form" style="display: none;">
+                        <!-- Your Full Membership form here -->
+                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Full Membership Form will be updated soon</p>
+                    </div>
 
-                <button type="submit">Submit</button>
-            </form>
+                    <div id="form-fellow" class="membership-form" style="display: none;">
+                        <!-- Your Fellow/Honorary Membership form here -->
+                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Fellow Membership Form will be updated soon </p>
+                    </div>
+
+                    <div id="organizationForm" class="membership-form" style="display: none;">
+                        <!-- Your Organization/Association Membership form here -->
+                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Organization Membership Form will be updated soon</p>
+                    </div>
+             </div>
+            </div>
+        </form>
         </div>
-    </div>
 
     <!-- Include JavaScript for dynamic form updates -->
     <script>
@@ -459,6 +669,64 @@
             });
         });
     </script>
+<!-- MEMBERSHIPS SCRIPTS -->
+<script>
+    let selectedMembership = '';
+
+    function showForm(value) {
+        selectedMembership = value;
+
+        // Hide all forms first
+        document.querySelectorAll('.membership-form').forEach(form => {
+            form.style.display = 'none';
+        });
+
+        // Show participation question
+        document.getElementById('participationSection').style.display = value ? 'block' : 'none';
+
+        // Hide registration form until user answers Yes
+        document.getElementById('registrationForm').style.display = 'none';
+
+        // Hide the form title
+        document.getElementById('selectedMembershipTitle').style.display = 'none';
+
+        // Clear any selected participation
+        document.getElementsByName('participation').forEach(r => r.checked = false);
+    }
+
+    function toggleRegistrationForm(show) {
+        if (show && selectedMembership) {
+            document.getElementById('registrationForm').style.display = 'block';
+
+            // Show only the relevant form
+            document.querySelectorAll('.membership-form').forEach(form => {
+                form.style.display = 'none';
+            });
+
+            const formId = `form-${selectedMembership}`;
+            const formElement = document.getElementById(formId);
+
+            if (formElement) {
+                formElement.style.display = 'block';
+
+                // Update title
+                const titleMap = {
+                    individual: 'Individual Membership',
+                    associate: 'Associate Membership',
+                    full: 'Full Membership',
+                    organization: 'Organization Membership'
+                };
+
+                document.getElementById('selectedMembershipTitle').innerText = titleMap[selectedMembership] || '';
+                document.getElementById('selectedMembershipTitle').style.display = 'block';
+            }
+        } else {
+            document.getElementById('registrationForm').style.display = 'none';
+            document.getElementById('selectedMembershipTitle').style.display = 'none';
+        }
+    }
+</script>
+
 </body>
 
 </html>

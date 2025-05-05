@@ -5,20 +5,21 @@
     <h2 class="mb-4 text-center fw-bold" style="margin-top: 65px;">📰 Latest News</h2>
 
     <!-- Search Form -->
-        <form action="{{ route('news.display') }}" method="GET" class="mb-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-10 col-lg-8">
-                    <div class="input-group flex-nowrap">
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            class="form-control shadow-sm rounded-start-pill"
-                            placeholder="Search news...">
-                        <button class="btn btn-primary rounded-end-pill px-4" type="submit">
-                            <i class="fas fa-search me-1"></i> Search
-                        </button>
-                    </div>
+    <form action="{{ route('news.display') }}" method="GET" class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="input-group flex-nowrap">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        class="form-control shadow-sm rounded-start-pill"
+                        placeholder="Search news...">
+                    <button class="btn btn-primary rounded-end-pill px-4" type="submit">
+                        <i class="fas fa-search me-1"></i> Search
+                    </button>
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
+
     @if($news->count())
         <div class="row g-4">
             @foreach($news as $item)
@@ -34,7 +35,7 @@
                                 {{ \Carbon\Carbon::parse($item->date)->format('l, F d, Y') }}
                             </p>
                             <div class="card-text mb-4" style="flex: 1;">
-                                {!! Str::limit($item->content, 130, '...') !!}
+                                {{ Str::limit(strip_tags($item->content), 130, '...') }}
                             </div>
                             <a href="{{ route('news.show', $item->id) }}" class="btn btn-outline-primary w-100 mt-auto rounded-pill">
                                 <i class="fas fa-eye me-2"></i> Read More

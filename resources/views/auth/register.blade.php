@@ -314,66 +314,139 @@
             <h2 style="color:rgb(61, 15, 81);">KESA Membership Registration</h2>
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-         <!-- Membership Selection Section
-         <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4 mb-3">
-                    <div class="card card-hover gradient-individual text-center" onclick="showForm('individual')">
-                        <div class="card-body">
-                            <div class="card-icon">
-                                <i class="fas fa-user-graduate"></i>
+        
+             <!-- Primary Membership Selection -->
+                <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
+                    <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+                        <label for="mainMembershipType" class="form-label fw-bold">Select Membership Type</label>
+                        <select class="form-select" id="mainMembershipType" onchange="handleMainSelection(this.value)" style="width: 300px;">
+                            <option value="">-- Choose a Membership Type --</option>
+                            <option value="individual">Individual Membership</option>
+                            <option value="organization">Organization Membership</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sub-options for Individual Membership -->
+                <div id="individualSubOptions" class="row justify-content-center mb-4 animate__animated animate__fadeInUp" style="display: none;">
+                    <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+                        <label for="individualMembershipType" class="form-label fw-bold">Select Individual Membership Type</label>
+                        <select class="form-select" id="individualMembershipType" onchange="showForm(this.value)" style="width: 300px;">
+                            <option value="">-- Choose Sub-type --</option>
+                            <option value="full">Full Membership</option>
+                            <option value="associate">Associate Membership</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Title -->
+                <h3 id="selectedMembershipTitle" style="text-align: center; display: none; color: brown; margin-bottom: 20px;"></h3>
+
+                <!-- Participation Section -->
+                <div id="participationSection" style="display: none;" class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
+                        <label class="fw-bold">Are you willing to participate in this registration?</label>
+                        <div class="d-flex justify-content-center align-items-center gap-3 mt-2">
+                            <div>
+                                <label for="participation_yes">Yes</label>
+                                <input type="radio" id="participation_yes" name="participation" value="Yes" onclick="toggleRegistrationForm(true)">
                             </div>
-                            <h5 class="card-title">Individual Membership</h5>
-                            <p class="card-text text-left">For university graduates/students pursuing economics or related programs.</p>
+                            <div>
+                                <label for="participation_no">No</label>
+                                <input type="radio" id="participation_no" name="participation" value="No" onclick="toggleRegistrationForm(false)">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4 mb-3">
-                    <div class="card card-hover gradient-associate text-center" onclic="showForm('associate')">
-                        <div class="card-body">
-                            <div class="card-icon">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <h5 class="card-title">Associate Membership</h5>
-                            <p class="card-text text-left">For professionals, institutions, organizations and supporters of economics.</p>
+                <!-- Organization Membership Form -->
+            <div id="organizationForm" class="row justify-content-center mt-4 animate__animated animate__fadeInUp" style="display: none;">
+                <div class="col-10 col-sm-8 col-md-6 col-lg-5">
+                    <h4 class="text-center mb-3">Organization Membership Form</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="orgName" class="form-label">Organization Name</label>
+                            <input type="text" class="form-control" id="orgName" name="orgName">
                         </div>
-                    </div>
-                </div>
-            </div> -->
-             <!-- Membership Selection Dropdown -->
-            <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
-                <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-                    <label for="membershipType" class="form-label fw-bold">Select Membership Type</label>
-                    <select class="form-select" id="membershipType" onchange="showForm(this.value)" style="width: 300px;">
-                        <option value="">-- Choose a Membership Type --</option>
-                        <option value="individual">Individual Membership</option>
-                        <option value="associate">Associate Membership</option>
-                        <option value="full">Full Membership</option>
-                        <option value="fellow">Fellow/Honorary Membership</option>
-                        <option value="organization">Organization/Association</option>
-                    </select>
+                        <div class="mb-3">
+                            <label for="orgEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="orgEmail" name="orgEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgPhone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="orgPhone" name="orgPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgAddress" class="form-label">Physical Address</label>
+                            <textarea class="form-control" id="orgAddress" name="orgAddress" rows="3"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Application</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- display title of selected card -->
-            <h3 id="selectedMembershipTitle" style="text-align: center; display: none; color: brown; margin-bottom: 20px;"></h3>
-             <!-- Participation question (HIDDEN INITIALLY) -->
-            <div id="participationSection" style="display: none;" class="form-row justify-content-center">
-                <div class="col-12 col-md-6">
-                    <label class="fw-bold">Are you willing to participate in this registration?</label>
-                    <div class="d-flex justify-content-center align-items-center gap-3 mt-2">
-                        <div>
-                            <label for="participation_yes">Yes</label>
-                            <input type="radio" id="participation_yes" name="participation" value="Yes" onclick="toggleRegistrationForm(true)">
-                        </div>
-                        <div>
-                            <label for="participation_no">No</label>
-                            <input type="radio" id="participation_no" name="participation" value="No" onclick="toggleRegistrationForm(false)">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <script>
+            function handleMainSelection(value) {
+                const subOptions = document.getElementById('individualSubOptions');
+                const orgForm = document.getElementById('organizationForm');
+                const title = document.getElementById('selectedMembershipTitle');
+                const participation = document.getElementById('participationSection');
+
+                // Reset all
+                subOptions.style.display = 'none';
+                orgForm.style.display = 'none';
+                participation.style.display = 'none';
+                title.style.display = 'none';
+
+                // Clear radio buttons
+                document.getElementById('participation_yes').checked = false;
+                document.getElementById('participation_no').checked = false;
+
+                if (value === 'individual') {
+                    subOptions.style.display = 'block';
+                } else if (value === 'organization') {
+                    title.innerText = 'Organization Membership';
+                    title.style.display = 'block';
+                    participation.style.display = 'block';
+                }
+            }
+
+            function showForm(value) {
+                const title = document.getElementById('selectedMembershipTitle');
+                const participation = document.getElementById('participationSection');
+                
+                if (value === 'full') {
+                    title.innerText = 'Full Membership';
+                    title.style.display = 'block';
+                } else if (value === 'associate') {
+                    title.innerText = 'Associate Membership';
+                    title.style.display = 'block';
+                } else {
+                    title.style.display = 'none';
+                }
+
+                participation.style.display = value ? 'block' : 'none';
+
+                // Clear radio buttons
+                document.getElementById('participation_yes').checked = false;
+                document.getElementById('participation_no').checked = false;
+            }
+
+            function handleParticipationSelection(isYes) {
+                const mainType = document.getElementById('mainMembershipType').value;
+                const orgForm = document.getElementById('organizationForm');
+
+                if (mainType === 'organization') {
+                    orgForm.style.display = isYes ? 'block' : 'none';
+                }
+
+                // Optional: Add logic here if you have an individual form
+            }
+            </script>
+
             <!-- individual registration form -->
              <div id="registrationForm" style="display: none;">
-             <div id="form-individual" class="membership-form" style="display: none;">
+             <div id="form-full" class="membership-form" style="display: none;">
 
                 <div class="form-row">
                     
@@ -561,7 +634,7 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Create Account</button>
                 </div>
                 <!-- OTHER MEMBERSHIP FORMS -->
                 <div id="form-associate" class="membership-form" style="display: none;">
@@ -578,9 +651,9 @@
                         <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Fellow Membership Form will be updated soon </p>
                     </div>
 
-                    <div id="form-organization" class="membership-form" style="display: none;">
+                    <div id="organizationForm" class="membership-form" style="display: none;">
                         <!-- Your Organization/Association Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Organization Membership Formwill be updated soon</p>
+                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Organization Membership Form will be updated soon</p>
                     </div>
              </div>
             </div>
@@ -656,8 +729,7 @@
                     individual: 'Individual Membership',
                     associate: 'Associate Membership',
                     full: 'Full Membership',
-                    fellow: 'Fellow/Honorary Membership',
-                    organization: 'Organization/Association Membership'
+                    organization: 'Organization Membership'
                 };
 
                 document.getElementById('selectedMembershipTitle').innerText = titleMap[selectedMembership] || '';

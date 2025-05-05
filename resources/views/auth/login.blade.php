@@ -214,7 +214,7 @@
 
                 <!-- Link to Register -->
                 <p style="text-align: left; margin-top: 12px;">
-                    Don't have an account? <a href="{{ route('register') }}" style="color: #007bff;">Register</a>
+                    Don't have an account? <a href="{{ route('memberships.types') }}" style="color: #007bff;">Register</a>
                 </p>
             </form>
         </div>

@@ -110,7 +110,7 @@
     .slide-img {
     width: 100%;
     margin-top: 75px;
-    height: 80vh;
+    height: 50vh;
     animation: zoomIn 10s ease-in-out infinite alternate;
     filter: brightness(70%); /* Makes slide darker underneath overlay */
 }
@@ -120,7 +120,7 @@
     .slide-img {
     width: 100%;
     margin-top: 75px;
-    height: 80vh;
+    height: 50vh;
     animation: zoomIn 10s ease-in-out infinite alternate;
     filter: brightness(70%); /* Makes slide darker underneath overlay */
 }
@@ -139,9 +139,8 @@
     position: relative;
     /* background: rgba(0, 0, 0, 0.5); Semi-transparent background */
     color: white;
-    padding: 1px;
+    padding: 0px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     z-index: 2; /* stays above background */
     margin-top: -200px; /* pull it up over the slides */
@@ -162,6 +161,26 @@
     font-size: 16px;
     margin: 5px 0;
 }
+/* Small and Medium screens */
+@media (max-width: 992px) { /* 992px is Bootstrap's 'md' breakpoint */
+    .impact-overview {
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+}
+.memberships-wrapper {
+    margin-top: 0px; /* Default spacing on large screens */
+     padding: 0; /* Ensure no padding */
+}
+
+/* Remove margin on small/medium screens */
+@media (max-width: 992px) {
+    .memberships-wrapper {
+        margin-top: 0px;
+         padding: 0; /* Ensure no padding */
+    }
+}
+
 
 </style>
 
@@ -284,7 +303,10 @@
 @endsection
 
     <!-- memberships Section -->
+   <div class="memberships-wrapper" style = "margin-top: 0px;">
     @include('partials.memberships', ['memberships' => App\Models\Membership::all()])
+    </div>
+
 <!-- Collaborations Section -->
     @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
