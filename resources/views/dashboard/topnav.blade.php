@@ -262,16 +262,11 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('memberships.types') }}">
+                        <a class="dropdown-item" href="{{ route('login') }}">
                             Our Members
                         </a>
                     </li>
                 </ul>
-            </li>
-            <li class="nav-item" style="margin-top: 10px;">
-                <a class="nav-link" href="{{ route('login') }}" style="background-color:white; color: black; margin-right: 15px; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
-                    Login
-                </a>
             </li>
             
             @endguest
@@ -448,17 +443,11 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('memberships.types') }}">
+                                <a class="dropdown-item" href="{{ route('login') }}">
                                     Our Members
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <!-- Login Button -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}" style="background-color: brown; color: white; font-weight: bold; border-radius: 5px; padding: 7px 10px; margin-top: 22px;">
-                            Login
-                        </a>
                     </li>
                     <li class="nav-item">
                     <!-- search icon -->

@@ -1,12 +1,10 @@
-<div class="container py-5" style="margin-top: 0px;">
-    <!-- <h2 class="mb-4 text-center">Impact Overview</h2> -->
-
+<div class="container impact-overview-container">
     <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3 g-3 justify-content-start text-center">
         <!-- Total events -->
         <div class="col">
             <div class="card impact-card border-0 shadow-lg rounded-4 p-3 bg-light">
                 <div class="mb-2">
-                <i class="fas fa-calendar-check impact-icon text-success"></i>
+                    <i class="fas fa-calendar-check impact-icon text-success"></i>
                 </div>
                 <h5 class="fw-bold impact-title">Events Held</h5>
                 <h2 class="impact-count text-primary fw-bold" id="totalPeople">0</h2>
@@ -17,7 +15,7 @@
         <div class="col">
             <div class="card impact-card border-0 shadow-lg rounded-4 p-3 bg-light">
                 <div class="mb-2">
-                <i class="fas fa-users impact-icon text-primary"></i>
+                    <i class="fas fa-users impact-icon text-primary"></i>
                 </div>
                 <h5 class="fw-bold impact-title" style="text-align: center;">People Reached</h5>
                 <h2 class="impact-count text-success fw-bold" id="totalEvents">0</h2>
@@ -38,9 +36,16 @@
 </div>
 
 <style>
-  .impact-card {
-    width: 100%; /* Full width */
-    max-width: 280px; /* Max width for larger screens */
+.impact-overview-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 60; /* No margin top */
+}
+
+/* Impact card styling */
+.impact-card {
+    width: 100%;
+    max-width: 280px;
     padding: 1rem;
     margin: auto;
 }
@@ -57,49 +62,58 @@
     font-size: 26px;
 }
 
-/* Medium screens (tablets) */
+/* Medium screens */
 @media (max-width: 768px) {
+    .impact-overview-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 0; /* No margin top */
+}
     .impact-card {
-        max-width: 220px; /* Smaller card width for tablets */
+        max-width: 220px;
         margin: 0.75rem auto;
-        height: 250px; /* Set a fixed height for the cards on medium screens */
+        height: 250px;
     }
 
     .impact-icon {
-        font-size: 1.6rem; /* Smaller icon size */
+        font-size: 1.6rem;
     }
 
     .impact-title {
-        font-size: 9px; /* Smaller title text */
+        font-size: 9px;
         text-align: left;
     }
 
     .impact-count {
-        font-size: 20px; /* Smaller count text */
+        font-size: 20px;
     }
 }
 
-/* Small screens (phones) */
+/* Small screens */
 @media (max-width: 576px) {
+    .impact-overview-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 0; /* No margin top */
+}
     .impact-card {
-        max-width: 180px; /* Smaller card width for phones */
+        max-width: 180px;
         margin: 0.75rem auto;
-        padding: 0.5rem; /* Reduce padding for smaller card height */
-        height: 250px; /* Uniform height for the cards on small screens */
+        padding: 0.5rem;
+        height: 250px;
     }
 
     .impact-icon {
-        font-size: 1.4rem; /* Smaller icon size */
+        font-size: 1.4rem;
     }
 
     .impact-title {
-        font-size: 7px; /* Smaller title text */
+        font-size: 7px;
         text-align: left;
     }
 
     .impact-count {
-        font-size: 18px; /* Smaller count text */
+        font-size: 18px;
     }
 }
-
 </style>

@@ -1,10 +1,10 @@
 <!-- Memberships Section -->
 @if($memberships->isNotEmpty())
-    <div class="container mt-5">
+    <div class="container">
         <h3 style=" text-align: center; color: maroon; font-size: 30px;">Our Members</h3>
         
         <!-- Static Grid for First Few Members -->
-        <div class="row mt-4">
+        <div class="row">
             @foreach ($memberships->take(8) as $membership) 
                 <div class="col-6 col-sm-6 col-md-3 text-center mb-4">
                     <div class="card shadow-sm h-100">

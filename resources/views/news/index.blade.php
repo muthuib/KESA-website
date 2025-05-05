@@ -4,12 +4,13 @@
 <div class="container mt-5">
     <h2 class="mb-4">News</h2>
 
-        <!-- Add News button -->
-        <div class="d-flex justify-content-end mb-3">
+    <!-- Add News button -->
+    <div class="d-flex justify-content-end mb-3">
         <a href="{{ route('news.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add News
         </a>
     </div>
+
     <!-- Search bar -->
     <form action="{{ route('news.index') }}" method="GET" class="mb-3">
         <div class="input-group">
@@ -35,21 +36,19 @@
             </thead>
             <tbody>
                 @forelse($news as $index => $item)
-                <tr>
-                    <td>{{ ($news->currentPage() - 1) * $news->perPage() + $index + 1 }}</td>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->date }}</td>
-                    <td>
-                        @if($item->image)
-                            <img src="{{ asset($item->image) }}" style="max-width: 100px;">
-                        @endif
-                    </td>
-                    <td>{!! Str::limit($item->content, 100, '...') !!}</td>
-                    <td>
-                        <!-- Action Buttons in One Row with Icon and Text Inline -->
-                        <div class="card">
-                            <div class="card-body p-2">
-                                <div class="d-flex gap-2">
+                    <tr>
+                        <td>{{ ($news->currentPage() - 1) * $news->perPage() + $index + 1 }}</td>
+                        <td>{{ $item->title }}</td>
+                        <td>{{ $item->date }}</td>
+                        <td>
+                            @if($item->image)
+                                <img src="{{ asset($item->image) }}" style="max-width: 100px;">
+                            @endif
+                        </td>
+                        <td>{{ Str::limit(strip_tags($item->content), 100, '...') }}</td>
+                        <td>
+                            <div class="card p-2">
+                                <div class="d-flex justify-content-center align-items-center gap-2 flex-nowrap">
                                     <a href="{{ route('news.show', $item->id) }}" class="btn btn-info btn-sm d-flex align-items-center">
                                         <i class="fas fa-eye me-2"></i> View
                                     </a>
@@ -65,13 +64,12 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="6" class="text-center">No news found.</td>
-                </tr>
+                    <tr>
+                        <td colspan="6" class="text-center">No news found.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

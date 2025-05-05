@@ -39,16 +39,6 @@
                     'full_description' => 'This grade is awarded to individuals holding Executive Management positions in the private or public sector, who have made significant contributions to the advancement of Economic practice, as demonstrated by their qualifications, professional experience, and the scale of the organisation they lead.'
                 ],
                 [
-                    'id' => 'fellow',
-                    'title' => 'Fellows/Honorary Member',
-                    'description' => 'Conferred on individuals with outstanding contributions to economics. By invitation only.',
-                    'registration_fee' => 'KES. 0',
-                    'subscription_fee' => 'KES. 5000',
-                    'color' => 'bg-danger text-white',
-                    'full_description' => 'This grade of Fellow is the highest level of membership within KESA. It is conferred upon individuals whose work and personal contributions have significantly advanced the promotion of excellence and integrity in the field of Economics and beyond. The grade is awarded by invitation only, subject to the  approval of both the Board of Management and the Founding Board.
-'
-                ],
-                [
                     'id' => 'organization',
                     'title' => 'Organization/Association',
                     'description' => 'For member institutions’ associations or collaborators via MoU.',
