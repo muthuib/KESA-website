@@ -38,6 +38,10 @@
             @endif
         </div>
         <div class="mb-3">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control" value="{{ old('date', $testimonial->date ? $testimonial->date->format('Y-m-d') : '') }}" required>
+        </div>
+        <div class="mb-3">
             <label>Content</label>
             <textarea name="content" class="form-control" rows="4" required>{{ old('content', $testimonial->content) }}</textarea>
         </div>

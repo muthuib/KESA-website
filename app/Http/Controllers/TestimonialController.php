@@ -10,7 +10,7 @@ class TestimonialController extends Controller
 {
     public function index()
     {
-        $testimonials = Testimonial::orderBy('created_at', 'desc')->get();
+        $testimonials = Testimonial::orderBy('date', 'desc')->get();
         return view('testimonials.index', compact('testimonials'));
     }    
 
@@ -23,26 +23,29 @@ class TestimonialController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'position' => 'nullable|string',
             'content' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'date' => 'nullable|date'
         ]);
-
+    
         $filename = null;
         if ($request->hasFile('photo')) {
             $filename = time() . '.' . $request->photo->extension();
             $request->photo->move(public_path('testimonials'), $filename);
         }
-
+    
         Testimonial::create([
             'name' => $request->name,
             'position' => $request->position,
             'content' => $request->content,
-            'photo' => $filename
+            'photo' => $filename,
+            'date' => $request->date
         ]);
-
-        return redirect()->route('testimonials.index')->with('success', 'Testimonial created!');
+    
+        return redirect()->route('testimonials.index')->with('success', 'Testimonial Added successfully!');
     }
-
+    
     public function show(Testimonial $testimonial)
     {
         return view('testimonials.show', compact('testimonial'));
@@ -57,26 +60,29 @@ class TestimonialController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'position' => 'nullable|string',
             'content' => 'required|string',
-            'photo' => 'nullable|image'
+            'photo' => 'nullable|image',
+            'date' => 'nullable|date'
         ]);
-
-        $data = $request->only(['name', 'position', 'content']);
-
+    
+        $data = $request->only(['name', 'position', 'content', 'date']);
+    
         if ($request->hasFile('photo')) {
             if ($testimonial->photo && file_exists(public_path('testimonials/' . $testimonial->photo))) {
                 unlink(public_path('testimonials/' . $testimonial->photo));
             }
-
+    
             $filename = time() . '.' . $request->photo->extension();
             $request->photo->move(public_path('testimonials'), $filename);
             $data['photo'] = $filename;
         }
-
+    
         $testimonial->update($data);
-
-        return redirect()->route('testimonials.index')->with('success', 'Testimonial updated!');
+    
+        return redirect()->route('testimonials.index')->with('success', 'Testimonial updated successfully!');
     }
+    
 
     public function destroy(Testimonial $testimonial)
     {
@@ -89,9 +95,9 @@ class TestimonialController extends Controller
     }
     public function display()
     {
-        $testimonials = Testimonial::latest()->get(); // Latest first
+        $testimonials = Testimonial::orderBy('date', 'desc')->get(); // Latest date first
         return view('testimonials.display', compact('testimonials'));
     }
-
+    
 }
 

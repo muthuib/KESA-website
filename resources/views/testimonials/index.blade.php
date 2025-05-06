@@ -12,8 +12,9 @@
         <thead class="table-light">
             <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th style="width: 150px;">Name</th>
                 <th>Position</th>
+                <th style="width: 150px;">Date</th>
                 <th>Content</th>
                 <th>Photo</th>
                 <th>Actions</th>
@@ -25,6 +26,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $testimonial->name }}</td>
                     <td>{{ $testimonial->position }}</td>
+                    <td>{{ $testimonial->date ? $testimonial->date->format('D, M j, Y') : 'N/A' }}</td>
                     <td>{{ Str::limit($testimonial->content, 100) }}</td>
                     <td>
                         @if($testimonial->photo)

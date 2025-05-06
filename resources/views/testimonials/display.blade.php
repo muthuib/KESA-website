@@ -18,6 +18,9 @@
                                              class="testimonial-photo mb-2">
                                         <h2 class="feedback-name">{{ $testimonial->name }}</h2>
                                         <p class="feedback-position text-muted">{{ $testimonial->position }}</p>
+                                        <p class="feedback-date text-muted" style="font-size: 0.8rem;">
+                                            {{ $testimonial->date ? \Carbon\Carbon::parse($testimonial->date)->format('l, M d, Y') : 'No date' }}
+                                        </p>
                                         <p id="testimonial-{{ $testimonial->id }}" class="feedback-message">
                                             "{{ \Illuminate\Support\Str::words($testimonial->content, 8, '...') }}"
                                         </p>

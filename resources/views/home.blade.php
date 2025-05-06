@@ -311,7 +311,8 @@
     @include('partials.collaborations', ['collaborations' => App\Models\Collaboration::all()])
 
 <!-- What People Say About Us Section -->
-@include('testimonials.display', ['testimonials' => App\Models\Testimonial::latest()->get()])
+@include('testimonials.display', ['testimonials' => App\Models\Testimonial::orderBy('date', 'desc')->get()])
+
 
 
 
