@@ -48,6 +48,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\MemberBenefitsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\BlogController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -420,7 +421,7 @@ Route::middleware(['role:admin'])->group(function () {
 Route::get('/membership', [MembershipController::class, 'display'])->name('memberships.display');
 Route::get('/membership-types', [MemberBenefitsController::class, 'types'])->name('memberships.types');
 
-// WEB ROUTES
+// NEWS ROUTES
 Route::middleware(['role:admin'])->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/new', [NewsController::class, 'index'])->name('news.index');
@@ -471,7 +472,20 @@ Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordControl
 Route::get('/change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showChangePasswordForm'])->name('password.change');
 Route::post('/change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'changePassword'])->name('password.update');
 
+// BLOG ROUTES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/blo', [BlogController::class, 'index'])->name('blog.index');
+        Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create');
+        Route::post('/blo', [BlogController::class, 'store'])->name('blog.store');
+        Route::get('/blog/{blog}/edit', [BlogController::class, 'edit'])->name('blog.edit');
+        Route::put('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update');
+        Route::delete('/blog/{blog}', [BlogController::class, 'destroy'])->name('blog.destroy');
+    });
+});
 
+Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blo/display', [BlogController::class, 'display'])->name('blog.display');
 
 
 
