@@ -232,10 +232,11 @@
             </div>
             <!-- Events dropdown -->
             <div class="menu-item dropdown">
-                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Events</a> <br>
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">News & Events</a> <br>
                 <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ route('news.display') }}">News</a></li>
                 <li><a class="dropdown-item" href="{{ route ('events.showAll') }}">Upcoming Events</a></li>
-                        <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
+                <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
                 </ul>
             </div>
             <!-- resource HUB Dropdown -->
@@ -249,7 +250,7 @@
             </div>
             <div class="menu-item"><a href="{{ route('contact.display') }}">Contact</a></div>
             <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div><br>
-            <div class="menu-item"><a href="{{ route('news.display') }}">Blog</a></div>
+            <div class="menu-item"><a href="{{ route('blog.display') }}">Blog</a></div>
             @guest
             <li class="nav-item dropdown" style="margin-right: 15px;">
                 <a class="nav-link dropdown-toggle" href="#" id="membershipDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; color: black; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
@@ -322,17 +323,19 @@
             <!-- events dropdown -->
             <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" 
-                    style="@if(request()->routeIs('events.showAll') || request()->routeIs('activities.display')) 
+                    style="@if(request()->routeIs('events.showAll') || request()->routeIs('activities.display') || request()->routeIs('news.display')
+)
                                 color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; 
                             @else 
                                 color: white; font-weight: bold; text-decoration: none; margin-top: 22px; 
                             @endif">
-                        Event
+                        News & Event
                     </a>
                     <ul class="dropdown-menu custom-dropdown" aria-labelledby="eventsDropdown">
+                    <li><a class="dropdown-item @if(request()->routeIs('news.display'))  @endif" href="{{ route('news.display') }}">News</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">Upcoming Events</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Past Events</a></li>
-                    </ul>
+                        </ul>
                 </li>
                     <!-- Economics Hub Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
@@ -425,7 +428,7 @@
                     <ul class="nav responsive-nav">
                         <!-- Live Media tab -->
                         <li class="nav-item">
-                            <a href="{{ route('news.display') }}" class="nav-link responsive-text"style="@if(request()->routeIs('news.display')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">
+                            <a href="{{ route('blog.display') }}" class="nav-link responsive-text"style="@if(request()->routeIs('blog.display') || request()->routeIs('blog.show')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">
                                Blog
                             </a>
                         </li>

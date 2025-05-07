@@ -74,6 +74,11 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
                 Manage News
             </a>
+            <!-- Manage blog -->
+         <a class="nav-link" href="{{ route('blog.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
+                <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
+                Manage blog
+            </a>
             <!-- Manage Testimonials -->
             <a class="nav-link" href="{{ route('testimonials.index') }}" style="font-size: 18px; padding: 6px 8px; margin: 2px 0; display: flex; align-items: center;">
                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
