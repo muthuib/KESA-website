@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.0.2",
         "bacon/bacon-qr-code": "^2.0",
+        "barryvdh/laravel-dompdf": "^2.2",
+        "barryvdh/laravel-snappy": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "illuminate/auth": "*",
         "intervention/image": "^2.7",

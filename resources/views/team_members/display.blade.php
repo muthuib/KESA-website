@@ -4,7 +4,6 @@
     <!-- Meet the Team Section -->
     <div class="container my-5">
     <h3 class="text-center mb-4 section-title" style="margin-top: 115px;">Organizational Structure</h3>
-    <p class="section-subtitle" style="color:black;"><i>Meet Our Board Members, Executives, and Founders</i></p>
 <!-- BOARD MEMBERS -->
     <p class="section-subtitle" style="text-align: center; font-size: 30px;">Board of Management </p>
     @if($teamMembers->isNotEmpty())

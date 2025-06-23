@@ -6,77 +6,114 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Mail\MembershipCredentialsMail;
+use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RegisterController extends Controller
 {
-    /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\View\View
-     */
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle the registration process.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function register(Request $request)
-        {
-            $validatedData = $request->validate([
-                'FIRST_NAME' => 'required|string|max:255',
-                'LAST_NAME' => 'required|string|max:255',
-                'EMAIL' => 'required|email|unique:users,EMAIL',
-                'PASSWORD' => 'required|string|min:8',
-                'GENDER' => 'required|in:Male,Female,Other',
-                'PHONE_NUMBER' => 'required|string|max:20|unique:users,PHONE_NUMBER',
-                'NATIONAL_ID_NUMBER' => 'required|string|max:50|unique:users,NATIONAL_ID_NUMBER',
-                'DISABILITY_STATUS' => 'required|in:Yes,No',
-                'DISABILITY_TYPE' => 'nullable|string|required_if:DISABILITY_STATUS,Yes',
-                'CURRENTLY_IN_SCHOOL' => 'required|in:Yes,No',
-                'HIGHEST_LEVEL_SCHOOL_ATTENDING' => 'nullable|required_if:CURRENTLY_IN_SCHOOL,Yes|in:TVET,College,University',
-                'SCHOOL_NAME' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
-                'PROGRAM_OF_STUDY' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
-                'SCHOOL_REGISTRATION_NUMBER' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
-                'HIGHEST_LEVEL_SCHOOL_ATTENDED' => 'nullable|in:TVET,College,University',
-                'EDUCATION_LEVEL' => 'nullable|in:Undergraduate Degree,Post Graduate Diploma,Masters Degree,PhD',
-                'PREVIOUS_SCHOOL_NAME' => 'nullable|string',
-                'PREVIOUS_PROGRAM_OF_STUDY' => 'nullable|string',
-                'REGISTRATION_FEE' => 'required|string|min:0',
-                'PASSPORT_PHOTO' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image validation
-            ]);
+    {
+        $validatedData = $request->validate([
+            'FIRST_NAME' => 'required|string|max:255',
+            'LAST_NAME' => 'nullable|string|max:255',
+            'EMAIL' => 'required|email|unique:users,EMAIL',
+            'GENDER' => 'required|in:Male,Female,Other',
+            'PHONE_NUMBER' => 'required|string|max:20|unique:users,PHONE_NUMBER',
+            'NATIONAL_ID_NUMBER' => 'required|string|max:50|unique:users,NATIONAL_ID_NUMBER',
+            'DISABILITY_STATUS' => 'required|in:Yes,No',
+            'DISABILITY_TYPE' => 'nullable|string|required_if:DISABILITY_STATUS,Yes',
+            'HIGHEST_LEVEL_SCHOOL_ATTENDING' => 'nullable|required_if:CURRENTLY_IN_SCHOOL,Yes|in:TVET,College,University',
+            'SCHOOL_NAME' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+            'PROGRAM_OF_STUDY' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+            'SCHOOL_REGISTRATION_NUMBER' => 'nullable|string|required_if:CURRENTLY_IN_SCHOOL,Yes',
+            'HIGHEST_LEVEL_SCHOOL_ATTENDED' => 'nullable|in:TVET,College,University',
+            'EDUCATION_LEVEL' => 'nullable|in:Undergraduate Degree,Post Graduate Diploma,Masters Degree,PhD',
+            'PREVIOUS_SCHOOL_NAME' => 'nullable|string',
+            'PREVIOUS_PROGRAM_OF_STUDY' => 'nullable|string',
+            'REGISTRATION_FEE' => 'required|string|min:0',
+            'PASSPORT_PHOTO' => 'required|image|mimes:jpeg,png,jpg|max:2048',
 
-            // Encrypt password
-            $validatedData['PASSWORD_HASH'] = Hash::make($validatedData['PASSWORD']);
-            unset($validatedData['PASSWORD']); // Remove plain password
+            // Newly added fields
+            'TITTLE' => 'nullable|string|max:255',
+            'POSTAL_ADDRESS' => 'nullable|string|max:255',
+            'PHYSICAL_ADDRESS' => 'nullable|string|max:255',
+            'COUNTY' => 'nullable|string|max:255',
+            'LINKEDIN' => 'nullable|string|max:255',
+            'PROFESSION' => 'nullable|string|max:255',
+            'WORK_PLACE' => 'nullable|string|max:255',
+            'JOB' => 'nullable|string|max:255',
+            'COMMENT' => 'nullable|string',
+            'DATE' => 'nullable|date',
+            'type' => 'required|in:student,full,associate',
+            'must_change_password' => 'required|boolean',
+        ]);
 
-            // Handle file upload
-            if ($request->hasFile('PASSPORT_PHOTO')) {
-                $file = $request->file('PASSPORT_PHOTO');
-                $filename = time() . '_' . $file->getClientOriginalName();
-            
-                // Move file directly to the public/profile_photos folder
-                $file->move(public_path('profile_photos'), $filename);
-            
-                // Save only the relative path in the database
-                $validatedData['PASSPORT_PHOTO'] = 'profile_photos/' . $filename;
-            }
-            
-            // Generate unique membership number
-            $validatedData['MEMBERSHIP_NUMBER'] = 'KESA' . str_pad(User::count() + 1, 5, '0', STR_PAD_LEFT);
+        // Generate a random password and hash it
+        $password = Str::random(10);
+        $validatedData['PASSWORD_HASH'] = Hash::make($password);
 
-            // Create user
-            User::create($validatedData);
+        // Force user to change password on first login
+        $validatedData['must_change_password'] = $request->boolean('must_change_password', true);
 
-            // Flash success message
-            session()->flash('success', 'You have successfully registered. Please log in with your email and password.');
+        // Generate unique membership number
+        do {
+            $membershipNumber = implode('', collect(range(0, 9))->shuffle()->take(6)->all());
+        } while (User::where('MEMBERSHIP_NUMBER', $membershipNumber)->exists());
+        $validatedData['MEMBERSHIP_NUMBER'] = $membershipNumber;
 
-            // Redirect to login page
-            return redirect()->route('login');
+        // Handle photo upload
+        if ($request->hasFile('PASSPORT_PHOTO')) {
+            $file = $request->file('PASSPORT_PHOTO');
+            $photoFilename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('profile_photos'), $photoFilename);
+            $validatedData['PASSPORT_PHOTO'] = 'profile_photos/' . $photoFilename;
         }
+
+        // Generate the membership card PDF
+        $pdfDir = public_path('membership_cards');
+        if (!is_dir($pdfDir)) {
+            mkdir($pdfDir, 0775, true);
+        }
+        $pdfPath = $pdfDir . '/' . $membershipNumber . '.pdf';
+
+        // Pass absolute photo path with file:// prefix to embed image properly
+        $absolutePhotoPath = public_path($validatedData['PASSPORT_PHOTO']);
+
+        $pdf = Pdf::loadView('pdf.membership_card', [
+        'name' => $validatedData['FIRST_NAME'],
+        'email' => $validatedData['EMAIL'],
+        'membershipNumber' => $membershipNumber,
+        'phone' => $validatedData['PHONE_NUMBER'],
+        'photo' => public_path($validatedData['PASSPORT_PHOTO']), // full local path
+        'logo' => public_path('pictures/logo.jpg'),
+    ]);
+
+
+        $pdf->save($pdfPath);
+
+        // Create the user record in the database
+        User::create($validatedData);
+
+        // Send email with PDF attached
+        Mail::to($validatedData['EMAIL'])->send(
+            new MembershipCredentialsMail(
+                $validatedData['EMAIL'],
+                $password,
+                $validatedData['FIRST_NAME'],
+                $membershipNumber,
+                $validatedData['PHONE_NUMBER'],
+                $pdfPath // Path to the generated PDF
+            )
+        );
+
+        session()->flash('success', 'Registration successful! Check your email for login credentials.');
+        return redirect()->route('login');
+    }
 }

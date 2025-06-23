@@ -128,12 +128,6 @@
         margin-top: 10px; /* Add some top margin */
     }
 
-    /* Logo image */
-    .logo {
-        width: 140px; /* Default size for larger screens */
-        height: auto; /* Maintain aspect ratio */
-    }
-
     /* Responsive adjustments for small devices */
     @media (max-width: 768px) {
         .register-wrapper {
@@ -146,7 +140,7 @@
             margin: 10px; /* Reduce margin for smaller screens */
             margin-top: 70px;
             width: 450px;
-            
+  
         }
 
         .register-container h2 {
@@ -179,11 +173,6 @@
         .logo-container {
             text-align: center; /* Center the logo horizontally */
         }
-        .logo {
-            width: 100px; /* Reduce logo size for small screens */
-            margin-left: 0; /* Remove left margin */
-        }
-        
     /* Further adjustments for very small devices (e.g., phones) */
     @media (max-width: 480px) {
         .register-container {
@@ -195,7 +184,6 @@
         .register-container h2 {
             font-size: 0.80rem; /* Further reduce heading size */
         }
-
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -206,10 +194,6 @@
         button[type="submit"] {
             padding: 8px; /* Further reduce button padding for very small screens */
             font-size: 10px; /* Further reduce button font size for very small screens */
-        }
-        .logo {
-            width: 80px; /* Further reduce logo size for very small screens */
-           
         }
     }
     /* membership style cards */
@@ -268,23 +252,26 @@
         margin-bottom: 10px;
     }
 }
-#participationSection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
+    #participationSection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-#participationSection label {
-    margin-right: 10px; /* Adjust space between labels and inputs */
-}
+    #participationSection label {
+        margin-right: 10px; /* Adjust space between labels and inputs */
+    }
 
-#participationSection input[type="radio"] {
-    margin-right: 15px; /* Adjust space between radio buttons */
-}
-
+    #participationSection input[type="radio"] {
+        margin-right: 15px; /* Adjust space between radio buttons */
+    }
 
 </style>
+<!-- Bootstrap CSS (v4 or v5 depending on what you're using) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
  <!-- Google Fonts -->
  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -317,12 +304,10 @@
             @endif
 
             <!-- Logo -->
-            <div class="logo-container">
+            <!-- <div class="logo-container"> -->
                 <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid">
-            </div>
-            
-
-            <h2 style="color:rgb(61, 15, 81);">KESA Membership Registration</h2>
+            <!-- </div> -->
+            <h2 style="color:rgb(61, 15, 81);">Membership Registration</h2>
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
         
@@ -341,11 +326,12 @@
                 <!-- Sub-options for Individual Membership -->
                 <div id="individualSubOptions" class="row justify-content-center mb-4 animate__animated animate__fadeInUp" style="display: none;">
                     <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-                        <label for="individualMembershipType" class="form-label fw-bold">Select Individual Membership Type</label>
+                        <label for="individualMembershipType" class="form-label fw-bold">Which membership grade are you aaplying for?</label>
                         <select class="form-select" id="individualMembershipType" onchange="showForm(this.value)" style="width: 300px;">
                             <option value="">-- Choose Sub-type --</option>
-                            <option value="full">Full Membership</option>
+                            <option value="student">Student Membership</option>
                             <option value="associate">Associate Membership</option>
+                            <option value="full">Full Membership</option>
                         </select>
                     </div>
                 </div>
@@ -432,7 +418,12 @@
                 } else if (value === 'associate') {
                     title.innerText = 'Associate Membership';
                     title.style.display = 'block';
-                } else {
+                } 
+                else if (value === 'student') {
+                    title.innerText = 'Student Membership';
+                    title.style.display = 'block';
+                }
+                else {
                     title.style.display = 'none';
                 }
 
@@ -455,101 +446,86 @@
             }
             </script>
 
-            <!-- individual registration form -->
+            <!-- full registration form -->
+            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+            @csrf
              <div id="registrationForm" style="display: none;">
-             <div id="form-full" class="membership-form" style="display: none;">
-
-                <div class="form-row">
-                    
-                <div class="form-group">
-                        <label for="FIRST_NAME">First Name *</label>
-                        <input id="FIRST_NAME" type="text" name="FIRST_NAME" value="{{ old('FIRST_NAME') }}" required>
-                        @error('FIRST_NAME')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                <div class="form-group">
-                        <label for="LAST_NAME">Last Name *</label>
-                        <input id="LAST_NAME" type="text" name="LAST_NAME" value="{{ old('LAST_NAME') }}" required>
-                        @error('LAST_NAME')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="MIDDLE_NAME">Middle Name *</label>
-                        <input id="MIDDLE_NAME" type="text" name="MIDDLE_NAME" value="{{ old('MIDDLE_NAME') }}" required>
-                        @error('MIDDLE_NAME')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>           
+             @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>There were some problems with your input: check all your inputs before submitting</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
+            @endif
+             <div id="form-full" class="membership-form" style="display: none;">
+                <!-- Display errors if any -->
+             <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="TITTLE" class="required-label">Title</label>
+                    <select name="TITTLE" id="TITTLE" class="form-control" required style="height: auto;">
+                        <option value="">-select title-</option>
+                        <option value="Mr." {{ old('TITTLE') == 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                        <option value="Mrs." {{ old('TITTLE') == 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                        <option value="Ms." {{ old('TITTLE') == 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                        <option value="Dr." {{ old('TITTLE') == 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                        <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="FIRST_NAME" class="required-label">Name (As you would like it to appear on the Certificate) </label>
+                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" value="{{ old('FIRST_NAME') }}" required>
+                    @error('FIRST_NAME')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="GENDER" class="required-label">Gender </label>
+                    <select name="GENDER" id="GENDER" class="form-control" required style="height: auto;">
+                        <option value="">-- Select --</option>
+                        <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                    @error('GENDER')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
               <!-- row-->
               <div class="form-row">
                       <!-- Email -->
                       <div class="form-group">
-                        <label for="EMAIL">Email *</label>
+                        <label for="EMAIL" class="required-label">Email </label>
                         <input type="email" id="EMAIL" name="EMAIL" value="{{ old('EMAIL') }}" required>
                         @error('EMAIL')
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="NATIONAL_ID_NUMBER">National ID Number *</label>
+                        <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number </label>
                         <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" value="{{ old('NATIONAL_ID_NUMBER') }}" required>
                         @error('NATIONAL_ID_NUMBER')
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-                <!-- Password and Confirm Password -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="PASSWORD">Password *</label>
-                        <input type="password" id="PASSWORD" name="PASSWORD" required>
-                        @error('PASSWORD')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="PASSWORD_CONFIRMATION">Confirm Password *</label>
-                        <input type="password" id="PASSWORD_CONFIRMATION" name="PASSWORD_CONFIRMATION" required>
-                        @error('PASSWORD_CONFIRMATION')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
                 <!--   Row -->
                 <div class="form-row">
+
                     <div class="form-group">
-                        <label for="GENDER">Gender *</label>
-                        <select id="GENDER" name="GENDER" required>
-                            <option value="">-- Select Gender --</option>
-                            <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
-                            <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
-                        </select>
-                        @error('GENDER')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="PHONE_NUMBER">Phone Number *</label>
+                        <label for="PHONE_NUMBER" class="required-label">Phone Number </label>
                         <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" value="{{ old('PHONE_NUMBER') }}" required>
                         @error('PHONE_NUMBER')
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div class="form-group">
-                        <label for="ALTERNATIVE_PHONE_NUMBER">Alternative Phone Number</label>
-                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER" value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}">
-                    </div>
-                </div>
-
-                <!-- Disability related question -->
+              <!-- Disability related question -->
                 <div class="form-group">
-                    <label for="DISABILITY_STATUS">Do you have any form of disability? *</label>
+                    <label for="DISABILITY_STATUS" class="required-label">Do you have any form of disability? </label>
                     <label for="DISABILITY_YES">Yes</label>
                     <input type="radio" id="DISABILITY_YES" name="DISABILITY_STATUS" value="Yes" {{ old('DISABILITY_STATUS') == 'Yes' ? 'checked' : '' }}>
                     <label for="DISABILITY_NO">No</label>
@@ -559,108 +535,589 @@
                 <!-- Disability type -->
                 <div id="disability_type" style="display: {{ old('DISABILITY_STATUS') == 'Yes' ? 'block' : 'none' }}">
                     <div class="form-group">
-                        <label for="DISABILITY_TYPE">Type of Disability *</label>
+                        <label for="DISABILITY_TYPE">Type of Disability </label>
                         <input type="text" id="DISABILITY_TYPE" name="DISABILITY_TYPE" value="{{ old('DISABILITY_TYPE') }}">
                     </div>
                 </div>
-
-                <!-- Passport photo -->
-                <div class="form-group">
-                    <label for="PASSPORT_PHOTO">Upload Passport Sized Photo * Images should be in format: jpeg, png, jpg</label>
-                    <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" required>
+               
                 </div>
-                <!-- School status -->
-                <div class="form-group">
-                    <label>Are you currently in school? *</label>
-                    <label for="SCHOOL_YES">Yes</label>
-                    <input type="radio" id="SCHOOL_YES" name="CURRENTLY_IN_SCHOOL" value="Yes" 
-                        {{ old('CURRENTLY_IN_SCHOOL') == 'Yes' ? 'checked' : '' }} >
+                <div class="form-row">
+                        <div class="form-group">
+                            <label>Postal Address</label>
+                            <input type="text" name="POSTAL_ADDRESS" class="form-control" value="{{ old('POSTAL_ADDRESS') }}">
+                        </div>
 
-                    <label for="SCHOOL_NO">No</label>
-                    <input type="radio" id="SCHOOL_NO" name="CURRENTLY_IN_SCHOOL" value="No" 
-                        {{ old('CURRENTLY_IN_SCHOOL') == 'No' ? 'checked' : '' }} >
+                        <div class="form-group">
+                            <label>Physical Address</label>
+                            <input type="text" name="PHYSICAL_ADDRESS" class="form-control" value="{{ old('PHYSICAL_ADDRESS') }}">
+                        </div>
                 </div>
-                <div id="school_info" style="display: {{ old('SCHOOL_STATUS') == 'Yes' ? 'block' : 'none' }}">
-                    <!-- School related fields for users currently in school -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="HIGHEST_LEVEL">Which level? *</label>
-                            <select id="HIGHEST_LEVEL" name="HIGHEST_LEVEL_SCHOOL_ATTENDING">
-                                <option value="" disabled selected>Select level</option>
-                                <option value="TVET College" {{ old('HIGHEST_LEVEL_SCHOOL_ATTENDING') == 'TVET College' ? 'selected' : '' }}>TVET College</option>
-                                <option value="University" {{ old('HIGHEST_LEVEL_SCHOOL_ATTENDING') == 'University' ? 'selected' : '' }}>University</option>
-                            </select>
+                            <label>County of Residence ( For Kenyans)</label>
+                            <input type="text" name="COUNTY" class="form-control" value="{{ old('COUNTY') }}">
                         </div>
+
                         <div class="form-group">
-                            <label for="SCHOOL_NAME">Name of School *</label>
-                            <input type="text" id="SCHOOL_NAME" name="SCHOOL_NAME" value="{{ old('SCHOOL_NAME') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="PROGRAM_OF_STUDY">Program of Study *</label>
-                            <input type="text" id="PROGRAM_OF_STUDY" name="PROGRAM_OF_STUDY" value="{{ old('PROGRAM_OF_STUDY') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="SCHOOL_REGISTRATION_NUMBER">Registration Number *</label>
-                            <input type="text" id="SCHOOL_REGISTRATION_NUMBER" name="SCHOOL_REGISTRATION_NUMBER" value="{{ old('SCHOOL_REGISTRATION_NUMBER') }}">
+                            <label>LinkedIn Profile</label>
+                            <input type="text" name="LINKEDIN" class="form-control" value="{{ old('LINKEDIN') }}">
                         </div>
                     </div>
-                    <p>Please send registration fee of KE.300 to M-Pesa Business No: 522533 Account No:7782321#mreg</p>
+
+                                    <!-- School related fields for users not currently in school -->
+                                    <div class="form-row">
                     <div class="form-group">
-                        <label for="REGISTRATION_FEE">Registration Fee (KES) *</label>
-                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE" value="{{ old('REGISTRATION_FEE') }}" >
-                        @error('REGISTRATION_FEE')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div id="non_school_info" style="display: {{ old('SCHOOL_STATUS') == 'No' ? 'block' : 'none' }}">
-                    <!-- School related fields for users not currently in school -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="PREVIOUS_SCHOOL_NAME">Name of Previous School *</label>
-                            <input type="text" id="PREVIOUS_SCHOOL_NAME" name="PREVIOUS_SCHOOL_NAME" value="{{ old('PREVIOUS_SCHOOL_NAME') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="PREVIOUS_PROGRAM_OF_STUDY">Program of Study *</label>
-                            <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="EDUCATION_LEVEL">What level? *</label>
-                            <select id="EDUCATION_LEVEL" name="EDUCATION_LEVEL">
+                            <label for="EDUCATION_LEVEL"  class="required-label">Highest Level of Education </label>
+                            <select id="EDUCATION_LEVEL" name="EDUCATION_LEVEL" required>
                                 <option value="" disabled selected>Select level</option>
                                 <option value="Undergraduate Degree" {{ old('EDUCATION_LEVEL') == 'Undergraduate Degree' ? 'selected' : '' }}>Undergraduate Degree</option>
                                 <option value="Post Graduate Diploma" {{ old('EDUCATION_LEVEL') == 'Post Graduate Diploma' ? 'selected' : '' }}>Post Graduate Diploma</option>
                                 <option value="Masters Degree" {{ old('EDUCATION_LEVEL') == 'Masters Degree' ? 'selected' : '' }}>Masters Degree</option>
                                 <option value="PhD" {{ old('EDUCATION_LEVEL') == 'PhD' ? 'selected' : '' }}>PhD</option>
                             </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="PREVIOUS_PROGRAM_OF_STUDY"  class="required-label">Program of Study </label>
+                        <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
+                    </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label  class="required-label">Current Profession </label>
+                            <input type="text" name="PROFESSION" class="form-control" value="{{ old('PROFESSION') }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label  class="required-label">Current Place of Work</label>
+                            <input type="text" name="WORK_PLACE" class="form-control" value="{{ old('WORK_PLACE') }}" required>
                         </div>
                     </div>
-                    <p>Please send registration fee of KE.500 to M-Pesa Business No: 522533 Account No:7782321#mreg</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label  class="required-label">Job Title</label>
+                            <input type="text" name="JOB" class="form-control" value="{{ old('JOB') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label  class="required-label">Date</label>
+                            <input type="date" name="DATE" class="form-control" value="{{ old('DATE') }}" required>
+                        </div>
+                    </div>
+                        <!-- Passport photo -->
+                        <div class="form-group">
+                                <label for="PASSPORT_PHOTO"  class="required-label">
+                                Upload a Passport-Sized Photo for Your Membership Smart Card (Not a Selfie)  </label> <p style="color: maroon;">Images should be in format: jpeg, png, jpg</p>
+                                <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" required>
+                        </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Any Comment (optional)</label>
+                            <textarea name="COMMENT" class="form-control">{{ old('COMMENT') }}</textarea>
+                        </div>
+                </div>
+                <input type="hidden" name="type" value="full">
+                <!-- must_change_password to ensure when user logs in change password form is displayed -->
+                <input type="hidden" name="must_change_password" value="1">
+                <!-- declaration -->
+                    <div class="form-check mt-4 mb-4">
+                        <input class="form-check-input" type="checkbox" id="declaration" name="declaration" required>
+                        <label class="form-check-label" for="declaration">
+                            <span style="color: red; font-weight: bold">*</span>
+                            I declare that the information given herein is correct to the best of my knowledge and belief, and, if approved, I agree to be bound by the Constitution of the Association as it now exists and as may hereafter be amended from time to time.
+                        </label>
+                    </div>
+          <p style="color: maroon; font-size: 17px;"><strong>Please send registration fee of KE.1000 to M-Pesa Business No: 522533 Account No:7782321#mreg</strong></p>
+                <p>Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
+                <p><strong>Business Number</strong>: 522533</p>
+                <p><strong>Account Number</strong>: Enter <code>7782321#me</code></p>
+                <p>Enter the <strong>fare</strong>: KES 1000</p>
+                <p>Enter your <strong>PIN number</strong>.</p>
+                <p>Wait for the <strong>MPESA confirmation SMS</strong>.</p>
+                <p>Fill in this form and <strong>submit below</strong>.</p>
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="REGISTRATION_FEE">Registration Fee (KES) *</label>
-                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE" value="{{ old('REGISTRATION_FEE') }}">
+                        <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">
+                            Cell Phone Number 
+                            <l style="color: maroon; font-size: 10px;">(The Number used for M-Pesa Payment)</l>
+                        </label>
+                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
+                            value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
+                        @error('ALTERNATIVE_PHONE_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="REGISTRATION_FEE" class="required-label">M-Pesa Transaction ID (e.g TE69MHLK8Q) *</label>
+                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE"
+                            value="{{ old('REGISTRATION_FEE') }}" required>
                         @error('REGISTRATION_FEE')
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-                <button type="submit">Create Account</button>
+
+                    <button type="submit">Create Account</button>
                 </div>
+                </form>
+
+
                 <!-- OTHER MEMBERSHIP FORMS -->
-                <div id="form-associate" class="membership-form" style="display: none;">
-                    <!-- Your Associate Membership form here -->
-                    <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Associate Membership Form will be updated soon</p>
+                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div id="form-student" class="membership-form" style="display: none;">
+                    <h1 style="color: maroon; font-size: 30px; font-weight: bold; text-align:center;">Student Membership</h1>
+                    <!-- Your Student Membership form here -->
+                    <!-- Display errors if any -->
+             <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="TITTLE" class="required-label">Title</label>
+                    <select name="TITTLE" id="TITTLE" class="form-control" required style="height: auto;">
+                        <option value="">-select title-</option>
+                        <option value="Mr." {{ old('TITTLE') == 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                        <option value="Mrs." {{ old('TITTLE') == 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                        <option value="Ms." {{ old('TITTLE') == 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                        <option value="Dr." {{ old('TITTLE') == 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                        <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
+                    </select>
                 </div>
-                    <div id="form-full" class="membership-form" style="display: none;">
-                        <!-- Your Full Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Full Membership Form will be updated soon</p>
+                <div class="form-group col-md-8">
+                    <label for="FIRST_NAME" class="required-label">Name (As you would like it to appear on the Certificate) </label>
+                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" value="{{ old('FIRST_NAME') }}" required>
+                    @error('FIRST_NAME')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="GENDER" class="required-label">Gender </label>
+                    <select name="GENDER" id="GENDER" class="form-control" required style="height: auto;">
+                        <option value="">-- Select --</option>
+                        <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                    @error('GENDER')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+              <!-- row-->
+              <div class="form-row">
+                      <!-- Email -->
+                      <div class="form-group">
+                        <label for="EMAIL" class="required-label">Email </label>
+                        <input type="email" id="EMAIL" name="EMAIL" value="{{ old('EMAIL') }}" required>
+                        @error('EMAIL')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number </label>
+                        <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" value="{{ old('NATIONAL_ID_NUMBER') }}" required>
+                        @error('NATIONAL_ID_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <!--   Row -->
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="PHONE_NUMBER" class="required-label">Phone Number </label>
+                        <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" value="{{ old('PHONE_NUMBER') }}" required>
+                        @error('PHONE_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div id="form-fellow" class="membership-form" style="display: none;">
-                        <!-- Your Fellow/Honorary Membership form here -->
-                        <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Fellow Membership Form will be updated soon </p>
+                                  <!-- Disability related question -->
+                <div class="form-group">
+                    <label for="DISABILITY_STATUS" class="required-label">Do you have any form of disability? </label><br>
+
+                    <label for="DISABILITY_YES">Yes</label>
+                    <input type="radio" id="DISABILITY_YES" name="DISABILITY_STATUS" value="Yes"
+                        {{ old('DISABILITY_STATUS') == 'Yes' ? 'checked' : '' }} onclick="toggleDisabilityTypeField(true)">
+
+                    <label for="DISABILITY_NO">No</label>
+                    <input type="radio" id="DISABILITY_NO" name="DISABILITY_STATUS" value="No"
+                        {{ old('DISABILITY_STATUS') == 'No' ? 'checked' : '' }} onclick="toggleDisabilityTypeField(false)">
+                </div>
+
+                <!-- Disability type -->
+                <div id="disability_type_field" style="display: {{ old('DISABILITY_STATUS') == 'Yes' ? 'block' : 'none' }};">
+                    <div class="form-group">
+                        <label for="DISABILITY_TYPE" >Type of Disability </label>
+                        <input type="text" id="DISABILITY_TYPE" name="DISABILITY_TYPE" value="{{ old('DISABILITY_TYPE') }}">
                     </div>
+                </div>
+
+                <!-- Inline Script (Scoped to this section) -->
+                <script>
+                    function toggleDisabilityTypeField(show) {
+                        document.getElementById('disability_type_field').style.display = show ? 'block' : 'none';
+                    }
+
+                    window.addEventListener('DOMContentLoaded', function () {
+                        toggleDisabilityTypeField(document.getElementById('DISABILITY_YES').checked);
+                    });
+                </script>
+                </div>
+
+                <div class="form-row">
+                        <div class="form-group">
+                            <label>Postal Address</label>
+                            <input type="text" name="POSTAL_ADDRESS" class="form-control" value="{{ old('POSTAL_ADDRESS') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Physical Address</label>
+                            <input type="text" name="PHYSICAL_ADDRESS" class="form-control" value="{{ old('PHYSICAL_ADDRESS') }}">
+                        </div>
+                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>County of Residence ( For Kenyans)</label>
+                            <input type="text" name="COUNTY" class="form-control" value="{{ old('COUNTY') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>LinkedIn Profile</label>
+                            <input type="text" name="LINKEDIN" class="form-control" value="{{ old('LINKEDIN') }}">
+                        </div>
+                    </div>
+
+                    <!-- School related fields for users not currently in school -->
+                    <div class="form-row">
+                         <div class="form-group">
+                            <label for="SCHOOL_NAME" class="required-label">Name of School</label>
+                            <input type="text" id="SCHOOL_NAME" name="SCHOOL_NAME" value="{{ old('SCHOOL_NAME') }}" required>
+                        </div>
+                    <div class="form-group">
+                            <label for="EDUCATION_LEVEL" class="required-label">Current Highest Level of Education </label>
+                            <select id="EDUCATION_LEVEL" name="EDUCATION_LEVEL" required>
+                                <option value="" disabled selected>Select level</option>
+                                <option value="Undergraduate Degree" {{ old('EDUCATION_LEVEL') == 'Undergraduate Degree' ? 'selected' : '' }}>Undergraduate Degree</option>
+                                <option value="Post Graduate Diploma" {{ old('EDUCATION_LEVEL') == 'Post Graduate Diploma' ? 'selected' : '' }}>Post Graduate Diploma</option>
+                                <option value="Masters Degree" {{ old('EDUCATION_LEVEL') == 'Masters Degree' ? 'selected' : '' }}>Masters Degree</option>
+                                <option value="PhD" {{ old('EDUCATION_LEVEL') == 'PhD' ? 'selected' : '' }}>PhD</option>
+                            </select>
+                    </div>
+                       
+                   </div>
+
+                    <div class="form-row">
+                         <div class="form-group">
+                        <label for="SCHOOL_REGISTRATION_NUMBER" class="required-label">Current Year of Study</label>
+                        <select id="SCHOOL_REGISTRATION_NUMBER" name="SCHOOL_REGISTRATION_NUMBER" class="form-control" required style="height: auto;">
+                            <option value="">-- Select Year --</option>
+                            <option value="1" {{ old('SCHOOL_REGISTRATION_NUMBER') == '1' ? 'selected' : '' }}>Year 1</option>
+                            <option value="2" {{ old('SCHOOL_REGISTRATION_NUMBER') == '2' ? 'selected' : '' }}>Year 2</option>
+                            <option value="3" {{ old('SCHOOL_REGISTRATION_NUMBER') == '3' ? 'selected' : '' }}>Year 3</option>
+                            <option value="4" {{ old('SCHOOL_REGISTRATION_NUMBER') == '4' ? 'selected' : '' }}>Year 4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="PREVIOUS_SCHOOL_NAME" class="required-label">Current Semester of Study</label>
+                        <select id="PREVIOUS_SCHOOL_NAME" name="PREVIOUS_SCHOOL_NAME" class="form-control" required style="height: auto; width:auto;">
+                            <option value="">-- Select Semester --</option>
+                            <option value="1" {{ old('PREVIOUS_SCHOOL_NAME') == '1' ? 'selected' : '' }}>semester 1</option>
+                            <option value="2" {{ old('PREVIOUS_SCHOOL_NAME') == '2' ? 'selected' : '' }}>semester 2</option>
+                        </select>
+                    </div>
+                </div>
+
+                    <div class="form-row">
+                    <div class="form-group">
+                        <label for="PREVIOUS_PROGRAM_OF_STUDY" class="required-label">Program of Study </label>
+                        <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
+                    </div>
+                        <div class="form-group">
+                            <label class="required-label">Date</label>
+                            <input type="date" name="DATE" class="form-control" value="{{ old('DATE') }}" required>
+                        </div>
+                    </div>
+                        <!-- Passport photo -->
+                        <div class="form-group">
+                                <label for="PASSPORT_PHOTO" class="required-label">
+                                Upload a Passport-Sized Photo for Your Membership Smart Card (Not a Selfie)  </label> <p style="color: maroon;">Images should be in format: jpeg, png, jpg</p>
+                                <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" required>
+                        </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label> Any Comment (optional)</label>
+                            <textarea name="COMMENT" class="form-control">{{ old('COMMENT') }}</textarea>
+                        </div>
+                </div>
+                <input type="hidden" name="type" value="student">
+                <!-- must_change_password to ensure when user logs in change password form is displayed -->
+                <input type="hidden" name="must_change_password" value="1">
+                                <!-- declaration -->
+                    <div class="form-check mt-4 mb-4">
+                        <input class="form-check-input" type="checkbox" id="declaration" name="declaration" required>
+                        <label class="form-check-label" for="declaration">
+                            <span style="color: red; font-weight: bold">*</span>
+                            I declare that the information given herein is correct to the best of my knowledge and belief, and, if approved, I agree to be bound by the Constitution of the Association as it now exists and as may hereafter be amended from time to time.
+                        </label>
+                    </div>
+
+                <p style="color: maroon; font-size: 17px;"><strong>Please send registration fee of KE.300 to M-Pesa Business No: 522533 Account No:7782321#mreg</strong></p>
+                <p>Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
+                <p><strong>Business Number</strong>: 522533</p>
+                <p><strong>Account Number</strong>: Enter <code>7782321#me</code></p>
+                <p>Enter the <strong>fare</strong>: KES 300</p>
+                <p>Enter your <strong>PIN number</strong>.</p>
+                <p>Wait for the <strong>MPESA confirmation SMS</strong>.</p>
+                <p>Fill in this form and <strong>submit below</strong>.</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">
+                            Cell Phone Number 
+                            <l style="color: maroon; font-size: 10px;">(The Number used for M-Pesa Payment)</l>
+                        </label>
+                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
+                            value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
+                        @error('ALTERNATIVE_PHONE_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="REGISTRATION_FEE" class="required-label">M-Pesa Transaction ID (e.g TE69MHLK8Q) *</label>
+                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE"
+                            value="{{ old('REGISTRATION_FEE') }}" required>
+                        @error('REGISTRATION_FEE')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                    <button type="submit">Create Account</button>
+                </div>
+                </form>
+
+                <!-- ASSOCIATE MEMBERSHIP -->
+                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div id="form-associate" class="membership-form" style="display: none;">
+                    <!-- Your Associate Membership form here -->
+                    <!-- Display errors if any -->
+             <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="TITTLE" class="required-label">Title</label>
+                    <select name="TITTLE" id="TITTLE" class="form-control" required style="height: auto;">
+                        <option value="">-select title-</option>
+                        <option value="Mr." {{ old('TITTLE') == 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                        <option value="Mrs." {{ old('TITTLE') == 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                        <option value="Ms." {{ old('TITTLE') == 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                        <option value="Dr." {{ old('TITTLE') == 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                        <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="FIRST_NAME" class="required-label">Name (As you would like it to appear on the Certificate) </label>
+                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" value="{{ old('FIRST_NAME') }}" required>
+                    @error('FIRST_NAME')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="GENDER" class="required-label">Gender </label>
+                    <select name="GENDER" id="GENDER" class="form-control" required style="height: auto;">
+                        <option value="">-- Select --</option>
+                        <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                    @error('GENDER')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+              <!-- row-->
+              <div class="form-row">
+                      <!-- Email -->
+                      <div class="form-group">
+                        <label for="EMAIL" class="required-label">Email </label>
+                        <input type="email" id="EMAIL" name="EMAIL" value="{{ old('EMAIL') }}" required>
+                        @error('EMAIL')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number </label>
+                        <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" value="{{ old('NATIONAL_ID_NUMBER') }}" required>
+                        @error('NATIONAL_ID_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <!--   Row -->
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="PHONE_NUMBER" class="required-label">Phone Number </label>
+                        <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" value="{{ old('PHONE_NUMBER') }}" required>
+                        @error('PHONE_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                                  <!-- Disability related question -->
+                <div class="form-group">
+                    <label for="DISABILITY_STATUS" class="required-label">Do you have any form of disability? </label><br>
+
+                    <label for="DISABILITY_YES">Yes</label>
+                    <input type="radio" id="DISABILITY_YES" name="DISABILITY_STATUS" value="Yes"
+                        {{ old('DISABILITY_STATUS') == 'Yes' ? 'checked' : '' }} onclick="toggleDisabilityTypeField(true)">
+
+                    <label for="DISABILITY_NO">No</label>
+                    <input type="radio" id="DISABILITY_NO" name="DISABILITY_STATUS" value="No"
+                        {{ old('DISABILITY_STATUS') == 'No' ? 'checked' : '' }} onclick="toggleDisabilityTypeField(false)">
+                </div>
+
+                <!-- Disability type -->
+                <div id="disability_type_field" style="display: {{ old('DISABILITY_STATUS') == 'Yes' ? 'block' : 'none' }};">
+                    <div class="form-group">
+                        <label for="DISABILITY_TYPE" >Type of Disability </label>
+                        <input type="text" id="DISABILITY_TYPE" name="DISABILITY_TYPE" value="{{ old('DISABILITY_TYPE') }}">
+                    </div>
+                </div>
+
+                <!-- Inline Script (Scoped to this section) -->
+                <script>
+                    function toggleDisabilityTypeField(show) {
+                        document.getElementById('disability_type_field').style.display = show ? 'block' : 'none';
+                    }
+
+                    window.addEventListener('DOMContentLoaded', function () {
+                        toggleDisabilityTypeField(document.getElementById('DISABILITY_YES').checked);
+                    });
+                </script>
+                </div>
+
+                <div class="form-row">
+                        <div class="form-group">
+                            <label>Postal Address</label>
+                            <input type="text" name="POSTAL_ADDRESS" class="form-control" value="{{ old('POSTAL_ADDRESS') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Physical Address</label>
+                            <input type="text" name="PHYSICAL_ADDRESS" class="form-control" value="{{ old('PHYSICAL_ADDRESS') }}">
+                        </div>
+                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>County of Residence ( For Kenyans)</label>
+                            <input type="text" name="COUNTY" class="form-control" value="{{ old('COUNTY') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>LinkedIn Profile</label>
+                            <input type="text" name="LINKEDIN" class="form-control" value="{{ old('LINKEDIN') }}">
+                        </div>
+                    </div>
+
+                                    <!-- School related fields for users not currently in school -->
+                                    <div class="form-row">
+                    <div class="form-group">
+                            <label for="EDUCATION_LEVEL" class="required-label">Highest Level of Education </label>
+                            <select id="EDUCATION_LEVEL" name="EDUCATION_LEVEL" required>
+                                <option value="" disabled selected>Select level</option>
+                                <option value="Undergraduate Degree" {{ old('EDUCATION_LEVEL') == 'Undergraduate Degree' ? 'selected' : '' }}>Undergraduate Degree</option>
+                                <option value="Post Graduate Diploma" {{ old('EDUCATION_LEVEL') == 'Post Graduate Diploma' ? 'selected' : '' }}>Post Graduate Diploma</option>
+                                <option value="Masters Degree" {{ old('EDUCATION_LEVEL') == 'Masters Degree' ? 'selected' : '' }}>Masters Degree</option>
+                                <option value="PhD" {{ old('EDUCATION_LEVEL') == 'PhD' ? 'selected' : '' }}>PhD</option>
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="PREVIOUS_PROGRAM_OF_STUDY" class="required-label">Program of Study </label>
+                        <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
+                    </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required-label">Current Profession </label>
+                            <input type="text" name="PROFESSION" class="form-control" value="{{ old('PROFESSION') }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required-label">Current Place of Work</label>
+                            <input type="text" name="WORK_PLACE" class="form-control" value="{{ old('WORK_PLACE') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required-label">Job Title</label>
+                            <input type="text" name="JOB" class="form-control" value="{{ old('JOB') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required-label">Date</label>
+                            <input type="date" name="DATE" class="form-control" value="{{ old('DATE') }}" required>
+                        </div>
+                    </div>
+                        <!-- Passport photo -->
+                        <div class="form-group">
+                                <label for="PASSPORT_PHOTO" class="required-label">
+                                Upload a Passport-Sized Photo for Your Membership Smart Card (Not a Selfie)  </label> <p style="color: maroon;">Images should be in format: jpeg, png, jpg</p>
+                                <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" required>
+                        </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Any Comment (optional)</label>
+                            <textarea name="COMMENT" class="form-control">{{ old('COMMENT') }}</textarea>
+                        </div>
+                </div>
+                <input type="hidden" name="type" value="associate">
+                <!-- must_change_password to ensure when user logs in change password form is displayed -->
+                <input type="hidden" name="must_change_password" value="1">
+                    <!-- declaration -->
+                    <div class="form-check mt-4 mb-4">
+                        <input class="form-check-input" type="checkbox" id="declaration" name="declaration" required>
+                        <label class="form-check-label" for="declaration">
+                            <span style="color: red; font-weight: bold">*</span>
+                            I declare that the information given herein is correct to the best of my knowledge and belief, and, if approved, I agree to be bound by the Constitution of the Association as it now exists and as may hereafter be amended from time to time.
+                        </label>
+                    </div>
+                <p style="color: maroon; font-size: 17px;"><strong>Please send registration fee of KE.500 to M-Pesa Business No: 522533 Account No:7782321#mreg</strong></p>
+                <p>Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
+                <p><strong>Business Number</strong>: 522533</p>
+                <p><strong>Account Number</strong>: Enter <code>7782321#me</code></p>
+                <p>Enter the <strong>fare</strong>: KES 500</p>
+                <p>Enter your <strong>PIN number</strong>.</p>
+                <p>Wait for the <strong>MPESA confirmation SMS</strong>.</p>
+                <p>Fill in this form and <strong>submit below</strong>.</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">
+                            Cell Phone Number 
+                            <l style="color: maroon; font-size: 10px;">(The Number used for M-Pesa Payment)</l>
+                        </label>
+                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
+                            value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
+                        @error('ALTERNATIVE_PHONE_NUMBER')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="REGISTRATION_FEE" class="required-label">M-Pesa Transaction ID (e.g TE69MHLK8Q) *</label>
+                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE"
+                            value="{{ old('REGISTRATION_FEE') }}" required>
+                        @error('REGISTRATION_FEE')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                    <button type="submit">Create Account</button>
+                </div>
+                </form>
 
                     <div id="organizationForm" class="membership-form" style="display: none;">
                         <!-- Your Organization/Association Membership form here -->
@@ -752,7 +1209,85 @@
         }
     }
 </script>
-
+<!-- include code for declaration check box to function -->
+ <!-- Before the closing </body> -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+<style>
+    .required-label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}
+
+.logo {
+    width: 150px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Medium screens and below */
+@media (max-width: 768px) {
+    .logo {
+        width: 100px;
+    }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+    .logo {
+        width: 100px;
+    }
+}
+
+/* Ensure full width on small screens */
+@media (max-width: 767.98px) {
+    .form-group {
+        width: 100% !important;
+        margin-bottom: 1rem;
+    }
+
+    .form-row,
+    .row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+    }
+}
+
+/* For medium devices: stack only if necessary */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .form-group {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .form-row,
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .form-group.half-width {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+    }
+}
+
+
+</style>

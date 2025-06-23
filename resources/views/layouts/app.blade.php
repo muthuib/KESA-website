@@ -10,6 +10,9 @@
    
     <link rel="icon" href="{{ asset('public/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url('favicon.ico') }}" type="image/x-icon">
+    <!-- Font Awesome CDN -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
@@ -127,7 +130,7 @@
                 <h5 class="text-uppercase font-weight-bold footer-title">Contact Us</h5>
                 <ul class="list-unstyled mt-3">
                     <li class="footer-text"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                    <li class="footer-text"><i class="fas fa-phone-alt"></i> </li>
+                    <li class="footer-text"><i class="fas fa-phone-alt"></i>+254 715 752644 </li>
                     <li class="footer-text"><i class="fas fa-envelope"></i> admin@kesakenya.org</li>
                 </ul>
             </div>
@@ -145,7 +148,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="email" class="form-label footer-text">Your Email Address</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required readonly>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
                             </div>
                             <div class="form-group text-center mt-4">
                                 <button type="submit" class="btn btn-primary">Subscribe</button>

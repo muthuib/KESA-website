@@ -36,12 +36,14 @@ class PublicationController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $filePath = 'publications/' . $filename;
-            $file->move(public_path('publications'), $filename);
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = 'publications/' . $fileName;
+            
+            $fileSize = $file->getSize(); // ✅ Get size before moving
+            $file->move(public_path('publications/'), $fileName);
 
             $validated['file_path'] = $filePath;
-            $validated['file_size'] = $file->getSize(); // in bytes
+            $validated['file_size'] = $fileSize;
         } else {
             return redirect()->back()->with('error', 'No file uploaded.');
         }

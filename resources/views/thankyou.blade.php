@@ -19,39 +19,7 @@
         </div>
     @endif
 
-    <div class="row mt-5 text-center">
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">News & Updates</h5>
-                    <p class="card-text">Stay informed with the latest happenings in our community.</p>
-                    <a href="{{ route('app') }}" class="btn btn-primary">Learn More</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <i class="fas fa-calendar-alt fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Events & Debates</h5>
-                    <p class="card-text">Join upcoming events and engage in enriching discussions.</p>
-                    <a href="{{ route('app') }}" class="btn btn-success">Explore</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <i class="fas fa-book fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Resources</h5>
-                    <p class="card-text">Access valuable resources to enhance your knowledge and skills.</p>
-                    <a href="{{ route('resources.show') }}" class="btn btn-warning">Get Resources</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    
 
 @endsection
 

@@ -43,6 +43,20 @@ class User extends Authenticatable
         'PREVIOUS_PROGRAM_OF_STUDY',
         'REGISTRATION_FEE',
         'MEMBERSHIP_NUMBER',
+
+        // New fields added
+        'TITTLE',
+        'POSTAL_ADDRESS',
+        'PHYSICAL_ADDRESS',
+        'COUNTY',
+        'LINKEDIN',
+        'PROFESSION',
+        'WORK_PLACE',
+        'JOB',
+        'COMMENT',
+        'DATE',
+        'type',
+        'must_change_password',
     ];
 
     // Override default password attribute to match `PASSWORD_HASH` column
@@ -84,7 +98,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
-    
 
     // Check if user has a specific permission
     public function hasPermission($permission)
@@ -96,6 +109,4 @@ class User extends Authenticatable
             })
             ->exists();
     }
-    
-    
 }
