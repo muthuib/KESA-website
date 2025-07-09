@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Mail\MembershipCredentialsMail;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegisterController extends Controller
 {
@@ -63,10 +64,32 @@ class RegisterController extends Controller
         $validatedData['must_change_password'] = $request->boolean('must_change_password', true);
 
         // Generate unique membership number
-        do {
-            $membershipNumber = implode('', collect(range(0, 9))->shuffle()->take(6)->all());
-        } while (User::where('MEMBERSHIP_NUMBER', $membershipNumber)->exists());
+       // Generate formatted membership number: YY + IDlast2 + 4-digit reg
+        $year = now()->format('y'); // e.g., '25' for 2025
+        $idSuffix = substr($validatedData['NATIONAL_ID_NUMBER'], -2); // last 2 digits
+
+        // Get total users to create a unique 4-digit registration number
+        $count = User::count() + 1; // +1 for the new one
+        $regNumber = str_pad($count, 4, '0', STR_PAD_LEFT); // e.g., 0020
+
+        $membershipNumber = $year . $idSuffix . $regNumber;
         $validatedData['MEMBERSHIP_NUMBER'] = $membershipNumber;
+
+        // generate qr code
+            // Define QR code content (URL to member verification page)
+        $qrUrl = route('verify.member', ['membership' => $membershipNumber]);
+
+        // Set QR code path
+        $qrPath = 'qrcodes/' . $membershipNumber . '.png';
+        $fullQrPath = public_path($qrPath);
+
+        // Create directory if it doesn't exist
+        if (!file_exists(dirname($fullQrPath))) {
+            mkdir(dirname($fullQrPath), 0775, true);
+        }
+
+        // Generate QR code and save as image
+        QrCode::format('png')->size(200)->generate($qrUrl, $fullQrPath);
 
         // Handle photo upload
         if ($request->hasFile('PASSPORT_PHOTO')) {
@@ -90,9 +113,10 @@ class RegisterController extends Controller
         'name' => $validatedData['FIRST_NAME'],
         'email' => $validatedData['EMAIL'],
         'membershipNumber' => $membershipNumber,
-        'phone' => $validatedData['PHONE_NUMBER'],
+        'SCHOOL_NAME' => $validatedData['SCHOOL_NAME'],
         'photo' => public_path($validatedData['PASSPORT_PHOTO']), // full local path
         'logo' => public_path('pictures/logo.jpg'),
+        'qrCode' => public_path($qrPath), // important for PDF!
     ]);
 
 

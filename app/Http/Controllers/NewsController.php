@@ -91,9 +91,15 @@ class NewsController extends Controller
         return redirect()->route('news.index')->with('success', 'News updated successfully!');
     }
     
-    public function show(News $news)
+        public function show($id)
         {
-            return view('news.show', compact('news'));
+            $news = News::findOrFail($id);
+
+            $otherNews = News::where('id', '!=', $id)
+                            ->orderBy('date', 'desc')
+                            ->get();
+
+            return view('news.show', compact('news', 'otherNews'));
         }
 
     public function destroy(News $news)

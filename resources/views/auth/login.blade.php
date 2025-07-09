@@ -34,8 +34,8 @@
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
+            width: 600px;
+            margin-top: auto;
         }
 
         .login-container h2 {
@@ -110,14 +110,14 @@
         }
 
         .logo-containers img {
-            max-width: 50%; /* Default size */
+            max-width: 30%; /* Default size */
             height: auto;
         }
 
         /* Tablet Screens */
         @media (max-width: 768px) {
             .logo-containers img {
-                max-width: 40%;
+                max-width: 20%;
             }
         }
 
@@ -142,6 +142,52 @@
                 padding: 8px;
             }
         }
+        /* modern design css */
+       /* Entire split layout */
+.split-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left Image Section */
+.left-image {
+    flex: 1;
+    background: url('{{ asset('pictures/10.jpg') }}') no-repeat center center;
+    background-size: cover;
+}
+
+/* Right Form Section */
+.right-login {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 40px 20px;
+}
+
+
+/* Hide left image on small and medium screens */
+@media (max-width: 991.98px) {
+    .left-image {
+        display: none;
+    }
+
+    .split-container {
+        flex-direction: column;
+    }
+
+    .right-login {
+        flex: none;
+        padding: 20px;
+    }
+
+    .login-container {
+        max-width: 100%;
+        margin-top: 100px;
+    }
+}
+
     </style>
      <!-- Google Fonts -->
      <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
@@ -162,7 +208,10 @@
     @include('dashboard.topnav')
 
     <!-- Wrapper for the login form -->
-    <div class="login-wrapper">
+<div class="split-container">
+    <div class="left-image"></div>
+
+    <div class="right-login">
         <div class="login-container">
             
             <!-- Logo -->
@@ -228,8 +277,9 @@
                     Don't have an account? <a href="{{ route('memberships.types') }}" style="color: #007bff;">Register</a>
                 </p>
             </form>
-        </div>
+      </div>
     </div>
+</div>
 
 </body>
 
