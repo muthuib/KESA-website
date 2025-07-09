@@ -49,6 +49,7 @@ use App\Http\Controllers\MemberBenefitsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BlogController;
+use App\Models\User;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -486,6 +487,18 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blo/display', [BlogController::class, 'display'])->name('blog.display');
+
+// QR CODE ROUTES
+Route::get('/verify/{membership}', function ($membership) {
+    $user = User::where('MEMBERSHIP_NUMBER', $membership)->first();
+
+    if (!$user) {
+        return view('verify_unverified', ['membershipNumber' => $membership]);
+    }
+
+    return view('verify', ['user' => $user]);
+})->name('verify.member');
+
 
 
 

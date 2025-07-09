@@ -120,10 +120,19 @@
             <tr>
                 <td class="info">
                     <p><strong>Name:</strong> {{ $name }}</p>
-                    <p><strong>Email:</strong> {{ $email }}</p>
-                    <p><strong>Phone:</strong> {{ $phone }}</p>
+                    <p><strong>Institution:</strong> {{ $SCHOOL_NAME ?? 'N/A' }}</p>
+                    <p><strong>Date of Issuance:</strong> {{ \Carbon\Carbon::now()->format('F d, Y') }}</p>
                     <p><strong>Membership No:</strong> {{ $membershipNumber }}</p>
+
+                    @if(file_exists($qrCode))
+                        <div style="margin-top: 10px;">
+                            <img src="{{ $qrCode }}" alt="QR Code" style="width: 100px; height: 100px;">
+                        </div>
+                    @else
+                        <p style="font-size:12px; color: gray;">QR Code Missing</p>
+                    @endif
                 </td>
+
                 <td class="photo" style="width: 130px; text-align: center;">
                     @if(file_exists($photo))
                         <img src="{{ $photo }}" alt="Profile Photo">

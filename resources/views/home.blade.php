@@ -66,14 +66,26 @@
     /* device responsiveness for slideshows */
 
 /* Modern Slideshow Enhancements */
-.slide-img {
+/* .slide-img {
     width: 100%;
     margin-top: 100px;
     height: 100vh;
+    animation: zoomIn 10s ease-in-out infinite alternate; */
+ /* Makes slide darker underneath overlay */
+ /* filter: brightness(70%);
+} */
+.slide-img {
+    width: 80%;
+    max-height: 90vh; /* Prevents image from stretching vertically */
+    height: auto; /* Maintains aspect ratio */
+    margin-top: 100px;
     animation: zoomIn 10s ease-in-out infinite alternate;
-    filter: brightness(70%); /* Makes slide darker underneath overlay */
+    filter: brightness(70%);
+    object-fit: cover; /* or 'cover' if you want full coverage */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
-
 .caption-box {
     background: rgba(0, 0, 0, 0.6);
     padding: 20px 30px;

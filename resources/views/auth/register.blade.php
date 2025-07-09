@@ -33,7 +33,7 @@
     }
 
     .register-container {
-        background-color: #fff;
+        background-color: #ffffff;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -267,6 +267,62 @@
         margin-right: 15px; /* Adjust space between radio buttons */
     }
 
+     /* MODERN DESIGN CSS */
+       /* Entire split layout */
+.split-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left Image Section */
+.left-image {
+    flex: 1;
+    background: url('{{ asset('pictures/10.jpg') }}') no-repeat center center;
+    background-size: cover;
+}
+
+/* Right Form Section */
+.right-register {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 60px;
+    background-color: #f4f4f4;
+    padding: 40px 20px;
+
+    /* Enable scrolling when content exceeds container */
+    overflow: auto;
+    max-height: 100vh;  /* Prevent it from growing beyond the viewport height */
+}
+
+    .register-container {
+        max-width: 100%;
+        margin-top: 10px;
+    }
+
+
+/* Hide left image on small and medium screens */
+@media (max-width: 991.98px) {
+    .left-image {
+        display: none;
+    }
+
+    .split-container {
+        flex-direction: column;
+    }
+
+    .right-register {
+        flex: none;
+        padding: 20px;
+    }
+
+    .register-container {
+        max-width: 100%;
+        margin-top: 100px;
+    }
+}
+
 </style>
 <!-- Bootstrap CSS (v4 or v5 depending on what you're using) -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -289,7 +345,10 @@
     <!-- Include the top navigation bar -->
     @include('dashboard.topnav')
 
-    <div class="register-wrapper">
+    <div class="split-container">
+    <div class="left-image"></div>
+
+    <div class="right-register">
         <div class="register-container">
             @if (session('success'))
                 <div class="success">
@@ -461,6 +520,7 @@
                 </div>
             @endif
              <div id="form-full" class="membership-form" style="display: none;">
+                      <h1 style="color: maroon; font-size: 20px;  text-align:center;">Full Membership</h1>
                 <!-- Display errors if any -->
              <div class="form-row">
                 <div class="form-group col-md-2">
@@ -667,11 +727,12 @@
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-student" class="membership-form" style="display: none;">
-                    <h1 style="color: maroon; font-size: 30px; font-weight: bold; text-align:center;">Student Membership</h1>
+                    <h1 style="color: maroon; font-size: 20px;  text-align:center;">Student Membership</h1>
                     <!-- Your Student Membership form here -->
                     <!-- Display errors if any -->
+                     <!-- Title -->
              <div class="form-row">
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-12">
                     <label for="TITTLE" class="required-label">Title</label>
                     <select name="TITTLE" id="TITTLE" class="form-control" required style="height: auto;">
                         <option value="">-select title-</option>
@@ -682,14 +743,20 @@
                         <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
                     </select>
                 </div>
-                <div class="form-group col-md-8">
-                    <label for="FIRST_NAME" class="required-label">Name (As you would like it to appear on the Certificate) </label>
-                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" value="{{ old('FIRST_NAME') }}" required>
+             </div>
+             <!-- Name -->
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="FIRST_NAME" class="required-label">Name  </label>
+                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" placeholder="As you would like it to appear on the Certificate" value="{{ old('FIRST_NAME') }}" required>
                     @error('FIRST_NAME')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
+          <!-- Gender and Email -->
+            <div class="form-row">
                 <div class="form-group col-md-2">
                     <label for="GENDER" class="required-label">Gender </label>
                     <select name="GENDER" id="GENDER" class="form-control" required style="height: auto;">
@@ -701,18 +768,17 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-
-              <!-- row-->
-              <div class="form-row">
                       <!-- Email -->
                       <div class="form-group">
                         <label for="EMAIL" class="required-label">Email </label>
-                        <input type="email" id="EMAIL" name="EMAIL" value="{{ old('EMAIL') }}" required>
+                        <input type="email" id="EMAIL" name="EMAIL" placeholder="Enter valid email address" value="{{ old('EMAIL') }}" required>
                         @error('EMAIL')
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
+            </div>
+            <!-- ID NUMBER -->
+              <div class="form-row">
                     <div class="form-group">
                         <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number </label>
                         <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" value="{{ old('NATIONAL_ID_NUMBER') }}" required>
@@ -722,8 +788,8 @@
                     </div>
                 </div>
                 <!--   Row -->
+                   <!-- phone number -->
                 <div class="form-row">
-
                     <div class="form-group">
                         <label for="PHONE_NUMBER" class="required-label">Phone Number </label>
                         <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" value="{{ old('PHONE_NUMBER') }}" required>
@@ -731,8 +797,10 @@
                             <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
+                </div>
 
                                   <!-- Disability related question -->
+            <div class="form-row">
                 <div class="form-group">
                     <label for="DISABILITY_STATUS" class="required-label">Do you have any form of disability? </label><br>
 
@@ -744,6 +812,7 @@
                     <input type="radio" id="DISABILITY_NO" name="DISABILITY_STATUS" value="No"
                         {{ old('DISABILITY_STATUS') == 'No' ? 'checked' : '' }} onclick="toggleDisabilityTypeField(false)">
                 </div>
+            </div>
 
                 <!-- Disability type -->
                 <div id="disability_type_field" style="display: {{ old('DISABILITY_STATUS') == 'Yes' ? 'block' : 'none' }};">
@@ -763,7 +832,7 @@
                         toggleDisabilityTypeField(document.getElementById('DISABILITY_YES').checked);
                     });
                 </script>
-                </div>
+                
 
                 <div class="form-row">
                         <div class="form-group">
@@ -862,38 +931,77 @@
                         </label>
                     </div>
 
-                <p style="color: maroon; font-size: 17px;"><strong>Please send registration fee of KE.300 to M-Pesa Business No: 522533 Account No:7782321#mreg</strong></p>
-                <p>Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
-                <p><strong>Business Number</strong>: 522533</p>
-                <p><strong>Account Number</strong>: Enter <code>7782321#me</code></p>
-                <p>Enter the <strong>fare</strong>: KES 300</p>
-                <p>Enter your <strong>PIN number</strong>.</p>
-                <p>Wait for the <strong>MPESA confirmation SMS</strong>.</p>
-                <p>Fill in this form and <strong>submit below</strong>.</p>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">
-                            Cell Phone Number 
-                            <l style="color: maroon; font-size: 10px;">(The Number used for M-Pesa Payment)</l>
-                        </label>
-                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
-                            value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
-                        @error('ALTERNATIVE_PHONE_NUMBER')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                      <!-- MPESA Instructions -->
+                    <!-- M-Pesa Summary + Button -->
+                    <div style="margin: 25px 0; background-color: #fff7f7; padding: 15px; border-left: 5px solid maroon; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex-grow: 1;">
+                            <p style="margin: 5px 0;"><strong>Pay KES 300 via M-Pesa:</strong></p>
+                            <p style="margin: 5px 0;">Paybill: <strong>522533</strong></p>
+                            <p style="margin: 5px 0;">Account No: <strong>7782321#me</strong></p>
+                            <p style="margin: 5px 0;">Wait for the <strong>MPESA confirmation SMS</strong>.</p>
+                            <p style="margin: 5px 0;">Fill in this form below and <strong>submit</strong>.</p>
+                        </div>
+
+                        <!-- Payment Instructions Button -->
+                        <div>
+                            <button onclick="openModal()" style="background-color: maroon; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                                Full Instructions
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="REGISTRATION_FEE" class="required-label">M-Pesa Transaction ID (e.g TE69MHLK8Q) *</label>
-                        <input type="text" id="REGISTRATION_FEE" name="REGISTRATION_FEE"
-                            value="{{ old('REGISTRATION_FEE') }}" required>
-                        @error('REGISTRATION_FEE')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                    <!-- Modal Popup -->
+                    <div id="paymentModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6);">
+                        <div style="background-color: #fff; margin: 10% auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; position: relative;">
+                            <!-- Close Button -->
+                            <span onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 22px; font-weight: bold; color: maroon; cursor: pointer;">&times;</span>
+
+                            <h3 style="color: green; text-align: center; margin-bottom: 15px;">Payment Instructions</h3>
+                            <p style="color: green; font-size: 17px;"><strong>Please send registration fee of KES 300 to M-Pesa Business No: 522533 Account No: 7782321#me</strong></p>
+                            <p>1. Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
+                            <p>2. <strong>Business Number</strong>: 522533</p>
+                            <p>3. <strong>Account Number</strong>: Enter <code>7782321#me</code></p>
+                            <p>4. Enter the <strong>Amount</strong>: KES 300</p>
+                            <p>5. Enter your <strong>PIN number</strong>.</p>
+                            <p>6. Wait for the <strong>MPESA confirmation SMS</strong>.</p>
+                            <p>7. Fill in this form below and <strong>submit </strong>.</p>
+                        </div>
                     </div>
+
+                    <!-- Modal Script -->
+                    <script>
+                        function openModal() {
+                            document.getElementById('paymentModal').style.display = 'block';
+                        }
+
+                        function closeModal() {
+                            document.getElementById('paymentModal').style.display = 'none';
+                        }
+
+                        // Optional: Close modal if user clicks outside the box
+                        window.onclick = function(event) {
+                            const modal = document.getElementById('paymentModal');
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    </script>
+
+        <!-- Transaction ID -->
+                <div style="margin-bottom: 15px;">
+                    <label for="REGISTRATION_FEE" style="font-weight: bold;">M-Pesa Transaction Code <span style="color:red">*</span></label>
+                    <input type="text" name="REGISTRATION_FEE" id="REGISTRATION_FEE" placeholder="e.g. TE69MHLK8Q" value="{{ old('REGISTRATION_FEE') }}" required
+                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
                 </div>
 
-                    <button type="submit">Create Account</button>
+                <!-- M-Pesa Phone Number -->
+                <div style="margin-bottom: 15px;">
+                    <label for="ALTERNATIVE_PHONE_NUMBER" style="font-weight: bold;">M-Pesa Phone Number <span style="color:red">*</span></label>
+                    <input type="text" name="ALTERNATIVE_PHONE_NUMBER" id="ALTERNATIVE_PHONE_NUMBER" placeholder="Phone number used to pay" value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required
+                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
+                </div>
+
+                    <button type="submit" style="margin-bottom: 5px;">Create Account</button>
                 </div>
                 </form>
 
@@ -901,6 +1009,7 @@
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-associate" class="membership-form" style="display: none;">
+                    <h1 style="color: maroon; font-size: 20px;  text-align:center;">Associate Membership</h1>
                     <!-- Your Associate Membership form here -->
                     <!-- Display errors if any -->
              <div class="form-row">
@@ -1125,6 +1234,7 @@
                     </div>
              </div>
             </div>
+         </div>
         </form>
         </div>
 
@@ -1195,8 +1305,8 @@
                 // Update title
                 const titleMap = {
                     individual: 'Individual Membership',
-                    associate: 'Associate Membership',
-                    full: 'Full Membership',
+                    associate: '',
+                    full: '',
                     organization: 'Organization Membership'
                 };
 
