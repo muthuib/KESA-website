@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Blog; // You may rename this model to Blog later
+use App\Models\Blog;
 use Illuminate\Support\Facades\File;
 
 class BlogController extends Controller
@@ -21,7 +21,9 @@ class BlogController extends Controller
             });
         }
 
-        $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(10);
+        // $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(10);
+        $blogs = Blog::orderBy('created_at', 'desc')->paginate(10);
+
 
         return view('blog.index', compact('blogs', 'search'));
     }
@@ -37,6 +39,10 @@ class BlogController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'date' => 'required|date',
+            'author' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'copyright' => 'nullable|string|max:255',
+            'ownership_disclaimer' => 'nullable|string',
             'image' => 'nullable|image'
         ]);
 
@@ -46,10 +52,14 @@ class BlogController extends Controller
             $request->image->move(public_path('blog'), $imagePath);
         }
 
-       Blog ::create([
+        Blog::create([
             'title' => $request->title,
             'content' => $request->content,
             'date' => $request->date,
+            'author' => $request->author,
+            'category' => $request->category,
+            'copyright' => $request->copyright,
+            'ownership_disclaimer' => $request->ownership_disclaimer,
             'image' => $imagePath
         ]);
 
@@ -67,10 +77,17 @@ class BlogController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'date' => 'required|date',
+            'author' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'copyright' => 'nullable|string|max:255',
+            'ownership_disclaimer' => 'nullable|string',
             'image' => 'nullable|image'
         ]);
 
-        $data = $request->only('title', 'content', 'date');
+        $data = $request->only([
+            'title', 'content', 'date',
+            'author', 'category', 'copyright', 'ownership_disclaimer'
+        ]);
 
         if ($request->hasFile('image')) {
             if ($blog->image && File::exists(public_path($blog->image))) {
@@ -88,10 +105,19 @@ class BlogController extends Controller
         return redirect()->route('blog.index')->with('success', 'Blog post updated successfully!');
     }
 
-    public function show(Blog $blog)
-    {
-        return view('blog.show', ['blog' => $blog]);
-    }
+        public function show($id)
+        {
+            $blog = Blog::findOrFail($id);
+
+            // You can exclude the current blog from the list if you want
+            $otherBlogs = Blog::where('id', '!=', $id)
+                            ->orderBy('date', 'desc')
+                            ->take(10)
+                            ->get();
+
+            return view('blog.show', compact('blog', 'otherBlogs'));
+        }
+
 
     public function destroy(Blog $blog)
     {

@@ -4,42 +4,86 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
     #editor {
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
         min-height: 200px;
-        padding: 10px;
+        padding: 0.75rem;
+        font-size: 0.875rem; /* small font */
+    }
+    .form-label, .form-floating label {
+        font-size: 0.875rem;
+    }
+    .form-control, .form-select {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+        height: calc(1.5em + 0.75rem + 2px);
+    }
+    textarea.form-control {
+        min-height: 80px !important;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="container mt-5">
-    <h2>Add Blog</h2>
+<div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0"></h2>
-        <a href="{{ route('blog.index') }}" class="btn btn-dark">
-            <i class="fas fa-backward"></i> Back
+        <h5 class="fw-bold mb-0">📝 Create New Blog</h5>
+        <a href="{{ route('blog.index') }}" class="btn btn-sm btn-outline-dark">
+            <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
 
-    <form id="blogForm" action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
+    <form id="blogForm" action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-3 rounded shadow-sm">
         @csrf
 
-        <input type="text" name="title" class="form-control mb-3" placeholder="Title" required>
+        <div class="form-floating mb-2">
+            <input type="text" name="title" class="form-control form-control-sm" id="title" placeholder="Blog Title" required>
+            <label for="title">Blog Title</label>
+        </div>
 
-        <input type="date" name="date" class="form-control mb-3" required>
+        <div class="form-floating mb-2">
+            <input type="date" name="date" class="form-control form-control-sm" id="date" required>
+            <label for="date">Publish Date</label>
+        </div>
 
-        <input type="file" name="image" class="form-control mb-3">
+        <div class="mb-2">
+            <label for="image" class="form-label">Featured Image</label>
+            <input type="file" name="image" class="form-control form-control-sm" id="image">
+        </div>
 
-        <!-- Quill Editor -->
-        <label for="editor">Content:</label>
-        <div id="editor" class="mb-3"></div>
+        <div class="form-floating mb-2">
+            <input type="text" name="author" class="form-control form-control-sm" id="author" placeholder="Author Name" required>
+            <label for="author">Author</label>
+        </div>
 
-        <!-- Hidden Input to Store HTML Content -->
+        <div class="form-floating mb-2">
+            <input type="text" name="category" class="form-control form-control-sm" id="category" placeholder="Category" required>
+            <label for="category">Category</label>
+        </div>
+
+        <div class="mb-2">
+            <label for="editor" class="form-label">Content</label>
+            <div id="editor"></div>
+        </div>
+
         <input type="hidden" name="content" id="content">
 
-        <button type="submit" class="btn btn-success">Submit</button>
+        <!-- <div class="form-floating mb-2">
+            <input type="text" name="copyright" class="form-control form-control-sm" id="copyright" placeholder="Copyright" required>
+            <label for="copyright">Copyright</label>
+        </div>
+
+        <div class="form-floating mb-2">
+            <textarea name="ownership_disclaimer" class="form-control form-control-sm" id="ownership_disclaimer" placeholder="Ownership Disclaimer" required></textarea>
+            <label for="ownership_disclaimer">Ownership Disclaimer</label>
+        </div> -->
+
+        <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success btn-sm">
+                <i class="fas fa-paper-plane"></i> Publish Blog
+            </button>
+        </div>
     </form>
 </div>
 @endsection
@@ -52,11 +96,11 @@
         placeholder: 'Write your blog content here...',
         modules: {
             toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
+                [{ header: [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                [{ color: [] }, { background: [] }],
+                [{ align: [] }],
                 ['link', 'image'],
                 ['clean']
             ]
