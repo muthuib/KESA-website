@@ -53,13 +53,48 @@
             </div>
         </div>
         @endif
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
         <!-- Meta Info -->
+         <!-- <div class="card p-3 mb-4 shadow-sm">
+                <h4 class="mb-3">📊 View Stats</h4>
+                <div class="btn-group mb-3" role="group">
+                    <button class="btn btn-outline-primary" onclick="showStat('1')">Today</button>
+                    <button class="btn btn-outline-primary" onclick="showStat('7')">Last 7 Days</button>
+                    <button class="btn btn-outline-primary" onclick="showStat('30')">Last 30 Days</button>
+                    <button class="btn btn-outline-primary" onclick="showStat('365')">Last 365 Days</button>
+                </div>
+
+                <div id="viewStatsResult" class="alert alert-info">
+                    <strong>{{ $stats['last_1_day'] }}</strong> views today.
+                </div>
+            </div> -->
+
+            <script>
+                const stats = {
+                    '1': '{{ $stats["last_1_day"] }}',
+                    '7': '{{ $stats["last_7_days"] }}',
+                    '30': '{{ $stats["last_30_days"] }}',
+                    '365': '{{ $stats["last_365_days"] }}',
+                };
+
+                function showStat(range) {
+                    const textMap = {
+                        '1': 'Today',
+                        '7': 'Last 7 Days',
+                        '30': 'Last 30 Days',
+                        '365': 'Last 365 Days'
+                    };
+                    document.getElementById('viewStatsResult').innerHTML =
+                        `<strong>${stats[range]}</strong> views ${textMap[range].toLowerCase()}.`;
+                }
+            </script>
+
         <p class="text-muted mb-1">
             <strong>{{ \Carbon\Carbon::parse($blog->date)->format('l, F j, Y') }}</strong>
         </p>
         <p class="text-secondary mb-2" style="font-size: 0.9rem;">
-            👤 Author: <strong>{{ $blog->author ?? 'Admin' }}</strong> &nbsp; | &nbsp;
+            <i class="bi bi-person"></i> Author: <strong>{{ $blog->author ?? 'Admin' }}</strong> &nbsp; | &nbsp;
             📂 Category: <strong>{{ $blog->category ?? 'Uncategorized' }}</strong>
         </p>
 
@@ -294,7 +329,7 @@
     }
 
     .blog-title {
-        font-size: 20px;
+        font-size: 21px;
     }
 
     .blog-image {
@@ -306,5 +341,94 @@
         align-items: flex-start;
     }
 }
+
+.blog-content {
+    font-family: "Georgia", serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+    word-break: break-word;
+}
+
+/* ✅ Table styling */
+.blog-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.blog-content th,
+.blog-content td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.blog-content th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+/* ✅ Lists */
+.blog-content ul, .blog-content ol {
+    margin-left: 2rem;
+    padding-left: 1rem;
+}
+
+.blog-content li {
+    margin-bottom: 5px;
+}
+
+/* ✅ Headings from CKEditor */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5 {
+    margin-top: 1.5rem;
+    font-weight: bold;
+    color: #222;
+}
+
+/* ✅ Blockquotes */
+.blog-content blockquote {
+    margin: 1rem 0;
+    padding-left: 1rem;
+    border-left: 4px solid #ccc;
+    color: #555;
+    font-style: italic;
+}
+
+/* ✅ Code blocks */
+.blog-content pre {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 10px;
+    overflow-x: auto;
+    font-family: Consolas, Monaco, monospace;
+}
+
+/* ✅ Images & videos */
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    display: block;
+}
+
+.blog-content iframe {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border: none;
+}
+
+/* Optional fix for Word non-breaking spaces & smart quotes */
+.blog-content {
+    white-space: normal;
+}
+
 </style>
 @endsection

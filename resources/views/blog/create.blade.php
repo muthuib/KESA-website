@@ -1,28 +1,25 @@
 @extends('layouts.app')
 
 @section('styles')
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<style>
-    #editor {
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 0.375rem;
-        min-height: 200px;
-        padding: 0.75rem;
-        font-size: 0.875rem; /* small font */
-    }
-    .form-label, .form-floating label {
-        font-size: 0.875rem;
-    }
-    .form-control, .form-select {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
-        height: calc(1.5em + 0.75rem + 2px);
-    }
-    textarea.form-control {
-        min-height: 80px !important;
-    }
-</style>
+    <style>
+        .ck-editor__editable {
+            min-height: 300px;
+        }
+
+        .form-label, .form-floating label {
+            font-size: 0.875rem;
+        }
+
+        .form-control, .form-select {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+            height: calc(1.5em + 0.75rem + 2px);
+        }
+
+        textarea.form-control {
+            min-height: 80px !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -63,21 +60,9 @@
         </div>
 
         <div class="mb-2">
-            <label for="editor" class="form-label">Content</label>
-            <div id="editor"></div>
+            <label for="content-editor" class="form-label">Content</label>
+            <textarea name="content" id="content-editor" class="form-control"></textarea>
         </div>
-
-        <input type="hidden" name="content" id="content">
-
-        <!-- <div class="form-floating mb-2">
-            <input type="text" name="copyright" class="form-control form-control-sm" id="copyright" placeholder="Copyright" required>
-            <label for="copyright">Copyright</label>
-        </div>
-
-        <div class="form-floating mb-2">
-            <textarea name="ownership_disclaimer" class="form-control form-control-sm" id="ownership_disclaimer" placeholder="Ownership Disclaimer" required></textarea>
-            <label for="ownership_disclaimer">Ownership Disclaimer</label>
-        </div> -->
 
         <div class="d-grid mt-3">
             <button type="submit" class="btn btn-success btn-sm">
@@ -89,26 +74,21 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script>
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Write your blog content here...',
-        modules: {
-            toolbar: [
-                [{ header: [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-                [{ color: [] }, { background: [] }],
-                [{ align: [] }],
-                ['link', 'image'],
-                ['clean']
-            ]
-        }
-    });
-
-    document.getElementById('blogForm').onsubmit = function () {
-        document.getElementById('content').value = quill.root.innerHTML;
-    };
-</script>
+    {{-- Use the full build of CKEditor 5 --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content-editor'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'link', 'blockQuote', '|',
+                    'undo', 'redo'
+                ]
+            })
+            .catch(error => {
+                console.error('CKEditor initialization error:', error);
+            });
+    </script>
 @endsection

@@ -26,6 +26,7 @@
        <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    
 
     <!-- code to display image when news link is shared -->
 
@@ -226,5 +227,5 @@
     <!-- code for quilli editor for news -->
     @yield('scripts')
     
-
+@stack('scripts')
 </body>

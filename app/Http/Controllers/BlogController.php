@@ -5,28 +5,59 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class BlogController extends Controller
 {
-    public function index(Request $request)
-    {
-        $search = $request->input('search');
+   public function index(Request $request)
+{
+    $search = $request->input('search');
 
-        $blogsQuery = Blog::query();
+    $blogsQuery = Blog::query();
 
-        if ($search) {
-            $blogsQuery->where(function ($query) use ($search) {
-                $query->where('title', 'like', "%{$search}%")
-                      ->orWhere('content', 'like', "%{$search}%");
-            });
-        }
-
-        // $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(10);
-        $blogs = Blog::orderBy('created_at', 'desc')->paginate(10);
-
-
-        return view('blog.index', compact('blogs', 'search'));
+    if ($search) {
+        $blogsQuery->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+        });
     }
+
+    // Paginate blogs (once)
+    $blogs = $blogsQuery->orderBy('created_at', 'desc')->paginate(10);
+
+    // Initialize stats array
+    $today = Carbon::today();
+    $stats = [];
+
+    foreach ($blogs as $blog) {
+        $stats[$blog->id] = [
+            'last_1_day' => DB::table('blog_view_logs')
+                ->where('blog_id', $blog->id)
+                ->where('view_date', $today)
+                ->sum('views'),
+
+            'last_7_days' => DB::table('blog_view_logs')
+                ->where('blog_id', $blog->id)
+                ->where('view_date', '>=', $today->copy()->subDays(6))
+                ->sum('views'),
+
+            'last_30_days' => DB::table('blog_view_logs')
+                ->where('blog_id', $blog->id)
+                ->where('view_date', '>=', $today->copy()->subDays(29))
+                ->sum('views'),
+
+            'last_365_days' => DB::table('blog_view_logs')
+                ->where('blog_id', $blog->id)
+                ->where('view_date', '>=', $today->copy()->subDays(364))
+                ->sum('views'),
+        ];
+    }
+
+    // Return view with blogs, stats, and search
+    return view('blog.index', compact('blogs', 'search', 'stats'));
+}
 
     public function create()
     {
@@ -105,18 +136,61 @@ class BlogController extends Controller
         return redirect()->route('blog.index')->with('success', 'Blog post updated successfully!');
     }
 
-        public function show($id)
-        {
-            $blog = Blog::findOrFail($id);
+      public function show($id)
+{
+    $blog = Blog::findOrFail($id);
+    $sessionKey = 'blog_viewed_' . $id;
+    $now = now();
 
-            // You can exclude the current blog from the list if you want
-            $otherBlogs = Blog::where('id', '!=', $id)
-                            ->orderBy('date', 'desc')
-                            ->take(10)
-                            ->get();
+    // Check if session exists and if 24 hours have passed
+    if (!session()->has($sessionKey) || $now->diffInHours(session($sessionKey)) >= 24) {
+        $blog->increment('views');
+        session()->put($sessionKey, $now);
 
-            return view('blog.show', compact('blog', 'otherBlogs'));
-        }
+        // Log view
+        DB::table('blog_view_logs')->updateOrInsert(
+            [
+                'blog_id' => $id,
+                'view_date' => $now->toDateString(),
+            ],
+            [
+                'views' => DB::raw('views + 1'),
+                'updated_at' => $now,
+            ]
+        );
+    }
+
+    // Get stats
+     $today = Carbon::today();
+    $stats = [
+        'last_1_day' => DB::table('blog_view_logs')
+            ->where('blog_id', $id)
+            ->where('view_date', $today)
+            ->sum('views'),
+
+        'last_7_days' => DB::table('blog_view_logs')
+            ->where('blog_id', $id)
+            ->where('view_date', '>=', $today->copy()->subDays(6))
+            ->sum('views'),
+
+        'last_30_days' => DB::table('blog_view_logs')
+            ->where('blog_id', $id)
+            ->where('view_date', '>=', $today->copy()->subDays(29))
+            ->sum('views'),
+
+        'last_365_days' => DB::table('blog_view_logs')
+            ->where('blog_id', $id)
+            ->where('view_date', '>=', $today->copy()->subDays(364))
+            ->sum('views'),
+    ];
+
+    $otherBlogs = Blog::where('id', '!=', $id)
+        ->orderBy('created_at', 'desc')
+        ->take(10)
+        ->get();
+
+    return view('blog.show', compact('blog', 'otherBlogs', 'stats'));
+}
 
 
     public function destroy(Blog $blog)
@@ -140,7 +214,7 @@ class BlogController extends Controller
                       ->orWhere('content', 'like', "%{$search}%");
         }
 
-        $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(6);
+        $blogs = $blogsQuery->orderBy('created_at', 'desc')->paginate(6);
 
         return view('blog.display', compact('blogs', 'search'));
     }
