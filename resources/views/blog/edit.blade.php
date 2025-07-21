@@ -1,102 +1,98 @@
 @extends('layouts.app')
 
+@section('styles')
+    <style>
+        .ck-editor__editable {
+            min-height: 300px;
+        }
+
+        .form-label, .form-floating label {
+            font-size: 0.875rem;
+        }
+
+        .form-control, .form-select {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+            height: calc(1.5em + 0.75rem + 2px);
+        }
+
+        textarea.form-control {
+            min-height: 80px !important;
+        }
+    </style>
+@endsection
+
 @section('content')
-<div class="container mt-5">
-    <h2>Edit Blog Post</h2>
+<div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0"></h2>
-        <a href="{{ route('blog.index') }}" class="btn btn-dark">
-            <i class="fas fa-backward"></i> Back
+        <h5 class="fw-bold mb-0">✏️ Edit Blog</h5>
+        <a href="{{ route('blog.index') }}" class="btn btn-sm btn-outline-dark">
+            <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
 
-    <!-- Display Validation Errors -->
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <form id="blogForm" action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data" class="bg-white p-3 rounded shadow-sm">
+        @csrf
+        @method('PUT')
+
+        <div class="form-floating mb-2">
+            <input type="text" name="title" class="form-control form-control-sm" id="title" value="{{ old('title', $blog->title) }}" required>
+            <label for="title">Blog Title</label>
         </div>
-    @endif
 
-    <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data" id="blogForm">
-        @csrf @method('PUT')
+        <div class="form-floating mb-2">
+            <input type="date" name="date" class="form-control form-control-sm" id="date" value="{{ old('date', $blog->date) }}" required>
+            <label for="date">Publish Date</label>
+        </div>
 
-        <input type="text" name="title" class="form-control mb-3 @error('title') is-invalid @enderror" value="{{ old('title', $blog->title) }}" required>
-        @error('title')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-        
-        <input type="date" name="date" class="form-control mb-3 @error('date') is-invalid @enderror" value="{{ old('date', $blog->date) }}" required>
-        @error('date')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+      <div class="mb-2">
+            <label for="image" class="form-label">Featured Image</label>
+            <input type="file" name="image" class="form-control form-control-sm @error('image') is-invalid @enderror" id="image">
+            @if($blog->image)
+                <img src="{{ asset($blog->image) }}" alt="Current Image" class="mt-2" style="max-width: 150px; border-radius: 5px;">
+            @endif
+            @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
 
-        <input type="file" name="image" class="form-control mb-3 @error('image') is-invalid @enderror">
-        @if($blog->image)
-            <img src="{{ asset($blog->image) }}" style="max-width: 200px;" class="mb-2">
-        @endif
-        @error('image')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+        <div class="form-floating mb-2">
+            <input type="text" name="author" class="form-control form-control-sm" id="author" value="{{ old('author', $blog->author) }}" required>
+            <label for="author">Author</label>
+        </div>
 
-        <div id="editor" style="height: 200px;">{!! old('content', $blog->content) !!}</div>
-        <input type="hidden" name="content" id="content">
+        <div class="form-floating mb-2">
+            <input type="text" name="category" class="form-control form-control-sm" id="category" value="{{ old('category', $blog->category) }}" required>
+            <label for="category">Category</label>
+        </div>
 
-        <button class="btn btn-primary mt-3">Update</button>
+        <div class="mb-2">
+            <label for="content-editor" class="form-label">Content</label>
+            <textarea name="content" id="content-editor" class="form-control">{{ old('content', $blog->content) }}</textarea>
+        </div>
+
+        <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fas fa-save"></i> Update Blog
+            </button>
+        </div>
     </form>
 </div>
 @endsection
 
 @section('scripts')
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script>
-  // Initialize Quill editor
-  const quill = new Quill('#editor', {
-    theme: 'snow',
-    modules: {
-      toolbar: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'align': [] }],
-        ['link', 'image'],
-        ['clean']
-      ]
-    },
-    placeholder: 'Edit your blog content...'
-  });
-
-  // Assign the Quill content to the hidden input before form submission
-  document.querySelector('#blogForm').onsubmit = function (event) {
-    const content = quill.root.innerHTML;
-    
-    if (!content.trim()) {
-      event.preventDefault(); // Prevent form submission if content is empty
-      alert('Content is required!');
-      return;
-    }
-
-    document.querySelector('#content').value = content;
-  };
-</script>
-@endsection
-
-@section('styles')
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<style>
-    /* Ensure links inside the Quill editor are blue */
-    .ql-editor a {
-        color: #007bff !important; /* Set to blue */
-        text-decoration: none !important; /* Optional: Remove underline */
-    }
-
-    .ql-editor a:hover {
-        text-decoration: underline !important; /* Underline on hover */
-        color: #0056b3 !important; /* Darker blue on hover */
-    }
-</style>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content-editor'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'link', 'blockQuote', '|',
+                    'undo', 'redo'
+                ]
+            })
+            .catch(error => {
+                console.error('CKEditor initialization error:', error);
+            });
+    </script>
 @endsection

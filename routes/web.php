@@ -499,6 +499,9 @@ Route::get('/verify/{membership}', function ($membership) {
     return view('verify', ['user' => $user]);
 })->name('verify.member');
 
+// TAG ROUTE
+Route::get('/blogs/tags/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
+
 
 
 
