@@ -5,17 +5,14 @@
         .ck-editor__editable {
             min-height: 300px;
         }
-
         .form-label, .form-floating label {
             font-size: 0.875rem;
         }
-
         .form-control, .form-select {
             font-size: 0.875rem;
             padding: 0.375rem 0.75rem;
             height: calc(1.5em + 0.75rem + 2px);
         }
-
         textarea.form-control {
             min-height: 80px !important;
         }
@@ -49,6 +46,12 @@
             <input type="file" name="image" class="form-control form-control-sm" id="image">
         </div>
 
+        <!-- 🆕 Image Caption Field -->
+        <div class="form-floating mb-2">
+            <input type="text" name="name" class="form-control form-control-sm" id="name" placeholder="name">
+            <label for="name">Image Caption</label>
+        </div>
+
         <div class="form-floating mb-2">
             <input type="text" name="author" class="form-control form-control-sm" id="author" placeholder="Author Name" required>
             <label for="author">Author</label>
@@ -74,7 +77,6 @@
 @endsection
 
 @section('scripts')
-    {{-- Use the full build of CKEditor 5 --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor

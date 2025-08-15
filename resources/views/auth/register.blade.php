@@ -391,6 +391,7 @@
                             <option value="student">Student Membership</option>
                             <option value="associate">Associate Membership</option>
                             <option value="full">Full Membership</option>
+                            <option value="#">Fellows/Honorary Member</option>
                         </select>
                     </div>
                 </div>

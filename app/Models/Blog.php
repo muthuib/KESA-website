@@ -12,6 +12,7 @@ class Blog extends Model
 
     protected $fillable = [
         'title',
+        'name', // ✅ Newly added field
         'content',
         'image',
         'date',
@@ -24,9 +25,9 @@ class Blog extends Model
     /**
      * Relationship to the blog view logs.
      */
- public function viewLogs()
+    public function viewLogs()
     {
-        return $this->hasMany(BlogViewLog::class, 'id');
+        return $this->hasMany(BlogViewLog::class, 'blog_id'); // ✅ Fixed: should be 'blog_id'
     }
 
     public function viewsInDays($days)
@@ -38,5 +39,3 @@ class Blog extends Model
             ->sum('views');
     }
 }
-
-

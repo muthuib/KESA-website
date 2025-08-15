@@ -144,6 +144,8 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('slides', [SlideController::class, 'index'])->name('slides.index');
     Route::get('slides/create', [SlideController::class, 'create'])->name('slides.create');
     Route::post('slides', [SlideController::class, 'store'])->name('slides.store');
+    Route::get('slides/{slide}/edit', [SlideController::class, 'edit'])->name('slides.edit');
+    Route::put('slides/{slide}', [SlideController::class, 'update'])->name('slides.update');
     Route::get('/slides/{id}', [SlideController::class, 'show'])->name('slides.show');
     Route::delete('slides/{slide}', [SlideController::class, 'destroy'])->name('slides.destroy');
 });

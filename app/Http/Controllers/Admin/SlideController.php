@@ -5,66 +5,85 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Slide;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File; // For file handling
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class SlideController extends Controller
 {
     public function index()
     {
-        // Fetch all slides from the database
         $slides = Slide::all();
         return view('admin.slides.index', compact('slides'));
     }
+
     public function show($id)
-{
-    $slide = Slide::findOrFail($id); // Fetch the slide or throw a 404 error if not found
-    return view('admin.slides.show', compact('slide')); // Pass the slide to the view
-}
+    {
+        $slide = Slide::findOrFail($id);
+        return view('admin.slides.show', compact('slide'));
+    }
 
     public function create()
     {
-        // Return the create slide view
         return view('admin.slides.create');
     }
 
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'caption' => 'nullable|string|max:255',
+            'caption' => 'required|string|max:255',
         ]);
 
-        // Handle the uploaded image
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-        // Move the image to the 'public/slides' directory
         $image->move(public_path('slides'), $imageName);
 
-        // Save the slide information to the database
         Slide::create([
-            'IMAGE_PATH' => 'slides/' . $imageName, // Store path relative to 'public'
+            'IMAGE_PATH' => 'slides/' . $imageName,
             'CAPTION' => $request->caption,
         ]);
 
-        // Redirect back to the slides index with success message
         return redirect()->route('admin.slides.index')->with('success', 'Slide added successfully!');
+    }
+
+  
+   // Show edit form
+    public function edit($id)
+    {
+        $slide = Slide::findOrFail($id);
+        return view('admin.slides.edit', compact('slide'));
+    }
+
+    // Update slide
+    public function update(Request $request, $id)
+    {
+        $slide = Slide::findOrFail($id);
+
+        $request->validate([
+            'caption' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $slide->CAPTION = $request->input('caption');
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('slides', 'public');
+            $slide->IMAGE_PATH = 'storage/' . $imagePath;
+        }
+
+        $slide->save();
+
+        return redirect()->route('admin.slides.index')->with('success', 'Slide updated successfully.');
     }
 
     public function destroy(Slide $slide)
     {
-        // Check if the image file exists in the 'public/slides' directory
         $imagePath = public_path($slide->IMAGE_PATH);
         if (File::exists($imagePath)) {
-            File::delete($imagePath); // Delete the file
+            File::delete($imagePath);
         }
 
-        // Delete the database record
         $slide->delete();
 
-        // Redirect back with a success message
         return redirect()->route('admin.slides.index')->with('danger', 'Slide deleted successfully!');
     }
 }

@@ -66,8 +66,9 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+     $request->validate([
             'title' => 'required|string',
+            'name' => 'required|string|max:255',
             'content' => 'required|string',
             'date' => 'required|date',
             'author' => 'required|string|max:255',
@@ -83,8 +84,9 @@ class BlogController extends Controller
             $request->image->move(public_path('blog'), $imagePath);
         }
 
-        Blog::create([
+       Blog::create([
             'title' => $request->title,
+            'name' => $request->name,
             'content' => $request->content,
             'date' => $request->date,
             'author' => $request->author,
@@ -106,6 +108,7 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required|string',
+            'name' => 'required|string|max:255',
             'content' => 'required|string',
             'date' => 'required|date',
             'author' => 'required|string|max:255',
@@ -116,7 +119,7 @@ class BlogController extends Controller
         ]);
 
         $data = $request->only([
-            'title', 'content', 'date',
+            'title', 'name', 'content', 'date',
             'author', 'category', 'copyright', 'ownership_disclaimer'
         ]);
 

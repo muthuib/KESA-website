@@ -26,15 +26,22 @@
                 <div class="col-md-4 d-flex">
                     <div class="card shadow-sm border-0 rounded-4 w-100 hover-shadow transition d-flex flex-column">
                         @if($item->image)
-                        <img src="{{ asset($item->image) }}" class="card-img-top rounded-top-4 bg-light"
-                            style="height: 200px; object-fit: contain; padding: 10px;">
-
+                        <img src="{{ asset($item->image) }}" class="card-img-top blog-img bg-light">
+                            @if(!empty($item->name))
+                            <p class="small mb-1 text-secondary">
+                                </i>{{ $item->name }}
+                            </p>
+                            @endif
                         @endif
                         <div class="card-body d-flex flex-column px-4 pt-3 pb-4">
                             <h6 class="card-title fw-semibold mb-2 small">{{ $item->title }}</h6>
                             <p class="text-muted mb-3 small">
                                 <i class="fas fa-calendar-alt me-1"></i>
                                 {{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}
+                            </p>
+                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
+                                <i class="bi bi-person"></i> Author: <strong>{{ $item->author ?? 'Admin' }}</strong> &nbsp; | &nbsp;
+                                📂 Category: <strong>{{ $item->category ?? 'Uncategorized' }}</strong>
                             </p>
                             <div class="card-text text-muted small mb-4" style="flex: 1;">
                                 {{ Str::limit(strip_tags($item->content), 130, '...') }}
@@ -76,6 +83,48 @@
 
     .card-text {
         font-size: 0.87rem;
+    }
+
+    @media (max-width: 768px) {
+        .input-group .form-control {
+            border-radius: 50px 0 0 50px !important;
+        }
+
+        .input-group .btn {
+            border-radius: 0 50px 50px 0 !important;
+        }
+    }
+    /* image styes responsiveness */
+     .hover-shadow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+    }
+
+    .card-text {
+        font-size: 0.87rem;
+    }
+
+    .blog-img {
+        height: 200px;
+        object-fit: contain;
+        padding: 10px;
+        width: auto;
+    }
+
+    @media (max-width: 992px) {
+        .blog-img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            padding: 0;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
     }
 
     @media (max-width: 768px) {
