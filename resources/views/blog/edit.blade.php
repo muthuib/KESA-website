@@ -53,6 +53,10 @@
             @endif
             @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
+       <div class="form-floating mb-2">
+            <input type="text" name="name" class="form-control form-control-sm" id="name" value="{{ old('name', $blog->name ?? '') }}" required>
+            <label for="name">Image Caption</label>
+        </div>
 
         <div class="form-floating mb-2">
             <input type="text" name="author" class="form-control form-control-sm" id="author" value="{{ old('author', $blog->author) }}" required>

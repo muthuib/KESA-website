@@ -13,46 +13,155 @@
 @endauth
 
 <!-- Header -->
-<div class="text-dark py-4 px-0 responsive-header"
-     style="margin-top: {{ Auth::check() ? '0' : '120px' }}; margin-bottom: 8px; background-color: rgb(243, 233, 233);">
+<!-- <div class="text-dark py-4 px-0 responsive-header"
+     style="margin-top: {{ Auth::check() ? '0' : '120px' }}; margin-bottom: 8px; background-color: white;">
     <div class="container-fluid px-4">
         <h2 class="mb-0 blog-title w-100">{{ $blog->title }}</h2>
         <p class="text-muted mt-2" style="font-size: 0.9rem;">
             ⏱️ Estimated Read Time: {{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min read
         </p>
     </div>
-</div>
+</div> -->
 
 <!-- Blog Content + Sidebar -->
+<div class="row align-items-start">
+    <!-- Left Column -->
+    <div class="col-md-8 col-12">
+        <h2 class="mb-3 blog-title responsive-title">
+            {{ $blog->title }}
+        </h2>
+        <p class="text-muted text-center">
+            ⏱️ Estimated Read Time: {{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min read
+        </p>
+        <!-- image to display only on small and medium screens -->
+         <div class="fullwidth-mobile-content">
+            <figure class="image-caption-block d-block d-lg-none m-0">
+                <img src="{{ asset($blog->image) }}" 
+                    class="blog-image w-100" 
+                    alt="Blog Image" 
+                    style="height: auto; display: block;">
+                <figcaption class="image-caption text-muted text-left p-2" style="font-size: 0.9rem;">
+                    {{ $blog->name }}
+                </figcaption>
+            </figure>   
+         </div>        
+        <!-- Show only on large screens and above -->
+                <div class="fullwidth-mobile-content d-none d-lg-block">
+                    <div class="blog-content text-center">
+                        <p class="text-muted mb-1">
+                            <strong>{{ \Carbon\Carbon::parse($blog->date)->format('l, F j, Y') }}</strong>
+                        </p>
+                        
+                          <p class="text-secondary mb-2" style="font-size: 0.9rem;">
+                                <i class="bi bi-person"></i> <strong>Author:</strong> {{ $blog->author ?? 'Admin' }} &nbsp;  &nbsp;
+                            </p>
+                            <p class="text-secondary mb-2" style="font-size: 0.9rem;">
+                                <strong> Category:</strong> {{ $blog->category ?? 'Uncategorized' }}
+                            </p>
+
+                        @if($blog->tags)
+                        <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                            🏷️ Tags:
+                            @foreach(explode(',', $blog->tags) as $tag)
+                                <a href="{{ route('blog.index', ['tag' => trim($tag)]) }}" class="badge bg-secondary text-decoration-none">
+                                    {{ trim($tag) }}
+                                </a>
+                            @endforeach
+                        </p>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Share Section -->
+                <div class="share-section d-none d-lg-block">
+                    <div id="share-options" class="share-options mt-3 d-flex flex-wrap gap-2">
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
+                        target="_blank" 
+                        class="btn share-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span class="share-text"> Share</span>
+                        </a>
+
+                        <!-- Twitter / X -->
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" 
+                        target="_blank" 
+                        class="btn share-btn twitter">
+                            <img src="/assets/images/x-logo.png" alt="Twitter X" width="13" height="13">
+                            <span class="share-text"> Tweet</span>
+                        </a>
+
+                        <!-- WhatsApp -->
+                        <a href="https://api.whatsapp.com/send?text={{ urlencode($blog->title . ' ' . url()->current()) }}" 
+                        target="_blank" 
+                        class="btn share-btn whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="share-text"> WhatsApp</span>
+                        </a>
+
+                        <!-- Telegram -->
+                        <a href="https://t.me/share/url?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" 
+                        target="_blank" 
+                        class="btn share-btn telegram">
+                            <i class="fab fa-telegram-plane"></i>
+                            <span class="share-text"> Telegram</span>
+                        </a>
+
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($blog->title) }}" 
+                        target="_blank" 
+                        class="btn share-btn linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span class="share-text"> LinkedIn</span>
+                        </a>
+
+                        <!-- Copy Link -->
+                        <button type="button" onclick="copyLink()" class="btn share-btn copy-link">
+                            <i class="fas fa-link"></i>
+                            <span class="share-text"> Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-4 col-12 text-md-end">
+        <!-- image to display only on large screens -->
+        <figure class="image-caption-block d-none d-lg-block">
+            <img src="{{ asset($blog->image) }}" 
+                class="blog-image" 
+                alt="Blog Image" 
+                style="width: 300px; height: 220px; margin-top:150px;">
+            <figcaption class="image-caption text-muted" style="font-size: 0.9rem; text-align: left;">
+                {{ $blog->name }}
+            </figcaption>
+        </figure>
+    </div>
+</div>
+
+
 <div class="container-custom {{ Auth::check() ? 'full-width' : '' }}">
     <!-- LEFT COLUMN -->
     <div class="left-column {{ Auth::check() ? 'expand-full' : '' }}">
-        @if($blog->image)
+
+        <!-- @if($blog->image)
         <div class="image-share-wrapper mb-3">
-            <img src="{{ asset($blog->image) }}" class="blog-image" alt="Blog Image">
-            <div class="share-section">
-                <button class="btn btn-primary btn-sm" onclick="toggleShareOptions()">📤 Share</button>
-                <button class="btn btn-secondary btn-sm" onclick="copyLink()">🔗 Copy Link</button>
-                <div id="share-options" class="share-options mt-2">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
-                        <i class="fab fa-facebook" style="color: #3b5998;"></i>
-                    </a>
-                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" target="_blank">
-                        <img src="/assets/images/x-logo.png" alt="Twitter X" width="17" height="17">
-                    </a>
-                    <a href="https://api.whatsapp.com/send?text={{ urlencode($blog->title . ' ' . url()->current()) }}" target="_blank">
-                        <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                    </a>
-                    <a href="https://t.me/share/url?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" target="_blank">
-                        <i class="fab fa-telegram" style="color: #0088cc;"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($blog->title) }}" target="_blank">
-                        <i class="fab fa-linkedin" style="color: #0077b5;"></i>
-                    </a>
-                </div>
+            <img src="{{ asset($blog->image) }}" class="blog-image fullwidth-mobile" alt="Blog Image"> -->
+
+           <!-- Caption only on small and medium screens (sm and md) -->
+            <!-- <div class="fullwidth-mobile-content">
+              <div class="blog-content">
+                @if(!empty($blog->name))
+                    <p class="small mb-1 text-secondary d-block d-lg-none">
+                        {{ $blog->name }}
+                    </p>
+                @endif
+              </div>
             </div>
-        </div>
-        @endif
+         </div>
+        @endif -->
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
         <!-- Meta Info -->
@@ -89,44 +198,118 @@
                         `<strong>${stats[range]}</strong> views ${textMap[range].toLowerCase()}.`;
                 }
             </script>
+               
+                    <!-- Show only on small and medium devices -->
+                    <div class="fullwidth-mobile-content d-lg-none">
+                        <div class="blog-content text-center">
+                            <p class="text-muted mb-1">
+                                <strong>{{ \Carbon\Carbon::parse($blog->date)->format('l, F j, Y') }}</strong>
+                            </p>
+                            
+                            <p class="text-secondary mb-2" style="font-size: 0.9rem;">
+                                <i class="bi bi-person"></i> <strong>Author:</strong> {{ $blog->author ?? 'Admin' }} &nbsp;  &nbsp;
+                            </p>
+                            <p class="text-secondary mb-2" style="font-size: 0.9rem;">
+                                <strong> Category:</strong> {{ $blog->category ?? 'Uncategorized' }}
+                            </p>
 
-        <p class="text-muted mb-1">
-            <strong>{{ \Carbon\Carbon::parse($blog->date)->format('l, F j, Y') }}</strong>
-        </p>
-        <p class="text-secondary mb-2" style="font-size: 0.9rem;">
-            <i class="bi bi-person"></i> Author: <strong>{{ $blog->author ?? 'Admin' }}</strong> &nbsp; | &nbsp;
-            📂 Category: <strong>{{ $blog->category ?? 'Uncategorized' }}</strong>
-        </p>
+                            @if($blog->tags)
+                            <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                                🏷️ Tags:
+                                @foreach(explode(',', $blog->tags) as $tag)
+                                    <a href="{{ route('blog.index', ['tag' => trim($tag)]) }}" class="badge bg-secondary text-decoration-none">
+                                        {{ trim($tag) }}
+                                    </a>
+                                @endforeach
+                            </p>
+                            @endif
+                        </div>
+                    </div>
 
-        @if($blog->tags)
-        <p class="text-muted mb-3" style="font-size: 0.85rem;">
-            🏷️ Tags:
-            @foreach(explode(',', $blog->tags) as $tag)
-                <a href="{{ route('blog.index', ['tag' => trim($tag)]) }}" class="badge bg-secondary text-decoration-none">
-                    {{ trim($tag) }}
-                </a>
-            @endforeach
-        </p>
-        @endif
+                    <!-- Share Section (only on small & medium) -->
+                    <div class="share-section d-lg-none">
+                        <div id="share-options" class="share-options mt-3 d-flex flex-wrap gap-2">
+                            <!-- Facebook -->
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
+                            target="_blank" 
+                            class="btn share-btn facebook">
+                                <i class="fab fa-facebook-f"></i>
+                                <span class="share-text"> Share</span>
+                            </a>
+
+                            <!-- Twitter / X -->
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" 
+                            target="_blank" 
+                            class="btn share-btn twitter">
+                                <img src="/assets/images/x-logo.png" alt="Twitter X" width="13" height="13">
+                                <span class="share-text"> Tweet</span>
+                            </a>
+
+                            <!-- WhatsApp -->
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($blog->title . ' ' . url()->current()) }}" 
+                            target="_blank" 
+                            class="btn share-btn whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span class="share-text"> WhatsApp</span>
+                            </a>
+
+                            <!-- Telegram -->
+                            <a href="https://t.me/share/url?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" 
+                            target="_blank" 
+                            class="btn share-btn telegram">
+                                <i class="fab fa-telegram-plane"></i>
+                                <span class="share-text"> Telegram</span>
+                            </a>
+
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($blog->title) }}" 
+                            target="_blank" 
+                            class="btn share-btn linkedin">
+                                <i class="fab fa-linkedin-in"></i>
+                                <span class="share-text"> LinkedIn</span>
+                            </a>
+
+                            <!-- Copy Link -->
+                            <!-- <button type="button" onclick="copyLink()" class="btn share-btn copy-link" style="font-size: 11px !important; margin-top: 10px !important;">
+                                <i class="fas fa-link"></i>
+                                <span class="share-text"> Copy Link</span>
+                            </button> -->
+                        </div>
+                    </div>
+
 
         <!-- Blog Content -->
-        <div class="blog-content">
-            {!! $blog->content !!}
+        <div class="fullwidth-mobile-content">
+            <div class="blog-content">
+                {!! $blog->content !!}
+            </div>
         </div>
-
         <!-- Footer Notice -->
-        <div class="blog-footer mt-5 pt-4 border-top">
-            <p class="small text-muted mb-2">&copy; {{ date('Y') }} All rights reserved. This blog is the property of {{ config('app.name') }}.</p>
-            <p class="small text-muted">
-                <strong>Disclaimer:</strong> The views and opinions expressed in this blog post are those of the author and do not necessarily reflect the official policy or position of {{ config('app.name') }}. Any content provided is for informational purposes only.
-            </p>
-        </div>
+         <div class="fullwidth-mobile-content">
+            <div class="blog-content">
+                <div class="blog-footer mt-5 pt-4 border-top">
+                    <p class="small text-muted mb-2">&copy; {{ date('Y') }} All rights reserved. This blog is the property of {{ config('app.name') }}.</p>
+                    <p class="small text-muted">
+                        <strong>Disclaimer:</strong> The views and opinions expressed in this blog post are those of the author and do not necessarily reflect the official policy or position of {{ config('app.name') }}. Any content provided is for informational purposes only.
+                    </p>
+                </div>
+            </div>
+         </div>
     </div>
 
     <!-- RIGHT COLUMN - READ ALSO -->
     @guest
     <div class="right-column">
-        <h5 class="read-also-title">📌 Most Popular</h5>
+        <!-- image -->
+        <!-- <div class="image-share-wrapper">
+            <figure class="image-caption-block" style="width: 100%;">
+                <img src="{{ asset($blog->image) }}" class="blog-image" alt="Blog Image">
+                <figcaption class="image-caption">
+                    {{ $blog->caption }}
+                </figcaption>
+            </figure>
+        </div> -->
+        <h5 class="read-also-title" style="margin-top: 10px;">📌 More Blogs</h5>
         <ul class="read-also-list">
             @foreach($otherBlogs->take(10) as $item)
             <li class="read-also-item">
@@ -173,12 +356,14 @@
 
 <!-- Styles -->
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');  
 .container-custom {
     display: flex;
     flex-wrap: nowrap;
     margin-top: 0;
     padding: 0;
     gap: 40px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .container-custom.full-width {
@@ -208,32 +393,44 @@
 
 .image-share-wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Push image to the right */
     align-items: flex-start;
     gap: 15px;
     flex-wrap: wrap;
 }
 
 .blog-image {
-    max-width: 30%;
+    width: 100%;
     height: auto;
-    flex-grow: 1;
-    margin-left: 15px;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto 15px auto;
+}
+
+@media (min-width: 992px) {
+    .blog-image {
+        width: 50%;
+        margin-left: 0px;
+    }
+    
 }
 
 .share-section {
-    align-self: flex-start;
+    margin: 0 auto;
+    display: block;
+    width: fit-content; /* or specific width */
 }
 
 .share-options a {
     margin-right: 8px;
-    font-size: 1.2rem;
+    font-size: 11px;
 }
 
 .blog-title {
-    text-align: left;
-    font-size: 28px;
+    text-align: center;
+    font-size: 22px;
     font-weight: bold;
+    font-family: 'Poppins', sans-serif;
 }
 
 .blog-content {
@@ -241,6 +438,7 @@
     font-size: 0.95rem;
     color: #333;
     text-align: left;
+    font-family: 'Poppins', sans-serif;
 }
 
 .blog-content a {
@@ -319,6 +517,11 @@
 @media (max-width: 768px) {
     .container-custom {
         flex-direction: column;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
     }
 
     .right-column {
@@ -428,6 +631,94 @@
 /* Optional fix for Word non-breaking spaces & smart quotes */
 .blog-content {
     white-space: normal;
+}
+/* RESPONSIVE TITTLE */
+.responsive-title {
+    margin-top: 90px; /* default for small & medium */
+}
+
+@media (min-width: 992px) {
+    .responsive-title {
+        margin-top: 120px; /* for large and above */
+    }
+}
+
+@media (max-width: 991.98px) {
+    .fullwidth-mobile {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin-left: calc(-1 * (100vw - 100%) / 2) !important;
+        margin-right: 0 !important;
+        padding: 0 !important;
+        display: block;
+    }
+}
+@media (max-width: 991.98px) {
+    .fullwidth-mobile-content {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin-left: calc(-1 * (100vw - 100%) / 2) !important;
+        margin-right: 0 !important;
+        padding: 0 10px;
+        display: block;
+    }
+}
+
+/* SHARE BUTTONS */
+.share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.share-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+
+/* Specific Platform Colors */
+.facebook { background-color: #3b5998 !important; color: white !important; margin-top: 10px !important;}
+.twitter { background-color: #000000 !important; color: white !important; margin-top: 10px !important;}
+.whatsapp { background-color: #25D366 !important; color: white !important; margin-top: 10px !important;}
+.telegram { background-color: #0088cc !important;color: white !important; margin-top: 10px !important;}
+.linkedin { background-color: #0077b5 !important; color: white !important; margin-top: 10px !important; }
+.copy-link { background-color: #6c757d !important;color: white !important; font-size: 11px !important; margin-top: 10px !important; }
+
+/* Icon Sizes */
+.share-btn i, 
+.share-btn img {
+    font-size: 16px;
+}
+
+/* Medium & Small Screens: icons only */
+@media (max-width: 991px) {
+    .share-text {
+        display: none;
+    }
+    .share-options {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    .share-btn {
+        flex: 1 0 auto;
+        padding: 8px;
+        border-radius: 50%;
+        width: 40px;
+        height: auto;
+    }
+    .share-btn i, 
+    .share-btn img {
+        margin: 0;
+    }
 }
 
 </style>

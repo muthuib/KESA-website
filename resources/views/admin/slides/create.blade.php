@@ -17,7 +17,7 @@
 
                 <div class="mb-3">
                     <label for="caption" class="form-label">Caption</label>
-                    <input type="text" name="caption" id="caption" class="form-control">
+                    <input type="text" name="caption" id="caption" class="form-control" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add Slide</button>

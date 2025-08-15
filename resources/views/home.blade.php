@@ -87,7 +87,7 @@
     margin-right: auto;
 }
 .caption-box {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(87, 79, 79, 0.6);
     padding: 20px 30px;
     border-radius: 12px;
     backdrop-filter: blur(5px);
@@ -190,6 +190,40 @@
     .memberships-wrapper {
         margin-top: 0px;
          padding: 0; /* Ensure no padding */
+    }
+}
+/* latest news section */
+.section-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    position: relative;
+}
+
+.news-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.news-img {
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+@media (max-width: 768px) {
+    .news-img {
+        height: 150px;
+    }
+
+    .section-title {
+        font-size: 22px;
     }
 }
 
@@ -313,6 +347,26 @@
 </script>
 
 @endsection
+<!-- Latest News Section -->
+<!-- <section class="latest-news container mt-1">
+    <h2 class="section-title text-center mb-4" style="background-color: green; color:white;">Latest News</h2>
+    <div class="row">
+        @foreach(App\Models\Blog::latest()->take(3)->get() as $news)
+        <div class="col-md-4 mb-4">
+            <div class="card news-card h-100 shadow-sm border-0">
+                @if($news->image)
+                <img src="{{ asset($news->image) }}" class="card-img-top news-img" alt="News image">
+                @endif
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ Str::limit($news->title, 60) }}</h5>
+                    <p class="card-text">{{ Str::limit(strip_tags($news->content), 100) }}</p>
+                    <a href="{{ route('blog.show', $news->id) }}" class="btn btn-sm btn-primary mt-auto">Read More</a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</section> -->
 
     <!-- memberships Section -->
    <div class="memberships-wrapper" style = "margin-top: 0px;">
