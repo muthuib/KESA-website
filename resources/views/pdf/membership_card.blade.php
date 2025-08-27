@@ -4,89 +4,88 @@
     <meta charset="UTF-8">
     <title>KESA Membership Card</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #fff;
-            margin: 0;
-            padding: 0;
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #fff; 
+            margin: 0; 
+            padding: 0; 
         }
 
-        .card {
-            width: 600px;
-            border: 3px solid #000;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
+        /* Kenyan ID size ~ 1011 x 637 px @300dpi */
+        .card { 
+            width: 1011px; 
+            height: 637px; 
+            border: 3px solid #000; 
+            padding: 28px; 
+            box-sizing: border-box; 
+            position: relative; 
         }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 3px solid #800000;
-            padding-bottom: 10px;
+        .header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border-bottom: 3px solid #800000; 
+            padding-bottom: 12px; 
         }
 
-        .logo {
-            width: 80px;
-            height: auto;
+        .logo { 
+            width: 110px; 
+            height: auto; 
         }
 
-        .title {
-            flex-grow: 1;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: #800000;
-            user-select: none;
+        .title { 
+            flex-grow: 1; 
+            text-align: center; 
+            font-size: 32px; 
+            font-weight: bold; 
+            color: #800000; 
+            user-select: none; 
         }
 
-        .kenyan-flag {
-            height: 8px;
-            display: flex;
-            margin-top: 5px;
-            margin-bottom: 10px;
+        .kenyan-flag { 
+            height: 10px; 
+            display: flex; 
+            margin-top: 6px; 
+            margin-bottom: 12px; 
         }
 
-        .kenyan-flag div {
-            flex: 1;
-        }
-
+        .kenyan-flag div { flex: 1; }
         .flag-black { background-color: black; }
         .flag-white { background-color: white; }
         .flag-red { background-color: red; }
         .flag-green { background-color: green; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 0; 
         }
 
-        td {
-            vertical-align: top;
-            font-size: 14px;
+        td { 
+            vertical-align: top; 
+            font-size: 20px; 
         }
 
-        .info p {
-            margin: 6px 0;
+        .info p { 
+            margin: 8px 0; 
         }
 
-        .photo img {
-            width: 130px;
-            height: 150px;
-            object-fit: cover;
-            border: 2px solid #000;
+        .photo img { 
+            width: 200px; 
+            height: 240px; 
+            object-fit: cover; 
+            border: 2px solid #000; 
         }
 
-        .footer {
-            margin-top: 5px;
-            font-size: 10px;
-            text-align: center;
-            color: #333;
-            border-top: 1px dashed #999;
-            padding-top: 5px;
-            user-select: none;
+        .footer { 
+            margin-top: 8px; 
+            font-size: 12px; 
+            text-align: center; 
+            color: #333; 
+            border-top: 1px dashed #999; 
+            padding-top: 8px; 
+            user-select: none; 
         }
     </style>
 </head>
@@ -94,16 +93,8 @@
     <div class="card">
         <!-- Header -->
         <div class="header">
-            <!-- Logo -->
-            @if(file_exists($logo))
-                <img src="{{ $logo }}" class="logo" alt="KESA Logo"> <l style="flex-grow: 1; text-align: left; font-size: 20px; font-weight: bold; color: #800000;">
-        KESA MEMBERSHIP CARD
-            </l>
-                    @else
-                        <div class="logo">Logo Missing</div><l style="flex-grow: 1; text-align: left; font-size: 20px; font-weight: bold; color: #800000;">
-                KESA MEMBERSHIP CARD
-            </l>
-                    @endif
+            <img src="{{ $logo }}" class="logo" alt="KESA Logo">
+            <div class="title">KESA MEMBERSHIP CARD</div>
         </div>
 
         <!-- Kenyan Flag -->
@@ -124,21 +115,13 @@
                     <p><strong>Date of Issuance:</strong> {{ \Carbon\Carbon::now()->format('F d, Y') }}</p>
                     <p><strong>Membership No:</strong> {{ $membershipNumber }}</p>
 
-                    @if(file_exists($qrCode))
-                        <div style="margin-top: 10px;">
-                            <img src="{{ $qrCode }}" alt="QR Code" style="width: 100px; height: 100px;">
-                        </div>
-                    @else
-                        <p style="font-size:12px; color: gray;">QR Code Missing</p>
-                    @endif
+                    <div style="margin-top:12px;">
+                        <img src="{{ $qrCode }}" alt="QR Code" style="width: 130px; height: 130px;">
+                    </div>
                 </td>
 
-                <td class="photo" style="width: 130px; text-align: center;">
-                    @if(file_exists($photo))
-                        <img src="{{ $photo }}" alt="Profile Photo">
-                    @else
-                        <p style="font-size:12px;">Photo Missing</p>
-                    @endif
+                <td class="photo" style="width: 200px; text-align: center;">
+                    <img src="{{ $photo }}" alt="Profile Photo">
                 </td>
             </tr>
         </table>

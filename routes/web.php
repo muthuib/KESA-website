@@ -50,6 +50,9 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BlogController;
 use App\Models\User;
+use App\Http\Controllers\MpesaWebhookController;
+use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -85,8 +88,25 @@ Route::get('/users/{id}/assign-roles', [UserController::class, 'assignRolesForm'
 Route::post('/users/{id}/assign-roles', [UserController::class, 'assignRoles'])->name('users.assignRoles');
 });
 // Registration routes
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+// Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Route::post('/register', [RegisterController::class, 'register']);
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
+
+// Safaricom will POST here (no auth, no CSRF)
+Route::post('/mpesa/register/callback', [MpesaWebhookController::class, 'registrationCallback'])
+  ->name('mpesa.register.callback');
+
+// registration renewal via stk push
+Route::middleware(['auth'])->group(function () {
+    // Initiate renewal
+    Route::post('/renew', [PaymentController::class, 'renewMembership'])->name('membership.renew');
+
+    // STK callback (Safaricom will hit this endpoint)
+    Route::post('/stk/callback', [PaymentController::class, 'stkCallback'])->name('stk.callback');
+});
+
 
 //Partners registration routes
 Route::get('registration', [RegisterPartnerController::class, 'showRegistrationForm'])->name('registration');
@@ -508,5 +528,15 @@ Route::get('/blogs/tags/{tag}', [BlogController::class, 'tag'])->name('blog.tag'
 
 
 
+
+// CLEAR CACHE ROUTE RUN https://www.kesakenya.org/clearcache
+
+
+// Route::get('/clearcache', function() {
+//     Artisan::call('config:clear');
+//     Artisan::call('cache:clear');
+//     Artisan::call('config:cache'); // Optional to rebuild cache
+//     return 'Config and cache cleared';
+// });
 
 
