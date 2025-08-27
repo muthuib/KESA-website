@@ -18,31 +18,23 @@
         margin: 0;
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
-        background-image: url('pictures/econ.jpg'); /* Add the background image URL */
+        background-image: url('pictures/eco.jpg'); /* Add the background image URL */
         background-size: cover;
         background-position: center center;
         background-attachment: fixed;
     }
 
-    .register-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding-top: 50px;
-        min-height: 100%;
-    }
-
-    .register-container {
-        background-color: #ffffff;
+     .register-container {
+        max-width: 80%;
+        margin-top: 150px;
         padding: 20px;
+        /* max-width: 800px; */
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 800px;
-        height: auto; /* Allow height to adjust based on content */
-        margin-top: 70px;
-        
+        background-color: #ffffff;
+        margin-left: 170px;
     }
+
 
     .register-container h2 {
         text-align: center;
@@ -65,7 +57,7 @@
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
-        border-radius: 4px;
+        border-radius: 20px;
         box-sizing: border-box;
         position: relative; /* Required for the asterisk positioning */
     }
@@ -275,11 +267,11 @@
 }
 
 /* Left Image Section */
-.left-image {
+/* .left-image {
     flex: 1;
     background: url('{{ asset('pictures/10.jpg') }}') no-repeat center center;
     background-size: cover;
-}
+} */
 
 /* Right Form Section */
 .right-register {
@@ -296,11 +288,7 @@
     max-height: 100vh;  /* Prevent it from growing beyond the viewport height */
 }
 
-    .register-container {
-        max-width: 100%;
-        margin-top: 10px;
-    }
-
+   
 
 /* Hide left image on small and medium screens */
 @media (max-width: 991.98px) {
@@ -345,10 +333,6 @@
     <!-- Include the top navigation bar -->
     @include('dashboard.topnav')
 
-    <div class="split-container">
-    <div class="left-image"></div>
-
-    <div class="right-register">
         <div class="register-container">
             @if (session('success'))
                 <div class="success">
@@ -364,45 +348,55 @@
 
             <!-- Logo -->
             <!-- <div class="logo-container"> -->
-                <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid">
+                <!-- <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo" class="logo img-fluid"> -->
             <!-- </div> -->
             <h2 style="color:rgb(61, 15, 81);">Membership Registration</h2>
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
         
              <!-- Primary Membership Selection -->
-                <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
-                    <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-                        <label for="mainMembershipType" class="form-label fw-bold">Select Membership Type</label>
-                        <select class="form-select" id="mainMembershipType" onchange="handleMainSelection(this.value)" style="width: 300px;">
+          <!-- Membership Selection -->
+            <div id="membershipSelection" class="row justify-content-center mb-4 animate__animated animate__fadeInUp">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 text-center">
+                    <label for="mainMembershipType" class="form-label fw-bold fs-5 mb-2 text-success">
+                        <i class="bi bi-people-fill text-success me-2"></i> Select Membership Type
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <span class="input-group-text bg-success text-white"><i class="bi bi-list-task"></i></span>
+                        <select class="form-select" id="mainMembershipType" onchange="handleMainSelection(this.value)">
                             <option value="">-- Choose a Membership Type --</option>
-                            <option value="individual">Individual Membership</option>
-                            <option value="organization">Organization Membership</option>
+                            <option value="individual">👤 Individual Membership</option>
+                            <option value="organization">🏢 Organization Membership</option>
                         </select>
                     </div>
                 </div>
+            </div>
 
-                <!-- Sub-options for Individual Membership -->
-                <div id="individualSubOptions" class="row justify-content-center mb-4 animate__animated animate__fadeInUp" style="display: none;">
-                    <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-                        <label for="individualMembershipType" class="form-label fw-bold">Which membership grade are you aaplying for?</label>
-                        <select class="form-select" id="individualMembershipType" onchange="showForm(this.value)" style="width: 300px;">
+            <!-- Sub-options for Individual Membership -->
+            <div id="individualSubOptions" class="row justify-content-center mb-4 animate__animated animate__fadeInUp" style="display: none;">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 text-center">
+                    <label for="individualMembershipType" class="form-label fw-bold fs-7 mb-2 text-primary">
+                        <i class="bi bi-person-badge-fill text-primary me-2"></i> Which Membership Grade Are You Applying For?
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <span class="input-group-text bg-primary text-white"><i class="bi bi-award-fill"></i></span>
+                        <select class="form-select" id="individualMembershipType" onchange="showForm(this.value)">
                             <option value="">-- Choose Sub-type --</option>
-                            <option value="student">Student Membership</option>
-                            <option value="associate">Associate Membership</option>
-                            <option value="full">Full Membership</option>
-                            <option value="#">Fellows/Honorary Member</option>
+                            <option value="student">🎓 Student Membership</option>
+                            <option value="associate">🤝 Associate Membership</option>
+                            <option value="ful">⭐ Full Membership</option>
+                            <option value="#">🏅 Fellows / Honorary Member</option>
                         </select>
                     </div>
                 </div>
-
+            </div>
                 <!-- Title -->
                 <h3 id="selectedMembershipTitle" style="text-align: center; display: none; color: brown; margin-bottom: 20px;"></h3>
 
                 <!-- Participation Section -->
                 <div id="participationSection" style="display: none;" class="form-row justify-content-center">
                     <div class="col-12 col-md-6">
-                        <label class="fw-bold">Are you willing to participate in this registration?</label>
+                        <label class="fw-bold text-dark">Are you willing to participate in this registration?</label>
                         <div class="d-flex justify-content-center align-items-center gap-3 mt-2">
                             <div>
                                 <label for="participation_yes">Yes</label>
@@ -725,82 +719,102 @@
 
 
                 <!-- OTHER MEMBERSHIP FORMS -->
+                
+                
+                
+                <!--STUDENT MEMBERSHIP FORM-->
+                
+                
+                
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-student" class="membership-form" style="display: none;">
-                    <h1 style="color: maroon; font-size: 20px;  text-align:center;">Student Membership</h1>
+                    <h1 class="text-center fw-bold mb-4" 
+                        style="color: maroon; font-size: 1.2rem; letter-spacing: 1px;">
+                        <i class="bi bi-mortarboard-fill me-2 text-success"></i> 
+                        Student Membership
+                    </h1>
+
                     <!-- Your Student Membership form here -->
                     <!-- Display errors if any -->
-                     <!-- Title -->
-             <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="TITTLE" class="required-label">Title</label>
-                    <select name="TITTLE" id="TITTLE" class="form-control" required style="height: auto;">
-                        <option value="">-select title-</option>
-                        <option value="Mr." {{ old('TITTLE') == 'Mr.' ? 'selected' : '' }}>Mr.</option>
-                        <option value="Mrs." {{ old('TITTLE') == 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
-                        <option value="Ms." {{ old('TITTLE') == 'Ms.' ? 'selected' : '' }}>Ms.</option>
-                        <option value="Dr." {{ old('TITTLE') == 'Dr.' ? 'selected' : '' }}>Dr.</option>
-                        <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
-                    </select>
-                </div>
-             </div>
-             <!-- Name -->
-              <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="FIRST_NAME" class="required-label">Name  </label>
-                    <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" placeholder="As you would like it to appear on the Certificate" value="{{ old('FIRST_NAME') }}" required>
-                    @error('FIRST_NAME')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                  <!-- Title & Name Row -->
+                <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <!-- Title -->
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="TITTLE" class="required-label">Title</label>
+                        <select name="TITTLE" id="TITTLE" class="form-control" required style="width: 100%; height: auto;">
+                            <option value="">-select title-</option>
+                            <option value="Mr." {{ old('TITTLE') == 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                            <option value="Mrs." {{ old('TITTLE') == 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                            <option value="Ms." {{ old('TITTLE') == 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                            <option value="Dr." {{ old('TITTLE') == 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                            <option value="Prof." {{ old('TITTLE') == 'Prof.' ? 'selected' : '' }}>Prof.</option>
+                        </select>
+                    </div>
 
-          <!-- Gender and Email -->
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label for="GENDER" class="required-label">Gender </label>
-                    <select name="GENDER" id="GENDER" class="form-control" required style="height: auto;">
-                        <option value="">-- Select --</option>
-                        <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
-                    </select>
-                    @error('GENDER')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <!-- Name -->
+                    <div class="form-group" style="flex: 2; min-width: 250px;">
+                        <label for="FIRST_NAME" class="required-label">Name</label>
+                        <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control"
+                            placeholder="As you would like it to appear on the Certificate"
+                            value="{{ old('FIRST_NAME') }}" required style="width: 100%;">
+                        @error('FIRST_NAME')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
-                      <!-- Email -->
-                      <div class="form-group">
-                        <label for="EMAIL" class="required-label">Email </label>
-                        <input type="email" id="EMAIL" name="EMAIL" placeholder="Enter valid email address" value="{{ old('EMAIL') }}" required>
+
+                <!-- Gender & Email Row -->
+                <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+                    <!-- Gender -->
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="GENDER" class="required-label">Gender</label>
+                        <select name="GENDER" id="GENDER" class="form-control" required style="width: 100%; height: auto;">
+                            <option value="">-- Select --</option>
+                            <option value="Male" {{ old('GENDER') == 'Male' ? 'selected' : '' }}>Male</option>
+                            <option value="Female" {{ old('GENDER') == 'Female' ? 'selected' : '' }}>Female</option>
+                        </select>
+                        @error('GENDER')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group" style="flex: 2; min-width: 250px;">
+                        <label for="EMAIL" class="required-label">Email</label>
+                        <input type="email" id="EMAIL" name="EMAIL" class="form-control"
+                            placeholder="Enter valid email address"
+                            value="{{ old('EMAIL') }}" required style="width: 100%;">
                         @error('EMAIL')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-            </div>
-            <!-- ID NUMBER -->
-              <div class="form-row">
-                    <div class="form-group">
-                        <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number </label>
-                        <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" value="{{ old('NATIONAL_ID_NUMBER') }}" required>
-                        @error('NATIONAL_ID_NUMBER')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <!--   Row -->
-                   <!-- phone number -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="PHONE_NUMBER" class="required-label">Phone Number </label>
-                        <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" value="{{ old('PHONE_NUMBER') }}" required>
-                        @error('PHONE_NUMBER')
-                            <div class="error">{{ $message }}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
-                                  <!-- Disability related question -->
+                <!-- National ID & Phone Row -->
+                <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+                    <!-- National ID -->
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label for="NATIONAL_ID_NUMBER" class="required-label">National ID Number</label>
+                        <input type="text" id="NATIONAL_ID_NUMBER" name="NATIONAL_ID_NUMBER" class="form-control"
+                            value="{{ old('NATIONAL_ID_NUMBER') }}" required style="width: 100%;">
+                        @error('NATIONAL_ID_NUMBER')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label for="PHONE_NUMBER" class="required-label">Phone Number</label>
+                        <input type="text" id="PHONE_NUMBER" name="PHONE_NUMBER" class="form-control"
+                            value="{{ old('PHONE_NUMBER') }}" required style="width: 100%;">
+                        @error('PHONE_NUMBER')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+              <!-- Disability related question -->
             <div class="form-row">
                 <div class="form-group">
                     <label for="DISABILITY_STATUS" class="required-label">Do you have any form of disability? </label><br>
@@ -934,40 +948,86 @@
 
                       <!-- MPESA Instructions -->
                     <!-- M-Pesa Summary + Button -->
-                    <div style="margin: 25px 0; background-color: #fff7f7; padding: 15px; border-left: 5px solid maroon; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <div style="flex-grow: 1;">
-                            <p style="margin: 5px 0;"><strong>Pay KES 300 via M-Pesa:</strong></p>
-                            <p style="margin: 5px 0;">Paybill: <strong>522533</strong></p>
-                            <p style="margin: 5px 0;">Account No: <strong>7782321#me</strong></p>
-                            <p style="margin: 5px 0;">Wait for the <strong>MPESA confirmation SMS</strong>.</p>
-                            <p style="margin: 5px 0;">Fill in this form below and <strong>submit</strong>.</p>
+                       <div style="margin: 25px 0; background-color: #f9f9f9; padding: 20px; border-left: 6px solid #B22222; border-radius: 8px; font-family: Arial, sans-serif; position: relative;">
+
+                    <!-- Full Instructions Button Top Right -->
+                    <div style="
+                        position: relative; 
+                        border: 2px solid #00A859; 
+                        border-radius: 12px; 
+                        padding: 20px; 
+                        background: #f9fdf9; 
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+                        font-family: Arial, sans-serif;
+                        max-width: 800px;
+                        margin: auto;
+                    ">
+                        <!-- Safaricom/M-Pesa Logo -->
+                        <div style="display: flex; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+                            <img src="{{ asset('pictures/m-pesa-logo.jpg') }}" alt="M-Pesa Logo" 
+                                style="width: 120px; height: auto; margin-right: 12px; max-width: 40%;">
+                            <h3 style="color: #00A859; margin: 0; font-size: 20px; font-weight: bold; flex: 1; min-width: 200px;">
+                                M-Pesa Payment Instructions
+                            </h3>
                         </div>
 
-                        <!-- Payment Instructions Button -->
-                        <div>
-                            <button onclick="openModal()" style="background-color: maroon; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                        <!-- Full Instructions Button -->
+                        <div style="position: absolute; top: 15px; right: 20px;">
+                            <button onclick="openModal()" 
+                                style="background-color: #B22222; color: white; border: none; 
+                                    padding: 10px 16px; border-radius: 6px; cursor: pointer; 
+                                    font-size: 14px; font-weight: bold; transition: background-color 0.2s;">
                                 Full Instructions
                             </button>
                         </div>
-                    </div>
 
-                    <!-- Modal Popup -->
-                    <div id="paymentModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6);">
-                        <div style="background-color: #fff; margin: 10% auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; position: relative;">
-                            <!-- Close Button -->
-                            <span onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 22px; font-weight: bold; color: maroon; cursor: pointer;">&times;</span>
-
-                            <h3 style="color: green; text-align: center; margin-bottom: 15px;">Payment Instructions</h3>
-                            <p style="color: green; font-size: 17px;"><strong>Please send registration fee of KES 300 to M-Pesa Business No: 522533 Account No: 7782321#me</strong></p>
-                            <p>1. Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
-                            <p>2. <strong>Business Number</strong>: 522533</p>
-                            <p>3. <strong>Account Number</strong>: Enter <code>7782321#me</code></p>
-                            <p>4. Enter the <strong>Amount</strong>: KES 300</p>
-                            <p>5. Enter your <strong>PIN number</strong>.</p>
-                            <p>6. Wait for the <strong>MPESA confirmation SMS</strong>.</p>
-                            <p>7. Fill in this form below and <strong>submit </strong>.</p>
+                        <!-- Instruction Text -->
+                        <div style="margin-right: 0px; font-size: 15px; line-height: 1.6;">
+                            <p style="margin: 8px 0; font-size: 16px;">
+                                <strong style="color:#00A859; font-size: 17px;">Pay KES 300 via M-Pesa:</strong>
+                            </p>
+                            <p style="margin: 8px 0;">
+                                Click <strong style="color:#00A859;">Register & Pay via M-Pesa</strong> and an 
+                                <span style="color:#B22222; font-weight:bold;">STK Push</span> prompt will appear on your phone automatically.
+                            </p>
+                            <p style="margin: 8px 0;">
+                                <strong style="color:#00A859;">Enter your M-Pesa PIN</strong> to authorize payment.
+                            </p>
+                            <p style="margin: 8px 0;">
+                                Wait for the <strong style="color:#00A859;">M-Pesa confirmation SMS</strong>.
+                            </p>
+                            <p style="margin: 8px 0;">
+                                <strong>After successful payment, check the email you provided to receive your login details and membership card.</strong>
+                            </p>
                         </div>
                     </div>
+
+
+                    <!-- Modal Popup -->
+                   <!-- STK Push Payment Modal -->
+                    <div id="paymentModal" class="modal">
+                        <div class="modal-content">
+                            <!-- Close Button -->
+                            <span class="close-btn" onclick="closeModal()">&times;</span>
+
+                            <h3>STK Push Payment Instructions</h3>
+
+                            <p class="highlight">
+                                You will receive an <strong>MPESA prompt on your phone</strong> to complete the payment. Please follow these steps:
+                            </p>
+
+                            <ol class="instructions">
+                                <li>Ensure the phone number you entered is the one linked to your <strong>M-Pesa</strong> account.</li>
+                                <li>Once you submit the form, you will receive a prompt on your phone to approve the payment.</li>
+                                <li>Enter your <strong>M-Pesa PIN</strong> to authorize the payment.</li>
+                                <li>Wait for the confirmation message from M-Pesa that the payment was successful.</li>
+                                <li>After confirmation, your registration/payment will be marked as complete automatically.</li>
+                                <li>If you do not receive the prompt, ensure your phone has network coverage and try again.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+
 
                     <!-- Modal Script -->
                     <script>
@@ -987,26 +1047,25 @@
                             }
                         }
                     </script>
+                    
+                    <div class="mb-3">
+                        <label>Registration Fee</label>
+                        <input type="number" name="REGISTRATION_FEE" class="form-control" value="300" readonly>
+                    </div>
 
-        <!-- Transaction ID -->
-                <div style="margin-bottom: 15px;">
-                    <label for="REGISTRATION_FEE" style="font-weight: bold;">M-Pesa Transaction Code <span style="color:red">*</span></label>
-                    <input type="text" name="REGISTRATION_FEE" id="REGISTRATION_FEE" placeholder="e.g. TE69MHLK8Q" value="{{ old('REGISTRATION_FEE') }}" required
-                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
-                </div>
-
-                <!-- M-Pesa Phone Number -->
-                <div style="margin-bottom: 15px;">
-                    <label for="ALTERNATIVE_PHONE_NUMBER" style="font-weight: bold;">M-Pesa Phone Number <span style="color:red">*</span></label>
-                    <input type="text" name="ALTERNATIVE_PHONE_NUMBER" id="ALTERNATIVE_PHONE_NUMBER" placeholder="Phone number used to pay" value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required
-                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
-                </div>
-
-                    <button type="submit" style="margin-bottom: 5px;">Create Account</button>
+                    <button type="submit" style="margin-bottom: 5px;">Register & Pay via M-Pesa</button>
                 </div>
                 </form>
 
+
+
+
+
                 <!-- ASSOCIATE MEMBERSHIP -->
+
+
+
+                
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-associate" class="membership-form" style="display: none;">
@@ -1234,8 +1293,6 @@
                         <p class="text-center text-muted" style="background-color: #00c6ff; color: #f4f4f4;">Organization Membership Form will be updated soon</p>
                     </div>
              </div>
-            </div>
-         </div>
         </form>
         </div>
 
@@ -1400,5 +1457,111 @@
     }
 }
 
+/* Modal background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    animation: fadeIn 0.3s ease;
+}
 
+/* Modal content box */
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-top: 6px solid #00A859; /* Safaricom green */
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #B22222; /* Safaricom red accent */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-btn:hover {
+    color: #ff0000;
+}
+
+/* Modal header */
+.modal-content h3 {
+    color: #00A859; /* Safaricom green */
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Highlighted paragraph */
+.highlight {
+    color: #00A859; /* Safaricom green */
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Instructions list */
+.instructions {
+    padding-left: 20px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Fade-in background */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Code styling if needed */
+.instructions code {
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+@media (max-width: 768px) {
+    .mpesa-card {
+        padding: 15px !important;
+    }
+    .mpesa-card h3 {
+        font-size: 18px !important;
+    }
+    .mpesa-card img {
+        width: 90px !important;
+        margin-bottom: 10px;
+    }
+    .mpesa-card div[style*="margin-right: 170px"] {
+        margin-right: 0 !important; /* Remove reserved space on small screens */
+    }
+    .mpesa-card div[style*="position: absolute"] {
+        position: static !important; 
+        margin-top: 10px;
+        text-align: right;
+    }
+}
 </style>

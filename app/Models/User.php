@@ -44,6 +44,12 @@ class User extends Authenticatable
         'REGISTRATION_FEE',
         'MEMBERSHIP_NUMBER',
 
+        'payment_status',
+        'mpesa_receipt',
+        'amount_paid',
+        'payment_date',
+        'membership_expiry',
+
         // New fields added
         'TITTLE',
         'POSTAL_ADDRESS',

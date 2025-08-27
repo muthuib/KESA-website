@@ -54,4 +54,13 @@ class LoginController extends Controller
         // Redirect to the login page with a success message
         return redirect('/login')->with('success', 'You have been logged out successfully.');
     }
+
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    {
+        if ($user->membership_expiry && \Carbon\Carbon::parse($user->membership_expiry)->lt(now())) {
+            auth()->logout();
+            return redirect()->route('payment.instructions')
+                ->with('error', 'Your membership has expired. Please renew.');
+        }
+    }
 }

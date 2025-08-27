@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
 //function for newsletter to be sent periodically
     protected function schedule(Schedule $schedule)
 {
+    $schedule->command('registrations:clean-pending')->everyMinute();
     //$schedule->command('newsletter:send')->daily();  // Send daily
 }
 

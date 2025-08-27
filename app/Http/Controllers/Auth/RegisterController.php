@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Mail\MembershipCredentialsMail;
-use Illuminate\Support\Facades\Mail;
-use Barryvdh\DomPDF\Facade\Pdf;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\services\MpesaService;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -19,9 +16,10 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(Request $request, MpesaService $mpesa)
     {
-        $validatedData = $request->validate([
+        // Validate request
+        $validated = $request->validate([
             'FIRST_NAME' => 'required|string|max:255',
             'LAST_NAME' => 'nullable|string|max:255',
             'EMAIL' => 'required|email|unique:users,EMAIL',
@@ -38,7 +36,7 @@ class RegisterController extends Controller
             'EDUCATION_LEVEL' => 'nullable|in:Undergraduate Degree,Post Graduate Diploma,Masters Degree,PhD',
             'PREVIOUS_SCHOOL_NAME' => 'nullable|string',
             'PREVIOUS_PROGRAM_OF_STUDY' => 'nullable|string',
-            'REGISTRATION_FEE' => 'required|string|min:0',
+            'REGISTRATION_FEE' => 'required|string|min:1',
             'PASSPORT_PHOTO' => 'required|image|mimes:jpeg,png,jpg|max:2048',
 
             // Newly added fields
@@ -56,88 +54,65 @@ class RegisterController extends Controller
             'must_change_password' => 'required|boolean',
         ]);
 
-        // Generate a random password and hash it
-        $password = Str::random(10);
-        $validatedData['PASSWORD_HASH'] = Hash::make($password);
+        // Normalize phone to 2547XXXXXXXX
+        $phone = preg_replace('/\s+/', '', $validated['PHONE_NUMBER']);
+        if (str_starts_with($phone, '0')) $phone = '254' . substr($phone, 1);
+        if (str_starts_with($phone, '+')) $phone = ltrim($phone, '+');
+        $validated['PHONE_NUMBER'] = $phone;
 
-        // Force user to change password on first login
-        $validatedData['must_change_password'] = $request->boolean('must_change_password', true);
-
-        // Generate unique membership number
-       // Generate formatted membership number: YY + IDlast2 + 4-digit reg
-        $year = now()->format('y'); // e.g., '25' for 2025
-        $idSuffix = substr($validatedData['NATIONAL_ID_NUMBER'], -2); // last 2 digits
-
-        // Get total users to create a unique 4-digit registration number
-        $count = User::count() + 1; // +1 for the new one
-        $regNumber = str_pad($count, 4, '0', STR_PAD_LEFT); // e.g., 0020
-
-        $membershipNumber = $year . $idSuffix . $regNumber;
-        $validatedData['MEMBERSHIP_NUMBER'] = $membershipNumber;
-
-        // generate qr code
-            // Define QR code content (URL to member verification page)
-        $qrUrl = route('verify.member', ['membership' => $membershipNumber]);
-
-        // Set QR code path
-        $qrPath = 'qrcodes/' . $membershipNumber . '.png';
-        $fullQrPath = public_path($qrPath);
-
-        // Create directory if it doesn't exist
-        if (!file_exists(dirname($fullQrPath))) {
-            mkdir(dirname($fullQrPath), 0775, true);
-        }
-
-        // Generate QR code and save as image
-        QrCode::format('png')->size(200)->generate($qrUrl, $fullQrPath);
-
-        // Handle photo upload
+        // Store photo temporarily in public/tmp
+        $tmpRelPath = null;
         if ($request->hasFile('PASSPORT_PHOTO')) {
             $file = $request->file('PASSPORT_PHOTO');
-            $photoFilename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('profile_photos'), $photoFilename);
-            $validatedData['PASSPORT_PHOTO'] = 'profile_photos/' . $photoFilename;
+            $tmpDir = public_path('tmp');
+            if (!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
+
+            $name = time() . '_' .
+                Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . 
+                '.' . $file->getClientOriginalExtension();
+
+            $file->move($tmpDir, $name);
+            $tmpRelPath = 'tmp/' . $name;
         }
 
-        // Generate the membership card PDF
-        $pdfDir = public_path('membership_cards');
-        if (!is_dir($pdfDir)) {
-            mkdir($pdfDir, 0775, true);
+        $amount = (float)$validated['REGISTRATION_FEE'];
+        $accountRef = 'KESA-' . now('Africa/Nairobi')->format('YmdHis');
+
+        // Send STK push
+        $stk = $mpesa->stkPush($validated['PHONE_NUMBER'], $amount, $accountRef, 'Membership Registration');
+
+        if (!isset($stk['ResponseCode']) || $stk['ResponseCode'] !== '0') {
+            if ($tmpRelPath && file_exists(public_path($tmpRelPath))) @unlink(public_path($tmpRelPath));
+            return back()->with('error', 'M-Pesa Error: ' . json_encode($stk));
         }
-        $pdfPath = $pdfDir . '/' . $membershipNumber . '.pdf';
 
-        // Pass absolute photo path with file:// prefix to embed image properly
-        $absolutePhotoPath = public_path($validatedData['PASSPORT_PHOTO']);
+        // Save pending registration & payment
+        DB::transaction(function () use ($validated, $tmpRelPath, $amount, $stk, $accountRef) {
+            $pendingId = DB::table('pending_registrations')->insertGetId([
+                'data' => json_encode($validated),
+                'passport_photo_tmp' => $tmpRelPath,
+                'phone' => $validated['PHONE_NUMBER'],
+                'amount' => $amount,
+                'merchant_request_id' => $stk['MerchantRequestID'] ?? null,
+                'checkout_request_id' => $stk['CheckoutRequestID'] ?? null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        $pdf = Pdf::loadView('pdf.membership_card', [
-        'name' => $validatedData['FIRST_NAME'],
-        'email' => $validatedData['EMAIL'],
-        'membershipNumber' => $membershipNumber,
-        'SCHOOL_NAME' => $validatedData['SCHOOL_NAME'],
-        'photo' => public_path($validatedData['PASSPORT_PHOTO']), // full local path
-        'logo' => public_path('pictures/logo.jpg'),
-        'qrCode' => public_path($qrPath), // important for PDF!
-    ]);
+            DB::table('mpesa_payments')->insert([
+                'phone' => $validated['PHONE_NUMBER'],
+                'amount' => $amount,
+                'account_reference' => $accountRef,
+                'description' => 'Membership Registration',
+                'merchant_request_id' => $stk['MerchantRequestID'] ?? null,
+                'checkout_request_id' => $stk['CheckoutRequestID'] ?? null,
+                'status' => 'pending',
+                'pending_registration_id' => $pendingId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        });
 
-
-        $pdf->save($pdfPath);
-
-        // Create the user record in the database
-        User::create($validatedData);
-
-        // Send email with PDF attached
-        Mail::to($validatedData['EMAIL'])->send(
-            new MembershipCredentialsMail(
-                $validatedData['EMAIL'],
-                $password,
-                $validatedData['FIRST_NAME'],
-                $membershipNumber,
-                $validatedData['PHONE_NUMBER'],
-                $pdfPath // Path to the generated PDF
-            )
-        );
-
-        session()->flash('success', 'Registration successful! Check your email for login credentials.');
-        return redirect()->route('login');
+        return back()->with('success', 'STK push sent. Enter your M-Pesa PIN to complete payment.');
     }
 }

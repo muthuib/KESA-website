@@ -1,286 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            background-image: url('pictures/econ.jpg'); /* Background image */   
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
 
-        /* Centering the login form */
-        .login-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 20px;
-        }
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-        /* Login Container */
-        .login-container {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 600px;
-            margin-top: auto;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .login-container div {
-            margin-bottom: 15px;
-        }
-
-        .login-container label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .login-container input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-
-        .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-
-        .text-danger {
-            color: red;
-            font-size: 12px;
-        }
-
-        /* Centering logo */
-        .logo-containers {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .logo-containers img {
-            max-width: 30%; /* Default size */
-            height: auto;
-        }
-
-        /* Tablet Screens */
-        @media (max-width: 768px) {
-            .logo-containers img {
-                max-width: 20%;
-            }
-        }
-
-        /* Mobile Screens */
-        @media (max-width: 480px) {
-            .logo-containers img {
-                max-width: 30%;
-            }
-
-            .login-container {
-                padding: 15px;
-                max-width: 90%;
-            }
-
-            .login-container h2 {
-                font-size: 18px;
-            }
-
-            .login-container input,
-            .login-container button {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-        /* modern design css */
-       /* Entire split layout */
-.split-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Left Image Section */
-.left-image {
-    flex: 1;
-    background: url('{{ asset('pictures/10.jpg') }}') no-repeat center center;
-    background-size: cover;
-}
-
-/* Right Form Section */
-.right-login {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
-    padding: 40px 20px;
-}
-
-
-/* Hide left image on small and medium screens */
-@media (max-width: 991.98px) {
-    .left-image {
-        display: none;
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f4;
     }
 
+ 
+
+    /* Split Layout */
     .split-container {
-        flex-direction: column;
+      display: flex;
+      min-height: 100vh;
+      margin-top: 56px; /* offset for sticky nav */
     }
 
+    /* Left Image with subtle zoom animation */
+    .left-image {
+      flex: 1;
+      background: url('{{ asset('pictures/10.jpg') }}') no-repeat center center;
+      background-size: cover;
+      animation: zoomInOut 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes zoomInOut {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    /* Right Login Section */
     .right-login {
-        flex: none;
-        padding: 20px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      background: linear-gradient(to right, #ffffff, #f8f9fa);
     }
 
+    /* Login Card */
     .login-container {
-        max-width: 100%;
-        margin-top: 100px;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+      animation: fadeInUp 0.8s ease;
     }
-}
 
-    </style>
-     <!-- Google Fonts -->
-     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 600;
+      color: #333;
+    }
 
-    <!--  CSS -->
-    <style>
-        * {
-            font-family: 'Poppins';
-        }
-    </style>
-        @yield('styles')
+    /* Logo */
+    .logo-containers {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .logo-containers img {
+      max-width: 120px;
+      height: auto;
+    }
+
+    /* Form Controls */
+    .form-control {
+      border-radius: 10px;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease-in-out;
+    }
+    .form-control:focus {
+      border-color: #00a859;
+      box-shadow: 0 0 8px rgba(0,168,89,0.3);
+    }
+
+    /* Password toggle */
+    .password-wrapper {
+      position: relative;
+    }
+    .password-wrapper .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6c757d;
+    }
+
+    /* Button */
+    .btn-primary {
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease-in-out;
+      background-color: #006f3c;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #00a859;
+      transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .left-image { display: none; }
+      .split-container { flex-direction: column; margin-top: 56px; }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
 </head>
-
 <body>
+  <!-- Top Navigation -->
+  @include('dashboard.topnav')
 
-    <!-- Include the top navigation -->
-    @include('dashboard.topnav')
-
-    <!-- Wrapper for the login form -->
-<div class="split-container">
+  <!-- Wrapper -->
+  <div class="split-container">
     <div class="left-image"></div>
 
     <div class="right-login">
-        <div class="login-container">
-            
-            <!-- Logo -->
-            <div class="logo-containers">
-                <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo">
-            </div>
+      <div class="login-container">
+        <!-- Logo -->
+        <div class="logo-containers">
+          <img src="{{ asset('pictures/logo.jpg') }}" alt="KESA Logo">
+        </div>
 
-            <h2>Member Login</h2>
+        <h2><i class="bi bi-box-arrow-in-right"></i> Member Login</h2>
 
-            <!-- Show verification email success message if resent -->
-            @if (session('resent'))
-                <div class="alert alert-success">
-                    A fresh verification link has been sent to your email address.
-                </div>
-            @endif
+        <!-- Alerts -->
+        @if (session('resent'))
+          <div class="alert alert-success">A fresh verification link has been sent to your email address.</div>
+        @endif
+        @if(session('success'))
+          <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if($errors->any())
+          <div class="alert alert-danger">{{ $errors->first() }}</div>
+        @endif
 
-            <!-- Display success message if available -->
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+        <!-- Login Form -->
+        <form method="POST" action="{{ route('login') }}">
+          @csrf
 
-            <!-- Display errors if any -->
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    {{ $errors->first() }}
-                </div>
-            @endif
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="EMAIL" class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" name="EMAIL" value="{{ old('EMAIL') }}" required>
+            @error('EMAIL') <span class="text-danger">{{ $message }}</span> @enderror
+          </div>
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+          <!-- Password with eye toggle -->
+          <div class="mb-3 password-wrapper">
+            <label for="password" class="form-label fw-semibold">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+            <i class="bi bi-eye-slas toggle-password" id="togglePassword"></i>
+            @error('password') <span class="text-danger">{{ $message }}</span> @enderror
+          </div>
 
-                <!-- Email Input -->
-                <div>
-                    <label for="EMAIL">Email</label>
-                    <input type="email" name="EMAIL" value="{{ old('EMAIL') }}" required>
-                    @error('EMAIL')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                <!-- Password Input -->
-                <div>
-                    <label for="password">Password</label>
-                    <input type="password" name="password" required>
-                    @error('password')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit">Login</button>
-
-                <!-- Forgot Password Link -->
-                <p style="text-align: left; margin-top: 12px;">
-                    <a href="{{ route('password.request') }}" style="color: #007bff;">Forgot Password?</a>
-
-                </p>
-
-                <!-- Link to Register -->
-                <p style="text-align: left; margin-top: 12px;">
-                    Don't have an account? <a href="{{ route('memberships.types') }}" style="color: #007bff;">Register</a>
-                </p>
-            </form>
+          <!-- Links -->
+          <div class="mt-3 text-center">
+            <a href="{{ route('password.request') }}">Forgot Password?</a>
+          </div>
+          <div class="mt-2 text-center">
+            Don't have an account? <a href="{{ route('memberships.types') }}">Register</a>
+          </div>
+        </form>
       </div>
     </div>
-</div>
+  </div>
 
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Password toggle script -->
+  <script>
+    document.getElementById("togglePassword").addEventListener("click", function () {
+      const passwordField = document.getElementById("password");
+      const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+      passwordField.setAttribute("type", type);
+      this.classList.toggle("bi-eye");
+      this.classList.toggle("bi-eye-slash");
+    });
+  </script>
 </body>
-
 </html>

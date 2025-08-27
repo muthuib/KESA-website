@@ -345,8 +345,8 @@
     <!-- Include the top navigation bar -->
     @include('dashboard.topnav')
 
-    <div class="split-container">
-    <div class="left-image"></div>
+    <!-- <div class="split-container"> -->
+    <!-- <div class="left-image"></div> -->
 
     <div class="right-register">
         <div class="register-container">
@@ -725,6 +725,13 @@
 
 
                 <!-- OTHER MEMBERSHIP FORMS -->
+                
+                
+                
+                <!--STUDENT MEMBERSHIP FORM-->
+                
+                
+                
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-student" class="membership-form" style="display: none;">
@@ -934,40 +941,71 @@
 
                       <!-- MPESA Instructions -->
                     <!-- M-Pesa Summary + Button -->
-                    <div style="margin: 25px 0; background-color: #fff7f7; padding: 15px; border-left: 5px solid maroon; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <div style="flex-grow: 1;">
-                            <p style="margin: 5px 0;"><strong>Pay KES 300 via M-Pesa:</strong></p>
-                            <p style="margin: 5px 0;">Paybill: <strong>522533</strong></p>
-                            <p style="margin: 5px 0;">Account No: <strong>7782321#me</strong></p>
-                            <p style="margin: 5px 0;">Wait for the <strong>MPESA confirmation SMS</strong>.</p>
-                            <p style="margin: 5px 0;">Fill in this form below and <strong>submit</strong>.</p>
+                       <div style="margin: 25px 0; background-color: #f9f9f9; padding: 20px; border-left: 6px solid #B22222; border-radius: 8px; font-family: Arial, sans-serif; position: relative;">
+
+                                <!-- Full Instructions Button Top Right -->
+                                <div style="position: relative; border: 2px solid #00A859; border-radius: 12px; padding: 20px; background: #f9fdf9; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: Arial, sans-serif;">
+
+                            <!-- Safaricom/M-Pesa Logo -->
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                 <img src="{{ asset('pictures/m-pesa-logo.jpg') }}" alt="M-Pesa Logo" style=" width: 100px; height: auto; margin-right: 12px;">
+                                <h3 style="color: #00A859; margin: 0; font-size: 20px; font-weight: bold;">M-Pesa Payment Instructions</h3>
+                            </div>
+
+                            <!-- Full Instructions Button -->
+                            <div style="position: absolute; top: 15px; right: 20px;">
+                                <button onclick="openModal()" style="background-color: #B22222; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; transition: background-color 0.2s;">
+                                    Full Instructions
+                                </button>
+                            </div>
+
+                            <!-- Instruction Text -->
+                            <div style="margin-right: 170px;">
+                                <p style="margin: 8px 0; font-size: 16px;">
+                                    <strong style="color:#00A859; font-size: 17px;">Pay KES 300 via M-Pesa:</strong>
+                                </p>
+                                <p style="margin: 8px 0; font-size: 15px;">
+                                    Click <strong style="color:#00A859;">Register & Pay via M-Pesa</strong> and an 
+                                    <span style="color:#B22222; font-weight:bold;">STK Push</span> prompt will appear on your phone automatically.
+                                </p>
+                                <p style="margin: 8px 0; font-size: 15px;">
+                                    <strong style="color:#00A859;">Enter your M-Pesa PIN</strong> to authorize payment.
+                                </p>
+                                <p style="margin: 8px 0; font-size: 15px;">
+                                    Wait for the <strong style="color:#00A859;">M-Pesa confirmation SMS</strong>.
+                                </p>
+                                <p style="margin: 8px 0; font-size: 15px;">
+                                    <strong>After successful payment, check the email you provided to receive your login details and membership card.</strong>
+                                </p>
+                            </div>
                         </div>
 
-                        <!-- Payment Instructions Button -->
-                        <div>
-                            <button onclick="openModal()" style="background-color: maroon; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-                                Full Instructions
-                            </button>
-                        </div>
-                    </div>
 
                     <!-- Modal Popup -->
-                    <div id="paymentModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6);">
-                        <div style="background-color: #fff; margin: 10% auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; position: relative;">
+                   <!-- STK Push Payment Modal -->
+                    <div id="paymentModal" class="modal">
+                        <div class="modal-content">
                             <!-- Close Button -->
-                            <span onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 22px; font-weight: bold; color: maroon; cursor: pointer;">&times;</span>
+                            <span class="close-btn" onclick="closeModal()">&times;</span>
 
-                            <h3 style="color: green; text-align: center; margin-bottom: 15px;">Payment Instructions</h3>
-                            <p style="color: green; font-size: 17px;"><strong>Please send registration fee of KES 300 to M-Pesa Business No: 522533 Account No: 7782321#me</strong></p>
-                            <p>1. Go to the <strong>Lipa na MPESA</strong> menu and select <strong>Paybill</strong>.</p>
-                            <p>2. <strong>Business Number</strong>: 522533</p>
-                            <p>3. <strong>Account Number</strong>: Enter <code>7782321#me</code></p>
-                            <p>4. Enter the <strong>Amount</strong>: KES 300</p>
-                            <p>5. Enter your <strong>PIN number</strong>.</p>
-                            <p>6. Wait for the <strong>MPESA confirmation SMS</strong>.</p>
-                            <p>7. Fill in this form below and <strong>submit </strong>.</p>
+                            <h3>STK Push Payment Instructions</h3>
+
+                            <p class="highlight">
+                                You will receive an <strong>MPESA prompt on your phone</strong> to complete the payment. Please follow these steps:
+                            </p>
+
+                            <ol class="instructions">
+                                <li>Ensure the phone number you entered is the one linked to your <strong>M-Pesa</strong> account.</li>
+                                <li>Once you submit the form, you will receive a prompt on your phone to approve the payment.</li>
+                                <li>Enter your <strong>M-Pesa PIN</strong> to authorize the payment.</li>
+                                <li>Wait for the confirmation message from M-Pesa that the payment was successful.</li>
+                                <li>After confirmation, your registration/payment will be marked as complete automatically.</li>
+                                <li>If you do not receive the prompt, ensure your phone has network coverage and try again.</li>
+                            </ol>
                         </div>
                     </div>
+
+
 
                     <!-- Modal Script -->
                     <script>
@@ -987,28 +1025,25 @@
                             }
                         }
                     </script>
+                    
+                    <div class="mb-3">
+                        <label>Registration Fee</label>
+                        <input type="number" name="REGISTRATION_FEE" class="form-control" value="300" readonly>
+                    </div>
 
-        <!-- Transaction ID -->
-                <div style="margin-bottom: 15px;">
-                    <label for="REGISTRATION_FEE" style="font-weight: bold;">M-Pesa Transaction Code <span style="color:red">*</span></label>
-                    <input type="text" name="REGISTRATION_FEE" id="REGISTRATION_FEE" placeholder="e.g. TE69MHLK8Q" value="{{ old('REGISTRATION_FEE') }}" required
-                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
-                </div>
-
-                <!-- M-Pesa Phone Number -->
-                <div style="margin-bottom: 15px;">
-                    <label for="ALTERNATIVE_PHONE_NUMBER" style="font-weight: bold;">M-Pesa Phone Number <span style="color:red">*</span></label>
-                    <input type="text" name="ALTERNATIVE_PHONE_NUMBER" id="ALTERNATIVE_PHONE_NUMBER" placeholder="Phone number used to pay" value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required
-                        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
-                </div>
-
-                    <button type="submit" style="margin-bottom: 5px;">Create Account</button>
+                    <button type="submit" style="margin-bottom: 5px;">Register & Pay via M-Pesa</button>
                 </div>
                 </form>
 
-                
+
+
+
 
                 <!-- ASSOCIATE MEMBERSHIP -->
+
+
+
+                
                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="form-associate" class="membership-form" style="display: none;">
@@ -1237,7 +1272,7 @@
                     </div>
              </div>
             </div>
-         </div>
+         <!-- </div> -->
         </form>
         </div>
 
@@ -1402,5 +1437,90 @@
     }
 }
 
+/* Modal background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    animation: fadeIn 0.3s ease;
+}
 
+/* Modal content box */
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-top: 6px solid #00A859; /* Safaricom green */
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #B22222; /* Safaricom red accent */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-btn:hover {
+    color: #ff0000;
+}
+
+/* Modal header */
+.modal-content h3 {
+    color: #00A859; /* Safaricom green */
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Highlighted paragraph */
+.highlight {
+    color: #00A859; /* Safaricom green */
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Instructions list */
+.instructions {
+    padding-left: 20px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Fade-in background */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Code styling if needed */
+.instructions code {
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+}
 </style>
