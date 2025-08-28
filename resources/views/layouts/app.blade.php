@@ -4,9 +4,19 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    {{-- Default meta tags --}}
+    <meta property="og:title" content="KESA Kenya">
+    <meta property="og:description" content="Official website of the Economics Students Association of Kenya">
+    <meta property="og:image" content="{{ asset('default.jpg') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="KESA Kenya">
+    <meta name="twitter:description" content="Official website of the Economics Students Association of Kenya">
+    <meta name="twitter:image" content="{{ asset('default.jpg') }}">
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>{{ config('app.name', 'KESA') }}</title>
    
     <link rel="icon" href="{{ asset('public/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url('favicon.ico') }}" type="image/x-icon">

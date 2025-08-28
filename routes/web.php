@@ -507,8 +507,11 @@ Route::middleware(['role:admin'])->group(function () {
     });
 });
 
-Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+// Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blo/display', [BlogController::class, 'display'])->name('blog.display');
+Route::get('/blogs/author/{author}', [App\Http\Controllers\BlogController::class, 'byAuthor'])->name('blog.byAuthor');
+
 
 // QR CODE ROUTES
 Route::get('/verify/{membership}', function ($membership) {

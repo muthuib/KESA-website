@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use App\Models\BlogViewLog;
+use Illuminate\Support\Str;
 
 class Blog extends Model
 {
@@ -12,6 +13,7 @@ class Blog extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'name', // ✅ Newly added field
         'content',
         'image',
@@ -21,6 +23,11 @@ class Blog extends Model
         'copyright',
         'ownership_disclaimer',
     ];
+
+    protected $casts = [
+    'date' => 'datetime',
+     ];
+
 
     /**
      * Relationship to the blog view logs.
@@ -38,4 +45,22 @@ class Blog extends Model
             ->where('view_date', '>=', $fromDate)
             ->sum('views');
     }
+// creates blog title in the browser instead of id
+protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($blog) {
+        if (is_null($blog->slug) || $blog->slug === '') {
+            $blog->slug = Str::slug($blog->title);
+        }
+    });
+
+    static::updating(function ($blog) {
+        if (is_null($blog->slug) || $blog->slug === '') {
+            $blog->slug = Str::slug($blog->title);
+        }
+    });
+}
+
 }

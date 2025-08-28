@@ -65,7 +65,7 @@
                         </td>
                         <td class="text-center">
                             <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('blog.show', $item->id) }}" class="btn btn-info" title="View"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('blog.show', $item->slug) }}" class="btn btn-info" title="View"><i class="fas fa-eye"></i></a>
                                 <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('blog.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog post?');" style="display:inline;">
                                     @csrf
