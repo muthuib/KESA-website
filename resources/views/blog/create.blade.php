@@ -43,8 +43,10 @@
 
         <div class="mb-2">
             <label for="image" class="form-label">Featured Image</label>
-            <input type="file" name="image" class="form-control form-control-sm" id="image">
-        </div>
+            <input type="file" name="image" class="form-control form-control-sm" id="image" accept=".jpg,.jpeg">
+            <small style="color: maroon;">Only JPG/JPEG images are allowed.</small>
+      </div>
+
 
         <!-- 🆕 Image Caption Field -->
         <div class="form-floating mb-2">

@@ -1,6 +1,21 @@
 @extends('layouts.app')
 
 @section('title', $blog->title)
+@section('meta')
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="{{ $blog->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($blog->content), 150) }}">
+    <meta property="og:image" content="{{ asset(str_replace('public/', '', $blog->image)) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $blog->title }}">
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($blog->content), 150) }}">
+    <meta name="twitter:image" content="{{ asset(str_replace('public/', '', $blog->image)) }}">
+@endsection
+
 
 @section('content')
 @auth
@@ -53,8 +68,12 @@
                         </p>
                         
                           <p class="text-secondary mb-2" style="font-size: 0.9rem;">
-                                <i class="bi bi-person"></i> <strong>Author:</strong> {{ $blog->author ?? 'Admin' }} &nbsp;  &nbsp;
+                                <i class="bi bi-person"></i> <strong>Author:</strong>
+                                <a href="{{ route('blog.byAuthor', ['author' => $blog->author]) }}">
+                                    {{ $blog->author ?? 'Admin' }}
+                                </a>
                             </p>
+                            
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
                                 <strong> Category:</strong> {{ $blog->category ?? 'Uncategorized' }}
                             </p>
@@ -207,8 +226,12 @@
                             </p>
                             
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
-                                <i class="bi bi-person"></i> <strong>Author:</strong> {{ $blog->author ?? 'Admin' }} &nbsp;  &nbsp;
+                                <i class="bi bi-person"></i> <strong>Author:</strong>
+                                <a href="{{ route('blog.byAuthor', ['author' => $blog->author]) }}">
+                                    {{ $blog->author ?? 'Admin' }}
+                                </a>
                             </p>
+
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
                                 <strong> Category:</strong> {{ $blog->category ?? 'Uncategorized' }}
                             </p>
@@ -313,7 +336,7 @@
         <ul class="read-also-list">
             @foreach($otherBlogs->take(10) as $item)
             <li class="read-also-item">
-                <a href="{{ route('blog.show', $item->id) }}" class="read-also-link">
+                <a href="{{ route('blog.show', $item->slug) }}" class="read-also-link">
                     @if($item->image)
                         <img src="{{ asset($item->image) }}" alt="{{ $item->title }}" class="read-also-img">
                     @endif

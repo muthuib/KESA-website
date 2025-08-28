@@ -46,13 +46,28 @@
         </div>
 
       <div class="mb-2">
-            <label for="image" class="form-label">Featured Image</label>
-            <input type="file" name="image" class="form-control form-control-sm @error('image') is-invalid @enderror" id="image">
-            @if($blog->image)
-                <img src="{{ asset($blog->image) }}" alt="Current Image" class="mt-2" style="max-width: 150px; border-radius: 5px;">
-            @endif
-            @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
+                <label for="image" class="form-label">Featured Image</label>
+                <small style="color: maroon;">Only JPG/JPEG images are allowed.</small>
+                <input 
+                    type="file" 
+                    name="image" 
+                    class="form-control form-control-sm @error('image') is-invalid @enderror" 
+                    id="image" 
+                    accept=".jpg,.jpeg"
+                >
+                
+                @if($blog->image)
+                    <img src="{{ asset($blog->image) }}" 
+                        alt="Current Image" 
+                        class="mt-2" 
+                        style="max-width: 150px; border-radius: 5px;">
+                @endif
+
+                @error('image') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+         </div>
+
        <div class="form-floating mb-2">
             <input type="text" name="name" class="form-control form-control-sm" id="name" value="{{ old('name', $blog->name ?? '') }}" required>
             <label for="name">Image Caption</label>

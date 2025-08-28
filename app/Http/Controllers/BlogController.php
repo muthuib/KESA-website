@@ -7,6 +7,8 @@ use App\Models\Blog;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Database\QueryException;
 
 
 class BlogController extends Controller
@@ -75,8 +77,12 @@ class BlogController extends Controller
             'category' => 'nullable|string|max:255',
             'copyright' => 'nullable|string|max:255',
             'ownership_disclaimer' => 'nullable|string',
-            'image' => 'nullable|image'
-        ]);
+            'image' => 'required|image|mimes:jpg,jpeg|max:2048',
+        ],
+    [
+    'image.max' => 'The image size should not exceed 2MB.',
+    'image.mimes' => 'Only JPG/JPEG images are allowed.',
+   ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
@@ -84,64 +90,85 @@ class BlogController extends Controller
             $request->image->move(public_path('blog'), $imagePath);
         }
 
-       Blog::create([
-            'title' => $request->title,
-            'name' => $request->name,
-            'content' => $request->content,
-            'date' => $request->date,
-            'author' => $request->author,
-            'category' => $request->category,
-            'copyright' => $request->copyright,
-            'ownership_disclaimer' => $request->ownership_disclaimer,
-            'image' => $imagePath
-        ]);
+        try {
+                Blog::create([
+                    'title' => $request->title,
+                    'slug' => Str::slug($request->title), // ✅ generate slug
+                    'name' => $request->name,
+                    'content' => $request->content,
+                    'date' => $request->date,
+                    'author' => $request->author,
+                    'category' => $request->category,
+                    'copyright' => $request->copyright,
+                    'ownership_disclaimer' => $request->ownership_disclaimer,
+                    'image' => $imagePath
+                ]);
 
-        return redirect()->route('blog.index')->with('success', 'Blog post added successfully!');
-    }
+                return redirect()->route('blog.index')->with('success', 'Blog post added successfully!');
+            } catch (QueryException $e) {
+                if ($e->errorInfo[1] == 1062) { // Duplicate entry
+                    return back()->withInput()->withErrors(['title' => 'A blog with this title already exists. Please use a different title.']);
+                }
+                throw $e; // rethrow if it's another error
+            }
+        }
 
     public function edit(Blog $blog)
     {
         return view('blog.edit', ['blog' => $blog]);
     }
 
-    public function update(Request $request, Blog $blog)
-    {
-        $request->validate([
-            'title' => 'required|string',
-            'name' => 'required|string|max:255',
-            'content' => 'required|string',
-            'date' => 'required|date',
-            'author' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'copyright' => 'nullable|string|max:255',
-            'ownership_disclaimer' => 'nullable|string',
-            'image' => 'nullable|image'
-        ]);
+   public function update(Request $request, Blog $blog)
+        {
+            $request->validate([
+                'title' => 'required|string',
+                'name' => 'required|string|max:255',
+                'content' => 'required|string',
+                'date' => 'required|date',
+                'author' => 'required|string|max:255',
+                'category' => 'nullable|string|max:255',
+                'copyright' => 'nullable|string|max:255',
+                'ownership_disclaimer' => 'nullable|string',
+                'image' => 'nullable|image|mimes:jpg,jpeg|max:2048',
+            ], [
+                'image.max' => 'The image size should not exceed 2MB.',
+                'image.mimes' => 'Only JPG/JPEG images are allowed.',
+            ]);
 
-        $data = $request->only([
-            'title', 'name', 'content', 'date',
-            'author', 'category', 'copyright', 'ownership_disclaimer'
-        ]);
+            $data = $request->only([
+                'title', 'name', 'content', 'date',
+                'author', 'category', 'copyright', 'ownership_disclaimer'
+            ]);
 
-        if ($request->hasFile('image')) {
-            if ($blog->image && File::exists(public_path($blog->image))) {
-                File::delete(public_path($blog->image));
+            // ✅ generate slug
+            $data['slug'] = Str::slug($request->title);
+
+            if ($request->hasFile('image')) {
+                if ($blog->image && File::exists(public_path($blog->image))) {
+                    File::delete(public_path($blog->image));
+                }
+
+                $imageName = 'blog/' . time() . '.' . $request->image->extension();
+                $request->image->move(public_path('blog'), $imageName);
+
+                $data['image'] = $imageName;
             }
 
-            $imageName = 'blog/' . time() . '.' . $request->image->extension();
-            $request->image->move(public_path('blog'), $imageName);
-
-            $data['image'] = $imageName;
+               try {
+                    $blog->update($data);
+                    return redirect()->route('blog.index')->with('success', 'Blog post updated successfully!');
+                } catch (QueryException $e) {
+                    if ($e->errorInfo[1] == 1062) { // Duplicate entry
+                        return back()->withInput()->withErrors(['title' => 'A blog with this title already exists. Please change it.']);
+                    }
+                    throw $e;
+                }
         }
 
-        $blog->update($data);
-
-        return redirect()->route('blog.index')->with('success', 'Blog post updated successfully!');
-    }
-
-      public function show($id)
+     public function show($slug)
 {
-    $blog = Blog::findOrFail($id);
+    $blog = Blog::where('slug', $slug)->firstOrFail();
+    $id = $blog->id; // keep id for stats tracking
     $sessionKey = 'blog_viewed_' . $id;
     $now = now();
 
@@ -164,7 +191,7 @@ class BlogController extends Controller
     }
 
     // Get stats
-     $today = Carbon::today();
+    $today = Carbon::today();
     $stats = [
         'last_1_day' => DB::table('blog_view_logs')
             ->where('blog_id', $id)
@@ -196,6 +223,7 @@ class BlogController extends Controller
 }
 
 
+
     public function destroy(Blog $blog)
     {
         if ($blog->image && File::exists(public_path($blog->image))) {
@@ -221,4 +249,15 @@ class BlogController extends Controller
 
         return view('blog.display', compact('blogs', 'search'));
     }
+
+    public function byAuthor($author)
+        {
+            // Get blogs by this author
+            $blogs = Blog::where('author', $author)
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(10);
+
+            return view('blog.by-author', compact('blogs', 'author'));
+        }
+
 }
