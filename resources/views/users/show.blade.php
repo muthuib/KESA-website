@@ -31,13 +31,11 @@
                 <i class="fas fa-book text-dark"></i> Category: <span class="text-dark">{{ $user->CATEGORY }}</span>
             </h5>
             <p class="card-text">
-                <strong>Role:</strong>
-                @if($user->roles->isEmpty())
-                    <span class="text-danger">No roles assigned</span>
+               <strong>Role:</strong>
+                @if($user->role)
+                    <span class="badge bg-primary">{{ $user->role->name }}</span>
                 @else
-                    @foreach($user->roles as $role)
-                        <span class="badge bg-primary">{{ $role->name }}</span>
-                    @endforeach
+                    <span class="text-danger">No role assigned</span>
                 @endif
             </p>
         </div>

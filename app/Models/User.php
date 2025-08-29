@@ -15,6 +15,7 @@ class User extends Authenticatable
     public $incrementing = true;
     protected $keyType = 'int';
 
+    
     // Table columns
     protected $fillable = [
         'FIRST_NAME',
@@ -61,6 +62,7 @@ class User extends Authenticatable
         'JOB',
         'COMMENT',
         'DATE',
+        'role_id',
         'type',
         'must_change_password',
     ];
@@ -95,14 +97,13 @@ class User extends Authenticatable
 
     // RBAC: Check if user has a specific role
     public function hasRole($roleName)
+        {
+            return $this->role && $this->role->name === $roleName;
+        }
+        
+    public function role()
     {
-        return $this->roles()->where('name', $roleName)->exists();
-    }
-
-    // Define roles relationship
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     // Check if user has a specific permission

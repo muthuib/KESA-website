@@ -14,11 +14,12 @@
                     <p class="text-muted mb-1" style="font-size: 14px;">
                         Membership Number: 
                         <span class="fw-bold text-primary">
-                            @if($user->roles->isEmpty())
+                           @if(!$user->role) 
                                 Pending Approval
                             @else
                                 {{ $user->MEMBERSHIP_NUMBER }}
                             @endif
+
                         </span>
                     </p>
                     <a href="{{ route('profile.edit', $user->ID) }}" class="btn btn-outline-primary btn-sm mt-2">Edit Profile</a>
@@ -37,9 +38,18 @@
         <div class="col-md-9">
             <!-- Hero Welcome Message -->
             <div class="bg-light p-4 rounded shadow-sm mb-4 animate__animated animate__fadeInUp">
-                @foreach($user->roles as $role)
-                    <h2 class="fw-bold mb-1">Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} <span class="text-success">({{ $role->name }})</span></h2>
-                @endforeach
+               @if($user->role)
+                    <h2 class="fw-bold mb-1">
+                        Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} 
+                            <span class="text-success">({{ $user->role->name }})</span>
+                        </h2>
+                    @else
+                        <h2 class="fw-bold mb-1">
+                            Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} 
+                            <span class="text-warning">(Pending Approval)</span>
+                        </h2>
+                    @endif
+
                 <p class="text-muted">Your personalized space for updates, tools, and resources within KESA.</p>
             </div>
 

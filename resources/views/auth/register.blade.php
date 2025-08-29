@@ -739,6 +739,7 @@
                     <!-- Display errors if any -->
                   <!-- Title & Name Row -->
                 <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                     <input type="hidden" name="role_id" value="2"> {{-- Student role ID --}}
                     <!-- Title -->
                     <div class="form-group" style="flex: 1; min-width: 150px;">
                         <label for="TITTLE" class="required-label">Title</label>
@@ -922,12 +923,35 @@
                             <input type="date" name="DATE" class="form-control" value="{{ old('DATE') }}" required>
                         </div>
                     </div>
-                        <!-- Passport photo -->
-                        <div class="form-group">
-                                <label for="PASSPORT_PHOTO" class="required-label">
-                                Upload a Passport-Sized Photo for Your Membership Smart Card (Not a Selfie)  </label> <p style="color: maroon;">Images should be in format: jpeg, png, jpg</p>
-                                <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO" accept=".jpeg,.png,.jpg" required>
-                        </div>
+             <div class="form-row">
+                    <!-- Passport photo -->
+                    <div class="form-group col-md-7">
+                        <label for="PASSPORT_PHOTO" class="required-label">
+                            Upload a Passport-Sized Photo for Your Membership Smart Card (Not a Selfie)
+                        </label>
+                        <p style="color: maroon; font-size: 0.9rem;">
+                            Images should be in format: jpeg, png, jpg
+                        </p>
+                        <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO"
+                            class="form-control-file"
+                            accept=".jpeg,.png,.jpg" required>
+                    </div>
+
+                    <!-- Phone number -->
+                    <div class="form-group col-md-5">
+                        <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">Mpesa Phone Number</label>
+                        <p style="color: maroon; font-size: 0.7rem;">
+                             Safaricom M-Pesa phone number that will be used to make your membership payment.
+                        </p>
+                        <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
+                            class="form-control"
+                            value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
+                        @error('ALTERNATIVE_PHONE_NUMBER')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
                     <div class="form-row">
                         <div class="form-group">
                             <label> Any Comment (optional)</label>
@@ -1050,7 +1074,7 @@
                     
                     <div class="mb-3">
                         <label>Registration Fee</label>
-                        <input type="number" name="REGISTRATION_FEE" class="form-control" value="300" readonly>
+                        <input type="number" name="REGISTRATION_FEE" class="form-control" value="1" readonly>
                     </div>
 
                     <button type="submit" style="margin-bottom: 5px;">Register & Pay via M-Pesa</button>

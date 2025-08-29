@@ -2,54 +2,42 @@
 
 @section('content')
 <div class="container">
-    <h1>Assign Roles to {{ $user->USERNAME }}</h1>
+    <h5 style="margin-top: 50px;">Assign Role to {{ "{$user->FIRST_NAME} {$user->LAST_NAME}" }}</h5>
 
-         <!-- Back button with a backward icon -->
-         <div class="mb-3 text-end">
+    <!-- Back button with a backward icon -->
+    <div class="mb-3 text-end">
         <a href="{{ route('users.index') }}" class="btn btn-outline-dark">
             <i class="fa fa-backward"></i> Back
         </a>
     </div>
-    <!-- Display success message if available -->
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
-    <!-- Display error messages if validation fails -->
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <!-- Form to assign roles -->
+    <!-- Form to assign role -->
     <form action="{{ route('users.assignRoles', $user->ID) }}" method="POST">
         @csrf
         <div class="form-group">
-            <label>Roles</label>
+            <label class="fw-bold mb-2">Select Role</label>
             <div class="form-check">
                 @foreach($roles as $role)
-                    <div>
-                        <input 
-                            type="checkbox" 
-                            name="roles[]" 
-                            value="{{ $role->id }}" 
+                    <div class="mb-2">
+                      <input
+                            type="radio"
+                            name="role"
+                            value="{{ $role->id }}"
                             id="role-{{ $role->id }}"
                             class="form-check-input"
-                            {{ $user->roles->contains('id', $role->id) ? 'checked' : '' }}>
+                            {{ $user->role && $user->role->id === $role->id ? 'checked' : '' }}>
                         <label for="role-{{ $role->id }}" class="form-check-label">
-                            {{ $role->name }}
+                            {{ ucfirst($role->name) }}
                         </label>
+
                     </div>
                 @endforeach
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3"><i class="fas fa-save"></i>Update Roles</button>
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-save"></i> Update Role
+        </button>
     </form>
 </div>
 @endsection

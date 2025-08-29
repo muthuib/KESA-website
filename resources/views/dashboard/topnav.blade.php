@@ -308,6 +308,7 @@
                     </a>
                 </li>
             @endguest
+            
                 <!-- About us Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="economicsHubDropdown" style="@if(request()->routeIs('about.display') || request()->routeIs('team-members.display')) 
@@ -527,12 +528,12 @@
               <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
                     <i class="fas fa-user" style="font-size: 20px; color: white; margin-top: 22px;"></i> 
-                    {{ Auth::user()->FIRST_NAME }} {{ Auth::user()->LAST_NAME }} 
-                    (@if(Auth::user()->roles->isEmpty()) 
-                        <span style="color: aqua; font-weight: bold;">Waiting for Approval</span> 
-                    @else 
-                    <span style="color: aqua; font-weight: bold;">{{ Auth::user()->MEMBERSHIP_NUMBER }} </span> 
-                    @endif)
+                    @if(!Auth::user()->role)
+                        <span style="color: aqua; font-weight: bold;">Waiting for Approval</span>
+                    @else
+                        <span style="color: aqua; font-weight: bold;">{{ Auth::user()->MEMBERSHIP_NUMBER }}</span>
+                    @endif
+
                 </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="top: 60px;">
                         <li>

@@ -58,15 +58,18 @@ class MpesaWebhookController extends Controller
         }
 
         $data = json_decode($pending->data, true);
+        // pass role id to users table from pending registrations
+        $roleId = $data['role_id'] ?? null;
+
 
         // Normalize phone number
-        $phoneNormalized = preg_replace('/\s+/', '', $data['PHONE_NUMBER']);
+        $phoneNormalized = preg_replace('/\s+/', '', $data['ALTERNATIVE_PHONE_NUMBER']);
         if (str_starts_with($phoneNormalized, '0')) $phoneNormalized = '254' . substr($phoneNormalized, 1);
         if (str_starts_with($phoneNormalized, '+')) $phoneNormalized = ltrim($phoneNormalized, '+');
 
         // Prevent duplicate users
         if (User::where('EMAIL', $data['EMAIL'])
-            ->orWhere('PHONE_NUMBER', $phoneNormalized)
+            ->orWhere('ALTERNATIVE_PHONE_NUMBER', $phoneNormalized)
             ->orWhere('NATIONAL_ID_NUMBER', $data['NATIONAL_ID_NUMBER'])->exists()) {
 
             DB::transaction(function() use ($pending) {
@@ -140,11 +143,13 @@ class MpesaWebhookController extends Controller
                         : public_path('pictures/default.png'),
             'logo' => public_path('pictures/logo.jpg'),
             'qrCode' => public_path($qrPathRel),
+        
         ]);
         $pdf->save($pdfPath);
 
         // Create user
         $user = User::create(array_merge($data, [
+            'role_id'           => $roleId, // assign role
             'membership_expiry' => $paidAt->copy()->addYear()->toDateString(),
             'mpesa_receipt'     => $receipt,
             'amount_paid'       => $amount,
@@ -167,7 +172,7 @@ class MpesaWebhookController extends Controller
             $plainPassword,
             $user->FIRST_NAME,
             $user->MEMBERSHIP_NUMBER,
-            $user->PHONE_NUMBER,
+            $user->ALTERNATIVE_PHONE_NUMBER,
             $pdfPath
         ));
 
