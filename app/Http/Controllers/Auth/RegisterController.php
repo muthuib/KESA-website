@@ -25,6 +25,7 @@ class RegisterController extends Controller
             'EMAIL' => 'required|email|unique:users,EMAIL',
             'GENDER' => 'required|in:Male,Female,Other',
             'PHONE_NUMBER' => 'required|string|max:20|unique:users,PHONE_NUMBER',
+            'ALTERNATIVE_PHONE_NUMBER' => 'required|string|max:20',
             'NATIONAL_ID_NUMBER' => 'required|string|max:50|unique:users,NATIONAL_ID_NUMBER',
             'DISABILITY_STATUS' => 'required|in:Yes,No',
             'DISABILITY_TYPE' => 'nullable|string|required_if:DISABILITY_STATUS,Yes',
@@ -50,15 +51,15 @@ class RegisterController extends Controller
             'JOB' => 'nullable|string|max:255',
             'COMMENT' => 'nullable|string',
             'DATE' => 'nullable|date',
-            'type' => 'required|in:student,full,associate',
+            'role_id' => 'required|exists:roles,id',
             'must_change_password' => 'required|boolean',
         ]);
 
         // Normalize phone to 2547XXXXXXXX
-        $phone = preg_replace('/\s+/', '', $validated['PHONE_NUMBER']);
+        $phone = preg_replace('/\s+/', '', $validated['ALTERNATIVE_PHONE_NUMBER']);
         if (str_starts_with($phone, '0')) $phone = '254' . substr($phone, 1);
         if (str_starts_with($phone, '+')) $phone = ltrim($phone, '+');
-        $validated['PHONE_NUMBER'] = $phone;
+        $validated['ALTERNATIVE_PHONE_NUMBER'] = $phone;
 
         // Store photo temporarily in public/tmp
         $tmpRelPath = null;
@@ -79,7 +80,7 @@ class RegisterController extends Controller
         $accountRef = 'KESA-' . now('Africa/Nairobi')->format('YmdHis');
 
         // Send STK push
-        $stk = $mpesa->stkPush($validated['PHONE_NUMBER'], $amount, $accountRef, 'Membership Registration');
+        $stk = $mpesa->stkPush($validated['ALTERNATIVE_PHONE_NUMBER'], $amount, $accountRef, 'Membership Registration');
 
         if (!isset($stk['ResponseCode']) || $stk['ResponseCode'] !== '0') {
             if ($tmpRelPath && file_exists(public_path($tmpRelPath))) @unlink(public_path($tmpRelPath));
@@ -91,7 +92,7 @@ class RegisterController extends Controller
             $pendingId = DB::table('pending_registrations')->insertGetId([
                 'data' => json_encode($validated),
                 'passport_photo_tmp' => $tmpRelPath,
-                'phone' => $validated['PHONE_NUMBER'],
+                'phone' => $validated['ALTERNATIVE_PHONE_NUMBER'],
                 'amount' => $amount,
                 'merchant_request_id' => $stk['MerchantRequestID'] ?? null,
                 'checkout_request_id' => $stk['CheckoutRequestID'] ?? null,
@@ -100,7 +101,7 @@ class RegisterController extends Controller
             ]);
 
             DB::table('mpesa_payments')->insert([
-                'phone' => $validated['PHONE_NUMBER'],
+                'phone' => $validated['ALTERNATIVE_PHONE_NUMBER'],
                 'amount' => $amount,
                 'account_reference' => $accountRef,
                 'description' => 'Membership Registration',

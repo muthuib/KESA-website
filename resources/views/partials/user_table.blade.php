@@ -5,7 +5,7 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Roles</th>
+
                 <th>Actions</th>
             </tr>
         </thead>
@@ -16,14 +16,9 @@
                     <td>{{ $user->FIRST_NAME }} {{ $user->LAST_NAME }}</td>
                     <td>{{ $user->EMAIL }}</td>
                     <td>
-                        @foreach($user->roles as $role)
-                            <span class="badge bg-primary">{{ $role->name }}</span>
-                        @endforeach
-                    </td>
-                    <td>
                         <a href="{{ route('users.assignRolesForm', $user->ID) }}" class="btn btn-success btn-sm">Assign Roles</a>
                         <a href="{{ route('users.show', $user->ID) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ route('users.edit', $user->ID) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <!-- <a href="{{ route('users.edit', $user->ID) }}" class="btn btn-warning btn-sm">Edit</a> -->
                         <form action="{{ route('users.destroy', $user->ID) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
