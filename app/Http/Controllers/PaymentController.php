@@ -2,130 +2,161 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\User;
-use App\Models\Payment;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-
 
 class PaymentController extends Controller
 {
-    /**
-     * Trigger STK push for membership renewal
-     */
     public function renewMembership(Request $request)
     {
-        $user = auth()->user();
-        $phone = $user->phone;  // user’s registered phone
-        $amount = 1000; // renewal fee (example)
+        $user   = $request->user();
+        $amount = (int) env('MPESA_RENEWAL_AMOUNT', 1000);
+        $phone  = $this->normalizeMsisdn($user->phone ?? $user->phone_number ?? '');
 
-        // Generate STK push
-        $response = $this->stkPush($phone, $amount, $user->id);
+        // callback URL must be absolute and accessible by Safaricom (ngrok)
+        $callbackURL = route('stk.callback', [], true);
 
-        if ($response['ResponseCode'] == "0") {
-            // Save renewal attempt in DB
+        $resp = $this->stkPush($phone, $amount, $user->id, $callbackURL);
+
+        // Safaricom returns ResponseCode 0 on success
+        $responseCode = $resp['ResponseCode'] ?? $resp['responseCode'] ?? null;
+
+        if ($responseCode == 0 || $responseCode === "0") {
             Payment::create([
                 'user_id' => $user->id,
-                'amount' => $amount,
-                'mpesa_receipt' => null,
-                'payment_status' => 'pending',
-                'payment_date' => now(),
+                'amount'  => $amount,
+                'phone_number' => $phone,
                 'purpose' => 'renewal',
+                'status'  => 'pending',
+                'merchant_request_id' => $resp['MerchantRequestID'] ?? null,
+                'checkout_request_id' => $resp['CheckoutRequestID'] ?? null,
             ]);
 
-            return back()->with('success', 'STK Push sent to your phone. Please enter your PIN to complete payment.');
+            return back()->with('success', 'STK Push sent. Enter your M-Pesa PIN to complete payment.');
         }
 
-        return back()->with('error', 'STK Push failed. Try again.');
+        Log::warning('STK push failed', ['response' => $resp]);
+
+        return back()->with('error', 'STK Push failed. Please try again.');
     }
 
-    /**
-     * STK Push Implementation
-     */
-    private function stkPush($phone, $amount, $userId)
+    private function stkPush(string $phone, int $amount, int $accountRef, string $callbackURL): array
     {
+        $base      = rtrim(env('MPESA_BASE_URL', 'https://sandbox.safaricom.co.ke'), '/');
         $shortcode = env('MPESA_SHORTCODE');
-        $passkey = env('MPESA_PASSKEY');
-        $lipaNaMpesaOnlineShortcode = $shortcode;
-        $timestamp = date('YmdHis');
-        $password = base64_encode($shortcode.$passkey.$timestamp);
-
-        $callbackURL = route('stk.callback'); // Our callback URL
+        $passkey   = env('MPESA_PASSKEY');
+        $timestamp = now()->format('YmdHis');
+        $password  = base64_encode($shortcode . $passkey . $timestamp);
 
         $payload = [
-            "BusinessShortCode" => $lipaNaMpesaOnlineShortcode,
-            "Password" => $password,
-            "Timestamp" => $timestamp,
-            "TransactionType" => "CustomerPayBillOnline",
-            "Amount" => $amount,
-            "PartyA" => $phone,
-            "PartyB" => $shortcode,
-            "PhoneNumber" => $phone,
-            "CallBackURL" => $callbackURL,
-            "AccountReference" => $userId, // link payment to user
-            "TransactionDesc" => "Membership Renewal"
+            "BusinessShortCode" => $shortcode,
+            "Password"          => $password,
+            "Timestamp"         => $timestamp,
+            "TransactionType"   => "CustomerPayBillOnline",
+            "Amount"            => $amount,
+            "PartyA"            => $phone,
+            "PartyB"            => $shortcode,
+            "PhoneNumber"       => $phone,
+            "CallBackURL"       => $callbackURL,
+            "AccountReference"  => (string)$accountRef,
+            "TransactionDesc"   => "Membership Renewal",
         ];
 
-        // Get access token
         $token = $this->getAccessToken();
 
         $response = Http::withToken($token)
-            ->post('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', $payload);
+            ->acceptJson()
+            ->post($base . '/mpesa/stkpush/v1/processrequest', $payload);
 
-        return $response->json();
+        return $response->json() ?? [];
     }
 
-    /**
-     * STK Callback (Safaricom will call this after payment)
-     */
     public function stkCallback(Request $request)
     {
-        $data = $request->all();
+        // Log raw payload for debugging
+        Log::info('STK Callback raw:', $request->all());
 
-        if (isset($data['Body']['stkCallback']['ResultCode']) && $data['Body']['stkCallback']['ResultCode'] == 0) {
-            $callback = $data['Body']['stkCallback']['CallbackMetadata']['Item'];
+        $body = $request->input('Body.stkCallback', []);
+        $resultCode = $body['ResultCode'] ?? null;
+        $checkoutId = $body['CheckoutRequestID'] ?? null;
 
-            $mpesaReceipt = $callback[1]['Value']; // Receipt number
-            $amount = $callback[0]['Value'];
-            $phone = $callback[4]['Value'];
-            $userId = $data['Body']['stkCallback']['MerchantRequestID'] ?? null;
-
-            // Find last pending payment for this user
-            $payment = Payment::where('payment_status', 'pending')
-                              ->where('amount', $amount)
-                              ->latest()
-                              ->first();
-
-            if ($payment) {
-                $payment->update([
-                    'mpesa_receipt' => $mpesaReceipt,
-                    'payment_status' => 'successful',
-                    'payment_date' => now(),
-                ]);
-
-                // Extend membership by 1 year
-                $user = $payment->user;
-                $currentExpiry = $user->membership_expiry ?? Carbon::now();
-                $newExpiry = Carbon::parse($currentExpiry)->greaterThan(now())
-                              ? Carbon::parse($currentExpiry)->addYear()
-                              : now()->addYear();
-
-                $user->update(['membership_expiry' => $newExpiry]);
-            }
+        // Find pending payment by checkout_request_id OR by MerchantRequestID
+        $payment = null;
+        if ($checkoutId) {
+            $payment = Payment::where('checkout_request_id', $checkoutId)->latest()->first();
         }
 
-        return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Success']);
+        if (!$payment && isset($body['MerchantRequestID'])) {
+            $payment = Payment::where('merchant_request_id', $body['MerchantRequestID'])->latest()->first();
+        }
+
+        // If still not found you'll want to log and return success to avoid retries
+        if (!$payment) {
+            Log::warning('Payment match not found for STK callback', ['checkoutId'=>$checkoutId, 'body' => $body]);
+            return response()->json(['ResultCode'=>0, 'ResultDesc'=>'Processed']);
+        }
+
+        // save raw payload
+        $payment->raw_callback = $request->all();
+
+        if ((int)$resultCode === 0) {
+            // Build metadata map by Name => Value for robust parsing
+            $items = collect($body['CallbackMetadata']['Item'] ?? [])
+                ->mapWithKeys(fn($i) => [($i['Name'] ?? '') => ($i['Value'] ?? null)]);
+
+            $payment->status = 'success';
+            $payment->mpesa_receipt_number = $items['MpesaReceiptNumber'] ?? $items['ReceiptNumber'] ?? null;
+
+            if (!empty($items['TransactionDate'])) {
+                // Daraja transaction date usually YYYYMMDDHHMMSS
+                try {
+                    $payment->transaction_date = Carbon::createFromFormat('YmdHis', (string)$items['TransactionDate']);
+                } catch (\Exception $e) {
+                    Log::warning('TransactionDate parse failed', ['val'=>$items['TransactionDate']]);
+                }
+            }
+
+            $payment->save();
+
+            // Extend membership by 1 year
+            $user = $payment->user;
+            if ($user) {
+                $currentExpiry = $user->membership_expiry ? Carbon::parse($user->membership_expiry) : now();
+                $newExpiry = $currentExpiry->greaterThan(now()) ? $currentExpiry->copy()->addYear() : now()->addYear();
+                $user->update(['membership_expiry' => $newExpiry]);
+            }
+        } else {
+            // Failed or cancelled
+            $payment->status = 'failed';
+            $payment->save();
+            Log::warning('STK push returned non-zero result', ['code'=>$resultCode, 'desc'=>$body['ResultDesc'] ?? null]);
+        }
+
+        return response()->json(['ResultCode'=>0, 'ResultDesc'=>'Processed']);
     }
 
-    private function getAccessToken()
+    private function getAccessToken(): string
     {
-        $consumerKey = env('MPESA_CONSUMER_KEY');
-        $consumerSecret = env('MPESA_CONSUMER_SECRET');
+        $base   = rtrim(env('MPESA_BASE_URL', 'https://sandbox.safaricom.co.ke'), '/');
+        $key    = env('MPESA_CONSUMER_KEY');
+        $secret = env('MPESA_CONSUMER_SECRET');
 
-        $response = Http::withBasicAuth($consumerKey, $consumerSecret)
-            ->get('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials');
+        $resp = Http::withBasicAuth($key, $secret)
+            ->acceptJson()
+            ->get($base.'/oauth/v1/generate?grant_type=client_credentials');
 
-        return $response->json()['access_token'];
+        return $resp->json()['access_token'] ?? '';
+    }
+
+    private function normalizeMsisdn(?string $raw): string
+    {
+        $raw = preg_replace('/\D+/', '', (string)$raw);
+        if (str_starts_with($raw, '0')) return '254' . substr($raw, 1);
+        if (str_starts_with($raw, '254')) return $raw;
+        if (str_starts_with($raw, '7')) return '254' . $raw;
+        return $raw;
     }
 }
