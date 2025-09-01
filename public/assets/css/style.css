@@ -41,10 +41,22 @@ h6 {
 /*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
+/* Common main styles */
 #main {
   margin-top: 60px;
   padding: 20px 30px;
   transition: all 0.3s;
+}
+
+/* Logged-in users: center content */
+#main.main-auth {
+  text-align: center;
+}
+
+/* Guests: align content left */
+#main.main-guest {
+  text-align: left;    /* guest users' content aligned left */
+  margin-left: 0 !important; /* remove sidebar spacing */
 }
 
 @media (max-width: 1199px) {
@@ -365,9 +377,19 @@ h6 {
 }
 
 .logo img {
-  max-height: 26px;
-  margin-right: 6px;
+  width: 50px;                /* fixed width */
+  height: 50px;               /* fixed height for perfect circle */
+  border-radius: 50%;         /* make circular */
+  object-fit: contain;        /* keep aspect ratio inside circle */
+  background-color: #fff;     /* white background */
+  padding: 4px;               /* small breathing space inside */
+  border: 2px solid #fff;     /* clean border */
+  margin: 0 6px 0 0;          /* only space on the right */
+  display: inline-block;      /* inline for alignment */
+  vertical-align: middle;     /* centers with text */
+  margin-top: 20px;
 }
+
 
 .logo span {
   font-size: 26px;

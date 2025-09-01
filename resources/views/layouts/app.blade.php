@@ -39,7 +39,27 @@
     
 
     <!-- code to display image when news link is shared -->
+     <!-- TEMPLATE CSS -->
+        <!-- Favicons -->
+        <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
+        <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+        <!-- Vendor CSS Files -->
+        <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+        <!-- END OF TEMPLATE CSS -->
     
     <title>@yield('title', 'KESA Kenya')</title>
     
@@ -53,152 +73,124 @@
         @yield('styles')
 
 </head>
-<body class="sb-nav-fixed">
-    {{-- Include Top Navigation --}}
-    @include('dashboard.topnav')
-    
-    {{-- Sidebar Toggle Button for Small Devices --}}
-    @auth
-    <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
-            style="position: fixed; top: 10px; left: 80px; z-index: 1050;">
-        <i class="fas fa-bars"></i> Dashboard
-    </button>
-@endauth
-    {{-- Only logged-in users will see the sidebar --}}
-    @auth
-    <div id="layoutSidenav" style="display: flex;">
-        <!-- Include Sidebar -->
-        @include('dashboard.sidebar')
-    @endauth
-        <!-- Main Content -->
-        <div id="layoutSidenav_content" style="flex-grow: 1; overflow-y: auto; top: 100px">
-            
-        @if($errors->any())
-            <div class="alert alert-danger" style="margin-top: 90px;">
-                <ul>
+    <body class="sb-nav-fixed">
+        @guest
+            {{-- Include Top Navigation --}}
+            @include('dashboard.topnav')
+        @endguest
+        @auth
+            {{-- Include Top Navigation --}}
+            @include('dashboard.topnav1')
+
+            {{-- Sidebar Toggle Button for Small Devices --}}
+            <!-- <button id="sidebarToggle" class="btn btn-primary d-lg-none" 
+                    style="position: fixed; top: 10px; left: 80px; z-index: 1050;">
+                <i class="fas fa-bars"></i> Dashboard
+            </button> -->
+        @endauth
+            {{-- Only logged-in users will see the sidebar --}}
+            @auth
+            <div id="layoutSidenav" style="display: flex;">
+                <!-- Include Sidebar -->
+                @include('dashboard.sidenav')
+            @endauth
+                <!-- Main Content -->
+              {{-- MAIN CONTENT --}}
+<main id="main" class="{{ Auth::check() ? 'main-auth' : 'main-guest' }}">
+    @if($errors->any())
+        <div class="alert alert-danger" style="margin-top: 90px;">
+            <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
-                </ul>
-            </div>
-        @endif
-            @auth
-                <!-- Start of Alert messages -->
-                @if (session('success'))
-                <div class="alert alert-success d-flex align-items-center mx-auto" role="alert" style="width: 600px; top: 10px;">
-                    <i class="fas fa-check-circle me-2 fs-3 text-success" style="font-size: 1.5rem;"></i>
-                    <div style="font-size: 1rem; color: #155724;">
-                        {{ session('success') }}
+            </ul>
+        </div>
+    @endif
+
+    @auth
+        <!-- Start of Alert messages -->
+        @include('layouts.alerts')
+    @endauth
+
+    @yield('content')
+</main>
+    <!-- Footer -->
+    <!-- display footer if not fetched through ajax -->
+    @if(empty($isAjax))
+        @guest
+        @if (!View::hasSection('hide_footer'))
+        <footer class="text-light pt-5 pb-4" style="background-color: rgb(88, 57, 57);">
+            <div class="container">
+                <div class="row text-center text-lg-start justify-content-lg-center">
+                    
+                    <!-- Quick Links Section -->
+                    <div class="col-lg-2 col-md-6 col-sm-12 mb-4">
+                        <h5 class="text-uppercase font-weight-bold footer-title">Quick Links</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li><a href="/" class="text-light footer-text">Home</a></li>
+                            <li><a href="{{ route('about.display') }}" class="text-light footer-text">About Us</a></li>
+                            <li><a href="{{ route('activities.display') }}" class="text-light footer-text">Past events</a></li>
+                            <li><a href="{{ route('contact.display') }}" class="text-light footer-text">Contact</a></li>
+                            <!-- <li><a href="/faq" class="text-light footer-text">FAQ</a></li> -->
+                        </ul>
                     </div>
-                </div>
-                @endif
 
-                @if (session('danger'))
-                <div class="alert alert-danger d-flex align-items-center mx-auto" role="alert" style="width: 600px; top: 10px;">
-                    <i class="fas fa-times-circle me-2 fs-3 text-danger" style="font-size: 1.5rem;"></i>
-                    <div style="font-size: 1rem; color: #721c24;">
-                        {{ session('danger') }}
+                    <!-- Contact Info Section -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <h5 class="text-uppercase font-weight-bold footer-title">Contact Us</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="footer-text"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                            <li class="footer-text"><i class="fas fa-phone-alt"></i>+254 715 752644 </li>
+                            <li class="footer-text"><i class="fas fa-envelope"></i> admin@kesakenya.org</li>
+                        </ul>
                     </div>
-                </div>
-                @endif
-                @if (session('error'))
-                <div class="alert alert-danger d-flex align-items-center mx-auto" role="alert" style="width: 600px; top: 10px;">
-                    <i class="fas fa-times-circle me-2 fs-3 text-danger" style="font-size: 1.5rem;"></i>
-                    <div style="font-size: 1rem; color: #721c24;">
-                        {{ session('error') }}
-                    </div>
-                </div>
-                @endif
-            @endauth
 
-                <!-- End of alert message -->
-        
-
-            <main>
-                <div class="container-fluid px-4">
-                    @yield('content')
-                </div>
-            </main>
-
-            <!-- Footer -->
-             <!-- display footer if not fetched through ajax -->
-             @if(empty($isAjax))
-@guest
-@if (!View::hasSection('hide_footer'))
-<footer class="text-light pt-5 pb-4" style="background-color: rgb(88, 57, 57);">
-    <div class="container">
-        <div class="row text-center text-lg-start justify-content-lg-center">
-            
-            <!-- Quick Links Section -->
-            <div class="col-lg-2 col-md-6 col-sm-12 mb-4">
-                <h5 class="text-uppercase font-weight-bold footer-title">Quick Links</h5>
-                <ul class="list-unstyled mt-3">
-                    <li><a href="/" class="text-light footer-text">Home</a></li>
-                    <li><a href="{{ route('about.display') }}" class="text-light footer-text">About Us</a></li>
-                    <li><a href="{{ route('activities.display') }}" class="text-light footer-text">Past events</a></li>
-                    <li><a href="{{ route('contact.display') }}" class="text-light footer-text">Contact</a></li>
-                    <!-- <li><a href="/faq" class="text-light footer-text">FAQ</a></li> -->
-                </ul>
-            </div>
-
-            <!-- Contact Info Section -->
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <h5 class="text-uppercase font-weight-bold footer-title">Contact Us</h5>
-                <ul class="list-unstyled mt-3">
-                    <li class="footer-text"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                    <li class="footer-text"><i class="fas fa-phone-alt"></i>+254 715 752644 </li>
-                    <li class="footer-text"><i class="fas fa-envelope"></i> admin@kesakenya.org</li>
-                </ul>
-            </div>
-
-            <!-- Newsletter Section -->
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <h5 class="text-uppercase font-weight-bold footer-title">Newsletter</h5>
-                <div class="card shadow-sm w-100">
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4 footer-text">Subscribe to Our Newsletter</h4>
-                        @if(session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
-                        <form method="POST" action="{{ route('subscribe') }}">
-                            @csrf
-                            <div class="form-group">
-                                <label for="email" class="form-label footer-text">Your Email Address</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    <!-- Newsletter Section -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <h5 class="text-uppercase font-weight-bold footer-title">Newsletter</h5>
+                        <div class="card shadow-sm w-100">
+                            <div class="card-body">
+                                <h4 class="card-title text-center mb-4 footer-text">Subscribe to Our Newsletter</h4>
+                                @if(session('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
+                                @endif
+                                <form method="POST" action="{{ route('subscribe') }}">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="email" class="form-label footer-text">Your Email Address</label>
+                                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                                    </div>
+                                    <div class="form-group text-center mt-4">
+                                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group text-center mt-4">
-                                <button type="submit" class="btn btn-primary">Subscribe</button>
-                            </div>
-                        </form>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div class="col-lg-4 col-md-12 col-sm-12 text-center">
+                        <h5 class="text-uppercase font-weight-bold footer-title">Follow Us</h5>
+                        <div class="mt-3">
+                            <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" class="text-light me-3"><img src="/assets/images/x-logo.png" alt="Twitter X" width="17" height="17"></i></a>
+                            <a href=" https://www.linkedin.com/company/kenya-economics-students-association/" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" class="text-light"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="text-center mt-4 footer-text" style="color: white;">
+                    <div>&copy; KESA Kenya. All rights reserved. {{ date('Y') }}</div>
+                    <div class="mt-2">
+                        <a href="{{ route('app') }}" class="text-decoration-none text-light"><u>Privacy Policy</u></a>
+                        &middot;
+                        <a href="{{ route('app') }}" class="text-decoration-none text-light"><u>Terms & Conditions</u></a>
                     </div>
                 </div>
             </div>
-
-            <!-- Social Media Links -->
-            <div class="col-lg-4 col-md-12 col-sm-12 text-center">
-                <h5 class="text-uppercase font-weight-bold footer-title">Follow Us</h5>
-                <div class="mt-3">
-                    <a href="https://www.facebook.com/kesa.kenya?mibextid=ZbWKwL" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com/kesa_kenya?t=9VRLpQi_IiXHRdU81n_iLQ&s=09" class="text-light me-3"><img src="/assets/images/x-logo.png" alt="Twitter X" width="17" height="17"></i></a>
-                    <a href=" https://www.linkedin.com/company/kenya-economics-students-association/" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://www.instagram.com/kesa_kenya?igsh=YjcwdXptM254d3Fq" class="text-light"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer Bottom -->
-        <div class="text-center mt-4 footer-text" style="color: white;">
-            <div>&copy; KESA Kenya. All rights reserved. {{ date('Y') }}</div>
-            <div class="mt-2">
-                <a href="{{ route('app') }}" class="text-decoration-none text-light"><u>Privacy Policy</u></a>
-                &middot;
-                <a href="{{ route('app') }}" class="text-decoration-none text-light"><u>Terms & Conditions</u></a>
-            </div>
-        </div>
-    </div>
-</footer>
-     
-        </div>
+         </footer>
     </div>
     <!-- end of footer -->
     @endif
@@ -206,7 +198,7 @@
    
      <!-- Footer2 to be vissible only to logged in users -->
  @auth
- <footer class="py-4 bg-light mt-auto">
+ <!-- <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
                         <div class="text-muted">&copy; KESA {{ date('Y') }}</div>
@@ -217,12 +209,12 @@
                         </div>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
             @endauth
     <!-- end of footer -->
     @endif
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/chart-area-demo.js"></script>
@@ -230,11 +222,26 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- implements pop up for read more in activities/display -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- code for quilli editor for news -->
+
+    <!-- TEMPLATE JS FILES -->
+      <!-- Vendor JS Files -->
+        <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
+        <script src="{{ asset('assets/vendor/echarts/echarts.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+        <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
+
+        <!-- Template Main JS File -->
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+  <!-- END OF TEMPLATE JS FILES -->
     @yield('scripts')
     
 @stack('scripts')
