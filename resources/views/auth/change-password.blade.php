@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')
+
 <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
     <div class="col-md-6 col-lg-5 bg-white p-5 shadow rounded-4 mt-5 mb-5">
 
@@ -51,4 +51,4 @@
         </form>
     </div>
 </div>
-@endsection
+

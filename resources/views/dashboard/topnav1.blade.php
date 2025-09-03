@@ -2,11 +2,12 @@
   <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: maroon;">
 
     <div class="d-flex align-items-center justify-content-between">
+      @auth
       <a href="{{ route('user-dashboard') }}" class="logo d-flex align-items-center">
             <img src="{{ asset('pictures/logo.jpg') }}" alt="Kesa Logo">
             <span class="d-block text-light" style="font-size: 12px;">KESA KENYA</span>
         </a>
-
+@endauth
       <i class="bi bi-list toggle-sidebar-btn" style="color: white;"></i>
     </div>
     <!-- End Logo -->
@@ -221,6 +222,13 @@
                 <span>Need Help?</span>
               </a>
             </li>
+            <!-- change password -->
+              <li>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('password.change') }}">
+                <i class="bi bi-key"></i>
+                <span>Change Password</span>
+              </a>
+            </li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -236,8 +244,6 @@
                 <span>Sign Out</span>
             </a>
             </li>
-
-
 
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->

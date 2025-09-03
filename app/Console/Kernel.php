@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
 {
     $schedule->command('registrations:clean-pending')->everyMinute();
     //$schedule->command('newsletter:send')->daily();  // Send daily
+    $schedule->command('renewals:process')->everyMinute();
 }
 
 }

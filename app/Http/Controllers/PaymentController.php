@@ -2,161 +2,249 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\services\MpesaService;
+use App\Models\MpesaPayment;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function renewMembership(Request $request)
+    /**
+     * Initiate membership renewal via M-Pesa STK Push
+     */
+    public function renewMembership(Request $request, MpesaService $mpesa)
     {
-        $user   = $request->user();
-        $amount = (int) env('MPESA_RENEWAL_AMOUNT', 1000);
-        $phone  = $this->normalizeMsisdn($user->phone ?? $user->phone_number ?? '');
-
-        // callback URL must be absolute and accessible by Safaricom (ngrok)
-        $callbackURL = route('stk.callback', [], true);
-
-        $resp = $this->stkPush($phone, $amount, $user->id, $callbackURL);
-
-        // Safaricom returns ResponseCode 0 on success
-        $responseCode = $resp['ResponseCode'] ?? $resp['responseCode'] ?? null;
-
-        if ($responseCode == 0 || $responseCode === "0") {
-            Payment::create([
-                'user_id' => $user->id,
-                'amount'  => $amount,
-                'phone_number' => $phone,
-                'purpose' => 'renewal',
-                'status'  => 'pending',
-                'merchant_request_id' => $resp['MerchantRequestID'] ?? null,
-                'checkout_request_id' => $resp['CheckoutRequestID'] ?? null,
+        try {
+            $request->validate([
+                'phone' => 'required|digits_between:10,12',
+                'email' => 'required|email',
             ]);
 
-            return back()->with('success', 'STK Push sent. Enter your M-Pesa PIN to complete payment.');
+            $phone = $this->normalizePhone($request->phone);
+            $email = $request->email;
+
+            if (!$phone) {
+                return back()->with('error', 'Invalid phone number. Use format 2547XXXXXXXX.');
+            }
+
+            $user = User::where('EMAIL', $email)->first();
+            if (!$user) {
+                return back()->with('error', 'No account found for this email. Please register first.');
+            }
+
+            $amount = config('kesa.renewal_fee', 1);
+            $accountRef = 'RENEW-' . now('UTC')->format('YmdHis');
+
+            Log::info('Initiating STK push for renewal', [
+                'user_id' => $user->ID,
+                'email'   => $email,
+                'phone'   => $phone,
+                'amount'  => $amount
+            ]);
+
+            $stk = $mpesa->stkPush($phone, (float)$amount, $accountRef, 'Membership Renewal');
+
+            if (!isset($stk['ResponseCode']) || $stk['ResponseCode'] !== '0') {
+                Log::error('STK initiate failed', ['phone' => $phone, 'response' => $stk]);
+                return back()->with('error', 'Failed to initiate M-Pesa payment. Please try again.');
+            }
+
+            MpesaPayment::create([
+                'user_id'             => $user->ID,
+                'phone'               => $phone,
+                'email'               => $email,
+                'amount'              => $amount,
+                'account_reference'   => $accountRef,
+                'description'         => 'Membership Renewal',
+                'merchant_request_id' => $stk['MerchantRequestID'] ?? null,
+                'checkout_request_id' => $stk['CheckoutRequestID'] ?? null,
+                'status'              => 'pending',
+                'purpose'             => 'renewal',
+            ]);
+
+            return back()->with('success', 'Payment request sent! Check your phone and enter your M-Pesa PIN to complete the renewal.');
+
+        } catch (\Exception $e) {
+            Log::error('Renew membership error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'An error occurred while processing your request. Please try again.');
         }
-
-        Log::warning('STK push failed', ['response' => $resp]);
-
-        return back()->with('error', 'STK Push failed. Please try again.');
     }
 
-    private function stkPush(string $phone, int $amount, int $accountRef, string $callbackURL): array
-    {
-        $base      = rtrim(env('MPESA_BASE_URL', 'https://sandbox.safaricom.co.ke'), '/');
-        $shortcode = env('MPESA_SHORTCODE');
-        $passkey   = env('MPESA_PASSKEY');
-        $timestamp = now()->format('YmdHis');
-        $password  = base64_encode($shortcode . $passkey . $timestamp);
-
-        $payload = [
-            "BusinessShortCode" => $shortcode,
-            "Password"          => $password,
-            "Timestamp"         => $timestamp,
-            "TransactionType"   => "CustomerPayBillOnline",
-            "Amount"            => $amount,
-            "PartyA"            => $phone,
-            "PartyB"            => $shortcode,
-            "PhoneNumber"       => $phone,
-            "CallBackURL"       => $callbackURL,
-            "AccountReference"  => (string)$accountRef,
-            "TransactionDesc"   => "Membership Renewal",
-        ];
-
-        $token = $this->getAccessToken();
-
-        $response = Http::withToken($token)
-            ->acceptJson()
-            ->post($base . '/mpesa/stkpush/v1/processrequest', $payload);
-
-        return $response->json() ?? [];
-    }
-
+    /**
+     * Handle M-Pesa STK Push callback
+     */
     public function stkCallback(Request $request)
     {
-        // Log raw payload for debugging
-        Log::info('STK Callback raw:', $request->all());
+        DB::beginTransaction();
 
-        $body = $request->input('Body.stkCallback', []);
-        $resultCode = $body['ResultCode'] ?? null;
-        $checkoutId = $body['CheckoutRequestID'] ?? null;
+        try {
+            $payload = $request->all();
+            Log::info('MPESA Callback Received', $payload);
 
-        // Find pending payment by checkout_request_id OR by MerchantRequestID
-        $payment = null;
-        if ($checkoutId) {
-            $payment = Payment::where('checkout_request_id', $checkoutId)->latest()->first();
+            $cb = data_get($payload, 'Body.stkCallback', []);
+            $resultCode = (int) data_get($cb, 'ResultCode', -1);
+            $checkoutId = data_get($cb, 'CheckoutRequestID');
+            $merchantRequestId = data_get($cb, 'MerchantRequestID');
+
+            $items = data_get($cb, 'CallbackMetadata.Item', []);
+            $meta = collect($items)->mapWithKeys(fn($i) => [($i['Name'] ?? '') => ($i['Value'] ?? null)]);
+
+            $receipt = $meta->get('MpesaReceiptNumber');
+            $txnDate = $meta->get('TransactionDate');
+            $paidAt = $txnDate
+                ? Carbon::createFromFormat('YmdHis', $txnDate, 'Africa/Nairobi')->setTimezone('UTC')
+                : now('UTC');
+
+            // Find the payment
+            $payment = MpesaPayment::where('checkout_request_id', $checkoutId)
+                ->orWhere('merchant_request_id', $merchantRequestId)
+                ->latest()
+                ->first();
+
+            if (!$payment) {
+                Log::error('Payment not found in callback', [
+                    'checkoutId'        => $checkoutId,
+                    'merchantRequestId' => $merchantRequestId
+                ]);
+                DB::rollBack();
+                return response()->json([
+                    'ResultCode' => 1,
+                    'ResultDesc' => 'Payment record not found'
+                ]);
+            }
+
+            if ($payment->status === 'successful') {
+                DB::commit();
+                return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Already processed']);
+            }
+
+            // Update payment record
+            $payment->result_code          = $resultCode;
+            $payment->result_desc          = data_get($cb, 'ResultDesc');
+            $payment->mpesa_receipt_number = $receipt;
+            $payment->transaction_date     = $paidAt;
+            $payment->callback_metadata    = $meta->toArray();
+            $payment->status               = $resultCode === 0 ? 'successful' : 'failed';
+            $payment->processed_at         = now('UTC');
+            $payment->save();
+
+            if ($resultCode !== 0) {
+                DB::commit();
+                return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Payment failed recorded']);
+            }
+
+            // Process successful payment - Extend membership
+            $user = User::find($payment->user_id);
+
+            if (!$user) {
+                DB::rollBack();
+                return response()->json([
+                    'ResultCode' => 1,
+                    'ResultDesc' => 'User account not found'
+                ]);
+            }
+
+            $currentExpiry = $user->membership_expiry
+                ? Carbon::parse($user->membership_expiry)
+                : now('UTC');
+
+            $newExpiry = $currentExpiry->greaterThan(now('UTC'))
+                ? $currentExpiry->copy()->addYear()
+                : now('UTC')->addYear();
+
+            $user->update([
+                'membership_expiry' => $newExpiry,
+                'payment_status'    => 'successful',
+                'mpesa_receipt'     => $receipt,
+                'amount_paid'       => $payment->amount,
+                'payment_date'      => $paidAt,
+            ]);
+
+            DB::commit();
+            return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Success']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('STK Callback Error: ' . $e->getMessage(), [
+                'trace'   => $e->getTraceAsString(),
+                'payload' => $request->all()
+            ]);
+
+            return response()->json([
+                'ResultCode' => 1,
+                'ResultDesc' => 'System error processing payment'
+            ]);
         }
+    }
 
-        if (!$payment && isset($body['MerchantRequestID'])) {
-            $payment = Payment::where('merchant_request_id', $body['MerchantRequestID'])->latest()->first();
-        }
+    /**
+     * Batch process unprocessed renewals
+     */
+    public function processRenewals()
+    {
+        try {
+            $payments = MpesaPayment::where('purpose', 'renewal')
+                ->where('status', 'successful')
+                ->whereNull('processed_at')
+                ->get();
 
-        // If still not found you'll want to log and return success to avoid retries
-        if (!$payment) {
-            Log::warning('Payment match not found for STK callback', ['checkoutId'=>$checkoutId, 'body' => $body]);
-            return response()->json(['ResultCode'=>0, 'ResultDesc'=>'Processed']);
-        }
+            foreach ($payments as $payment) {
+                $user = User::find($payment->user_id);
 
-        // save raw payload
-        $payment->raw_callback = $request->all();
+                if ($user) {
+                    $currentExpiry = $user->membership_expiry
+                        ? Carbon::parse($user->membership_expiry)
+                        : now('UTC');
 
-        if ((int)$resultCode === 0) {
-            // Build metadata map by Name => Value for robust parsing
-            $items = collect($body['CallbackMetadata']['Item'] ?? [])
-                ->mapWithKeys(fn($i) => [($i['Name'] ?? '') => ($i['Value'] ?? null)]);
+                    $newExpiry = $currentExpiry->greaterThan(now('UTC'))
+                        ? $currentExpiry->copy()->addYear()
+                        : now('UTC')->addYear();
 
-            $payment->status = 'success';
-            $payment->mpesa_receipt_number = $items['MpesaReceiptNumber'] ?? $items['ReceiptNumber'] ?? null;
+                    $user->update([
+                        'membership_expiry' => $newExpiry,
+                        'payment_status'    => 'successful',
+                        'mpesa_receipt'     => $payment->mpesa_receipt_number,
+                        'amount_paid'       => $payment->amount,
+                        'payment_date'      => $payment->transaction_date,
+                    ]);
 
-            if (!empty($items['TransactionDate'])) {
-                // Daraja transaction date usually YYYYMMDDHHMMSS
-                try {
-                    $payment->transaction_date = Carbon::createFromFormat('YmdHis', (string)$items['TransactionDate']);
-                } catch (\Exception $e) {
-                    Log::warning('TransactionDate parse failed', ['val'=>$items['TransactionDate']]);
+                    $payment->update(['processed_at' => now('UTC')]);
                 }
             }
 
-            $payment->save();
+            return response()->json([
+                'success' => true,
+                'message' => count($payments) . ' renewals processed successfully.'
+            ]);
 
-            // Extend membership by 1 year
-            $user = $payment->user;
-            if ($user) {
-                $currentExpiry = $user->membership_expiry ? Carbon::parse($user->membership_expiry) : now();
-                $newExpiry = $currentExpiry->greaterThan(now()) ? $currentExpiry->copy()->addYear() : now()->addYear();
-                $user->update(['membership_expiry' => $newExpiry]);
-            }
-        } else {
-            // Failed or cancelled
-            $payment->status = 'failed';
-            $payment->save();
-            Log::warning('STK push returned non-zero result', ['code'=>$resultCode, 'desc'=>$body['ResultDesc'] ?? null]);
+        } catch (\Exception $e) {
+            Log::error('Error processing renewals: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
         }
-
-        return response()->json(['ResultCode'=>0, 'ResultDesc'=>'Processed']);
     }
 
-    private function getAccessToken(): string
+    /**
+     * Normalize phone number to 254XXXXXXXXX format
+     */
+    private function normalizePhone($p)
     {
-        $base   = rtrim(env('MPESA_BASE_URL', 'https://sandbox.safaricom.co.ke'), '/');
-        $key    = env('MPESA_CONSUMER_KEY');
-        $secret = env('MPESA_CONSUMER_SECRET');
-
-        $resp = Http::withBasicAuth($key, $secret)
-            ->acceptJson()
-            ->get($base.'/oauth/v1/generate?grant_type=client_credentials');
-
-        return $resp->json()['access_token'] ?? '';
-    }
-
-    private function normalizeMsisdn(?string $raw): string
-    {
-        $raw = preg_replace('/\D+/', '', (string)$raw);
-        if (str_starts_with($raw, '0')) return '254' . substr($raw, 1);
-        if (str_starts_with($raw, '254')) return $raw;
-        if (str_starts_with($raw, '7')) return '254' . $raw;
-        return $raw;
+        if (!$p) return null;
+        $p = preg_replace('/\D+/', '', (string)$p);
+        if (str_starts_with($p, '0')) return '254' . substr($p, 1);
+        if (str_starts_with($p, '7')) return '254' . $p;
+        if (str_starts_with($p, '254')) return $p;
+        if (str_starts_with($p, '+')) return ltrim($p, '+');
+        return $p;
     }
 }
