@@ -15,7 +15,10 @@ class User extends Authenticatable
     public $incrementing = true;
     protected $keyType = 'int';
 
-    
+     protected $casts = [
+        'membership_expiry' => 'datetime',
+        'payment_date'      => 'datetime',
+    ];
     // Table columns
     protected $fillable = [
         'FIRST_NAME',
@@ -96,11 +99,22 @@ class User extends Authenticatable
     }
 
     // RBAC: Check if user has a specific role
+    //public function hasRole($roleName)
+    // {
+    //     return $this->roles()->where('name', $roleName)->exists();
+    // }
     public function hasRole($roleName)
         {
             return $this->role && $this->role->name === $roleName;
         }
-        
+
+
+    // Define roles relationship
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
+     // Single role relationship
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
@@ -116,4 +130,10 @@ class User extends Authenticatable
             })
             ->exists();
     }
+
+    public function mpesaPayments()
+    {
+        return $this->hasMany(MpesaPayment::class, 'user_id', 'ID');
+    }
+
 }

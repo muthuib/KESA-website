@@ -65,6 +65,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified.email' => \App\Http\Middleware\EnsureEmailIsVerified::class, //email verification after signup
         'role' => \App\Http\Middleware\RoleMiddleware::class, //code for RBAC
+        'check.membership' => \App\Http\Middleware\CheckMembership::class,
+
         
     ];
 }

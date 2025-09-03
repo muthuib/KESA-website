@@ -99,13 +99,25 @@ Route::post('/mpesa/register/callback', [MpesaWebhookController::class, 'registr
   ->name('mpesa.register.callback');
 
 // registration renewal via stk push
-Route::middleware(['auth'])->group(function () {
-    // Initiate renewal
-    Route::post('/renew', [PaymentController::class, 'renewMembership'])->name('membership.renew');
 
-    // STK callback (Safaricom will hit this endpoint)
-    Route::post('/stk/callback', [PaymentController::class, 'stkCallback'])->name('stk.callback');
-});
+    // Show renewal page if expired
+    Route::get('/renew', function () {
+        return view('memberships.renew');
+    })->name('membership.renew.form');
+
+    // Trigger STK push
+    Route::post('/renew', [PaymentController::class, 'renewMembership'])
+        ->name('membership.renew');
+
+    // Dashboard – protected by membership check
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware('check.membership')->name('dashboard');
+
+
+// M-Pesa callback (should NOT require auth)
+Route::post('/mpesa/stk/callback', [PaymentController::class, 'stkCallback'])
+    ->name('mpesa.stk.callback');
 
 
 //Partners registration routes
@@ -258,12 +270,10 @@ Route::middleware(['role:admin'])->group(function () {
     });
     });
 //USER DASHBOARD
-Route::middleware('auth')->group(function () {
-Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
-Route::get('/profile/edit/{id}', [UserDashboardController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/update/{id}', [UserDashboardController::class, 'update'])->name('profile.update');
-
-
+Route::middleware(['auth', 'check.membership'])->group(function () {
+    Route::get('/user-dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
+    Route::get('/profile/edit/{id}', [UserDashboardController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update/{id}', [UserDashboardController::class, 'update'])->name('profile.update');
 });
 
 //TICKETS AND  MPESA INTERGRATION ROUTES
