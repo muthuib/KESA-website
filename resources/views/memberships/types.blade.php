@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="text-center mb-3" style="margin-top: 90px;">Membership Categories</h2>
+    <h2 class="text-center mb-3 text-dark" style="margin-top: 10px;">Membership Categories</h2>
     <p id="intro-paragraph" class="text-left mb-5 px-3 text-muted" style="font-size: 17px;">
         KESA is a membership-based association that brings together Economics and Business students, young graduates, practising economists, policymakers, and other interested stakeholders from academia, civil society, and the corporate.
     </p>
@@ -18,7 +18,7 @@
                     'registration_fee' => 'KES. 300',
                     'subscription_fee' => 'KES. 500',
                     'color' => 'bg-primary text-white',
-                    'full_description' => 'This grade is open to students enrolled in universities and TVET institutions who  are pursuing programs related to Economics and Business.'
+                    'full_description' => 'This grade is open to students enrolled in universities and TVET institutions who are pursuing programs related to Economics and Business.'
                 ],
                 [
                     'id' => 'associate',
@@ -38,15 +38,14 @@
                     'color' => 'bg-warning text-dark',
                     'full_description' => 'This grade is awarded to individuals holding Executive Management positions in the private or public sector, who have made significant contributions to the advancement of Economic practice, as demonstrated by their qualifications, professional experience, and the scale of the organisation they lead.'
                 ],
-                 [
+                [
                     'id' => 'fellow',
                     'title' => 'Fellows/Honorary Member',
                     'description' => 'Conferred on individuals with outstanding contributions to economics. By invitation only.',
                     'registration_fee' => 'KES. 0',
                     'subscription_fee' => 'KES. 5000',
                     'color' => 'bg-danger text-white',
-                    'full_description' => 'This grade of Fellow is the highest level of membership within KESA. It is conferred upon individuals whose work and personal contributions have significantly advanced the promotion of excellence and integrity in the field of Economics and beyond. The grade is awarded by invitation only, subject to the  approval of both the Board of Management and the Founding Board.
-'
+                    'full_description' => 'This grade of Fellow is the highest level of membership within KESA. It is conferred upon individuals whose work and personal contributions have significantly advanced the promotion of excellence and integrity in the field of Economics and beyond. The grade is awarded by invitation only, subject to the approval of both the Board of Management and the Founding Board.'
                 ],
                 [
                     'id' => 'organization',
@@ -65,7 +64,10 @@
             <div class="card h-100 shadow-lg {{ $membership['color'] }} card-hover">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div>
-                        <h5 class="card-title mb-3"><i class="fas fa-users me-2"></i>{{ $membership['title'] }}</h5>
+                        <h5 class="card-title mb-3 text-white" style="color: white !important;">
+                            <i class="fas fa-users me-2 text-white" style="color: white !important;"></i>
+                            {{ $membership['title'] }}
+                        </h5>
                         <p class="card-text">{{ $membership['description'] }}</p>
                     </div>
                     <button class="btn btn-light mt-4 w-100 fw-bold" onclick="showDetails('{{ $membership['id'] }}')">
@@ -83,9 +85,7 @@
             <h4 id="detail-title" class="mb-3 text-primary fw-bold text-center" style="font-size: 20px;"></h4>
             <p id="detail-description" class="text-muted d-none"></p>
             <!-- Full Description -->
-            <div id="detail-full-description" class="mb-4 text-muted">
-                <!-- Additional description will be added dynamically here -->
-            </div>
+            <div id="detail-full-description" class="mb-4 text-muted"></div>
 
             <h6 class="mt-4 mb-2 text-dark">Membership Fees</h6>
             <div class="table-responsive">
@@ -103,8 +103,10 @@
                 </table>
             </div>
 
-            <a href="{{ route('register') }}" class="btn btn-success mt-4 w-100 w-md-auto">→ APPLY NOW</a>
-            <!-- Added 'Back to Memberships' Button -->
+            <!-- APPLY NOW will only show if not Honorary -->
+            <a id="apply-button" href="{{ route('register') }}" class="btn btn-success mt-4 w-100 w-md-auto">→ APPLY NOW</a>
+            
+            <!-- Back button -->
             <button class="btn btn-info mt-3 w-100 w-md-auto" onclick="backToCards()">← BACK TO MEMBERSHIPS</button>
         </div>
     </div>
@@ -136,9 +138,8 @@
     const membershipData = @json($memberships);
 
     function showDetails(id) {
-        // Hide membership cards and intro paragraph
         document.getElementById('membership-cards').style.display = 'none';
-        document.getElementById('intro-paragraph').style.display = 'none'; // Hide intro paragraph
+        document.getElementById('intro-paragraph').style.display = 'none';
 
         const data = membershipData.find(m => m.id === id);
 
@@ -147,19 +148,23 @@
             document.getElementById('detail-description').innerText = data.description;
             document.getElementById('detail-registration-fee').innerText = data.registration_fee;
             document.getElementById('detail-subscription-fee').innerText = data.subscription_fee;
-
-            // Set the full description dynamically
             document.getElementById('detail-full-description').innerText = data.full_description;
+
+            // Hide APPLY NOW if Honorary
+            if (data.id === 'fellow') {
+                document.getElementById('apply-button').style.display = 'none';
+            } else {
+                document.getElementById('apply-button').style.display = 'inline-block';
+            }
 
             document.getElementById('membership-detail-container').style.display = 'block';
         }
     }
 
     function backToCards() {
-        // Show membership cards and intro paragraph again
         document.getElementById('membership-detail-container').style.display = 'none';
         document.getElementById('membership-cards').style.display = 'flex';
-        document.getElementById('intro-paragraph').style.display = 'block'; // Show intro paragraph
+        document.getElementById('intro-paragraph').style.display = 'block';
     }
 </script>
 
