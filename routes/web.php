@@ -93,6 +93,7 @@ Route::post('/users/{id}/assign-roles', [UserController::class, 'assignRoles'])-
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
+Route::post('/check-user-exists', [RegisterController::class, 'checkUserExists'])->name('check-user-exists');
 
 // Safaricom will POST here (no auth, no CSRF)
 Route::post('/mpesa/register/callback', [MpesaWebhookController::class, 'registrationCallback'])
