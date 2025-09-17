@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -32,5 +33,20 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'Role updated successfully!');
    }
+
+ public function updateTheme(Request $request)
+    {
+        $request->validate([
+            'themeMode' => 'required|in:light,dark',
+        ]);
+
+        $user = auth()->user();
+
+        DB::table('users')
+            ->where('ID', $user->ID) // 👈 use uppercase ID
+            ->update(['theme_mode' => $request->themeMode]);
+
+        return back()->with('success', 'Theme updated successfully!');
+    }
 
 }

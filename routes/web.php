@@ -144,6 +144,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/app', function () {
         return view('layouts.app');
     })->name('app');
+    // VIEW PROFILE
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+});
 });
 
 // routes for resources
@@ -276,7 +280,9 @@ Route::middleware(['auth', 'check.membership'])->group(function () {
     Route::get('/profile/edit/{id}', [UserDashboardController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update/{id}', [UserDashboardController::class, 'update'])->name('profile.update');
 });
-
+    // theme update
+    Route::post('/theme/update', [App\Http\Controllers\UserController::class, 'updateTheme'])->name('user.theme.update');
+    
 //TICKETS AND  MPESA INTERGRATION ROUTES
 // Ticket Routes
 Route::middleware(['role:admin'])->group(function () {
@@ -537,7 +543,6 @@ Route::get('/verify/{membership}', function ($membership) {
 
 // TAG ROUTE
 Route::get('/blogs/tags/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
-
 
 
 

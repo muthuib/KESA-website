@@ -38,7 +38,13 @@ public function index()
                 'GENDER' => 'required|string|in:Male,Female',
                 'DISABILITY_STATUS' => 'required|string|in:Yes,No',
                 'DISABILITY_TYPE' => 'nullable|string|max:255',
-                'CURRENTLY_IN_SCHOOL' => 'required|string|in:Yes,No',
+                // 'CURRENTLY_IN_SCHOOL' => 'required|string|in:Yes,No',
+                'POSTAL_ADDRESS' => 'nullable|string|max:255',
+                'PHYSICAL_ADDRESS' => 'nullable|string|max:255',
+                'LINKEDIN' => 'nullable|string|max:255',
+                'DATE' => 'nullable|date',
+                'COUNTY' => 'nullable|string|max:255',
+                'TITTLE' => 'nullable|string|max:255',
                 'HIGHEST_LEVEL_SCHOOL_ATTENDING' => 'nullable|string|in:TVET College,University',
                 'SCHOOL_NAME' => 'nullable|string|max:255',
                 'PROGRAM_OF_STUDY' => 'nullable|string|max:255',
@@ -52,13 +58,22 @@ public function index()
             $user->FIRST_NAME = $request->FIRST_NAME;
             $user->LAST_NAME = $request->LAST_NAME;
             $user->MIDDLE_NAME = $request->MIDDLE_NAME;
+            $user->POSTAL_ADDRESS = $request->POSTAL_ADDRESS;
+            $user->PHYSICAL_ADDRESS = $request->PHYSICAL_ADDRESS;
+            $user->LINKEDIN = $request->LINKEDIN;
+            $user->COUNTY = $request->COUNTY;
             $user->EMAIL = $request->EMAIL;
+            $user->SCHOOL_NAME = $request->SCHOOL_NAME;
+            $user->SCHOOL_REGISTRATION_NUMBER = $request->SCHOOL_REGISTRATION_NUMBER;
             $user->NATIONAL_ID_NUMBER = $request->NATIONAL_ID_NUMBER;
             $user->PHONE_NUMBER = $request->PHONE_NUMBER;
             $user->GENDER = $request->GENDER;
+            $user->TITTLE = $request->TITTLE;
+            $user->DATE = $request->DATE;
+            $user->PROGRAM_OF_STUDY = $request->PROGRAM_OF_STUDY;
             $user->DISABILITY_STATUS = $request->DISABILITY_STATUS;
             $user->DISABILITY_TYPE = $request->DISABILITY_STATUS == 'Yes' ? $request->DISABILITY_TYPE : null;
-            $user->CURRENTLY_IN_SCHOOL = $request->CURRENTLY_IN_SCHOOL;
+            // $user->CURRENTLY_IN_SCHOOL = $request->CURRENTLY_IN_SCHOOL;
         
             if ($request->CURRENTLY_IN_SCHOOL == 'Yes') {
                 $user->HIGHEST_LEVEL_SCHOOL_ATTENDING = $request->HIGHEST_LEVEL_SCHOOL_ATTENDING;
@@ -86,8 +101,7 @@ public function index()
         
             $user->save();
         
-            return redirect()->route('user-dashboard')->with('success', 'Profile updated successfully!');
+            return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
         }
-        
 
 }

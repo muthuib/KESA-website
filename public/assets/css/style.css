@@ -46,11 +46,12 @@ h6 {
   margin-top: 60px;
   padding: 20px 30px;
   transition: all 0.3s;
+  width: 100%;
 }
 
-/* Logged-in users: center content */
+/* Logged-in users: left content */
 #main.main-auth {
-  text-align: center;
+  text-align: left;
 }
 
 /* Guests: align content left */
@@ -1253,3 +1254,18 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+/* dark and light modes */
+/* Light Mode */
+body.light{
+  background-color: #ffffff;
+  color: #212529;
+}
+
+/* Dark Mode */
+body.dark {
+  background-color: #070505;
+  color: #f8f9fa;
+}
+
+

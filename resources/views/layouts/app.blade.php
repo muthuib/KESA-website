@@ -70,11 +70,38 @@
         * {
             font-family: 'Poppins';
         }
+              <style>
+          /* Logged-in users: left content */
+                #main.main-auth {
+                  text-align: left;
+                }
+                
+                /* Guests: align content left */
+                #main.main-guest {
+                  text-align: left;    /* guest users' content aligned left */
+                  margin-left: 0 !important; /* remove sidebar spacing */
+                }
+                /* dark and light modes */
+                /* Light Mode */
+                body.light{
+                  background-color: #ffffff;
+                  color: #212529;
+                }
+                
+                /* Dark Mode */
+                body.dark {
+                  background-color: #070505;
+                  color: #f8f9fa;
+                }
+
+      </style>
     </style>
         @yield('styles')
 
 </head>
-    <body class="sb-nav-fixed">
+<body class="{{ auth()->check() ? auth()->user()->theme_mode : 'light' }}">
+
+    <!-- <body class="sb-nav-fixed"> -->
         @guest
             {{-- Include Top Navigation --}}
             @include('dashboard.topnav')
@@ -211,6 +238,21 @@
                     </div>
                 </div>
             </footer> -->
+
+            <!-- dark mode and light mode Navbar -->
+                <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+                    <div class="container-fluid">
+                        <a class="navbar-brand fw-bold" href="#">MyApp</a>
+
+                        <div class="d-flex align-items-center"> -->
+                            <!-- Dark Mode Toggle -->
+                            <!-- <button class="btn btn-outline-secondary btn-sm" id="themeToggle">
+                                <i class="bi bi-moon"></i> Dark Mode
+                            </button>
+                        </div>
+                    </div>
+                </nav> -->
+
             @endauth
     <!-- end of footer -->
     @endif
@@ -246,4 +288,45 @@
     @yield('scripts')
     
 @stack('scripts')
+
+<!-- dark and light mode script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const body = document.body;
+        const lightMode = document.getElementById("lightMode");
+        const darkMode = document.getElementById("darkMode");
+
+        // Load saved theme (from backend via blade OR localStorage)
+        const savedTheme = "{{ auth()->check() ? auth()->user()->theme_mode : 'light' }}";
+        body.classList.add(savedTheme + "-mode");
+        if (document.getElementById(savedTheme + "Mode")) {
+            document.getElementById(savedTheme + "Mode").checked = true;
+        }
+
+        // Change theme on radio change
+        [lightMode, darkMode].forEach((radio) => {
+            if (!radio) return; // skip if element doesn't exist
+            radio.addEventListener("change", function () {
+                const newTheme = this.value;
+
+                body.classList.remove("light-mode", "dark-mode");
+                body.classList.add(newTheme + "-mode");
+                localStorage.setItem("theme", newTheme);
+
+                // Send to backend (only if logged in)
+                @auth
+                fetch("{{ route('user.theme.update') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ themeMode: newTheme })
+                });
+                @endauth
+            });
+        });
+    });
+</script>
+
 </body>
