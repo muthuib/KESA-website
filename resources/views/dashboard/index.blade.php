@@ -37,7 +37,7 @@
         <!-- Main Content Section -->
         <div class="col-md-9">
             <!-- Hero Welcome Message -->
-            <div class="bg-light p-4 rounded shadow-sm mb-4 animate__animated animate__fadeInUp">
+            <div>
                @if($user->role)
                     <h2 class="fw-bold mb-1">
                         Welcome, {{ $user->FIRST_NAME }} {{ $user->LAST_NAME }} 

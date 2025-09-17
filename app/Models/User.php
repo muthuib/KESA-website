@@ -67,6 +67,7 @@ class User extends Authenticatable
         'DATE',
         'role_id',
         'type',
+        'theme_mode',
         'must_change_password',
     ];
 
