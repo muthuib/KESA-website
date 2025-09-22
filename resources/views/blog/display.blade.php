@@ -49,9 +49,21 @@
 
                         <p class="text-secondary mb-2" style="font-size: 0.9rem;">
                             <i class="bi bi-person"></i> Author: 
-                            <a href="{{ route('blog.byAuthor', ['author' => $item->author]) }}" class="text-primary text-decoration-none">
-                                <strong>{{ $item->author ?? 'Admin' }}</strong>
-                            </a>
+                           @php
+                                // Split authors into an array (trim spaces as well)
+                                $authors = array_map('trim', explode(',', $item->author ?? 'Admin'));
+                            @endphp
+
+                            @foreach($authors as $index => $author)
+                                <a href="{{ route('blog.byAuthor', ['author' => $author]) }}" 
+                                class="text-primary text-decoration-none">
+                                    <strong>{{ $author }}</strong>
+                                </a>
+                                @if($index < count($authors) - 1)
+                                    , 
+                                @endif
+                            @endforeach
+
                             &nbsp; | &nbsp;
                             📂 Category: <strong>{{ $item->category ?? 'Uncategorized' }}</strong>
                         </p>

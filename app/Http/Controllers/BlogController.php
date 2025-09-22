@@ -250,14 +250,13 @@ class BlogController extends Controller
         return view('blog.display', compact('blogs', 'search'));
     }
 
-    public function byAuthor($author)
-        {
-            // Get blogs by this author
-            $blogs = Blog::where('author', $author)
-                        ->orderBy('created_at', 'desc')
-                        ->paginate(10);
+   public function byAuthor($author)
+    {
+        $blogs = Blog::where('author', 'LIKE', "%{$author}%")
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
-            return view('blog.by-author', compact('blogs', 'author'));
-        }
+        return view('blog.by-author', compact('blogs', 'author'));
+    }
 
 }
