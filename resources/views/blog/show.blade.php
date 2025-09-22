@@ -69,9 +69,21 @@
                         
                           <p class="text-secondary mb-2" style="font-size: 0.9rem;">
                                 <i class="bi bi-person"></i> <strong>Author:</strong>
-                                <a href="{{ route('blog.byAuthor', ['author' => $blog->author]) }}">
-                                    {{ $blog->author ?? 'Admin' }}
+                                  @php
+                                // Split authors into an array (trim spaces as well)
+                                $authors = array_map('trim', explode(',', $blog->author ?? 'Admin'));
+                            @endphp
+
+                            @foreach($authors as $index => $author)
+                                <a href="{{ route('blog.byAuthor', ['author' => $author]) }}" 
+                                class="text-primary text-decoration-none">
+                                    <strong>{{ $author }}</strong>
                                 </a>
+                                @if($index < count($authors) - 1)
+                                    , 
+                                @endif
+                            @endforeach
+                            
                             </p>
                             
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
@@ -227,9 +239,20 @@
                             
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
                                 <i class="bi bi-person"></i> <strong>Author:</strong>
-                                <a href="{{ route('blog.byAuthor', ['author' => $blog->author]) }}">
-                                    {{ $blog->author ?? 'Admin' }}
-                                </a>
+                                                                 @php
+                                // Split authors into an array (trim spaces as well)
+                                $authors = array_map('trim', explode(',', $blog->author ?? 'Admin'));
+                                @endphp
+
+                                @foreach($authors as $index => $author)
+                                    <a href="{{ route('blog.byAuthor', ['author' => $author]) }}" 
+                                    class="text-primary text-decoration-none">
+                                        <strong>{{ $author }}</strong>
+                                    </a>
+                                    @if($index < count($authors) - 1)
+                                        , 
+                                    @endif
+                                @endforeach
                             </p>
 
                             <p class="text-secondary mb-2" style="font-size: 0.9rem;">
