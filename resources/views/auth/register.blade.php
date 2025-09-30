@@ -634,7 +634,7 @@
                     </div>
                     <div class="form-group">
                         <label for="PREVIOUS_PROGRAM_OF_STUDY"  class="required-label">Program of Study </label>
-                        <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
+                        <input type="text" id="PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
                     </div>
                     </div>
 

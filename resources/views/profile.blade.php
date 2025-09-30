@@ -158,16 +158,16 @@
                           <label for="TITTLE" class="form-label">Title</label>
                           <select name="TITTLE" id="TITTLE" class="form-select" required>
                               <option value="">-- Select Title --</option>
-                              <option value="Mr"   {{ old('TITTLE', $user->TITTLE) === 'Mr' ? 'selected' : '' }}>Mr.</option>
-                              <option value="Mrs"  {{ old('TITTLE', $user->TITTLE) === 'Mrs' ? 'selected' : '' }}>Mrs.</option>
-                              <option value="Ms"   {{ old('TITTLE', $user->TITTLE) === 'Ms' ? 'selected' : '' }}>Ms.</option>
-                              <option value="Dr"   {{ old('TITTLE', $user->TITTLE) === 'Dr' ? 'selected' : '' }}>Dr.</option>
-                              <option value="Prof" {{ old('TITTLE', $user->TITTLE) === 'Prof' ? 'selected' : '' }}>Prof.</option>
+                              <option value="Mr."   {{ old('TITTLE', $user->TITTLE) === 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                              <option value="Mrs."  {{ old('TITTLE', $user->TITTLE) === 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                              <option value="Ms."   {{ old('TITTLE', $user->TITTLE) === 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                              <option value="Dr."   {{ old('TITTLE', $user->TITTLE) === 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                              <option value="Prof." {{ old('TITTLE', $user->TITTLE) === 'Prof.' ? 'selected' : '' }}>Prof.</option>
                           </select>
                       </div>
                         <!-- First Name -->
                       <div class="col-md-4">
-                         <label for="FIRST_NAME" class="form-label">First Name</label>
+                         <label for="FIRST_NAME" class="form-label">Name (as they appear on your Certificate)</label>
                             <input name="FIRST_NAME" type="text" class="form-control" 
                                   id="FIRST_NAME" value="{{ old('FIRST_NAME', $user->FIRST_NAME) }}"style= " background-color: #e9ecef;" readonly>
                         </div>
@@ -370,7 +370,7 @@
                   <h5 class="card-title">Profile Details</h5>
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">{{ $user->TITTLE }}. {{ $user->FIRST_NAME }} {{ $user->MIDDLE_NAME }} {{ $user->LAST_NAME }}</div>
+                    <div class="col-lg-9 col-md-8">{{ $user->TITTLE }} {{ $user->FIRST_NAME }} {{ $user->MIDDLE_NAME }} {{ $user->LAST_NAME }}</div>
                   </div>
 
                   <div class="row">
@@ -413,7 +413,7 @@
                   
                   <div class="row">
                       <div class="col-lg-3 col-md-4 label">Program of Study</div>
-                      <div class="col-lg-9 col-md-8">{{ $user->PROGRAM_OF_STUDY ?: 'N/A' }}</div>
+                      <div class="col-lg-9 col-md-8">{{ $user->PREVIOUS_PROGRAM_OF_STUDY ?: 'N/A' }}</div>
                   </div>
 
                    <div class="row">
@@ -501,32 +501,18 @@
                           <label for="TITTLE" class="form-label">Title</label>
                           <select name="TITTLE" id="TITTLE" class="form-select" required>
                               <option value="">-- Select Title --</option>
-                              <option value="Mr"   {{ old('TITTLE', $user->TITTLE) === 'Mr' ? 'selected' : '' }}>Mr.</option>
-                              <option value="Mrs"  {{ old('TITTLE', $user->TITTLE) === 'Mrs' ? 'selected' : '' }}>Mrs.</option>
-                              <option value="Ms"   {{ old('TITTLE', $user->TITTLE) === 'Ms' ? 'selected' : '' }}>Ms.</option>
-                              <option value="Dr"   {{ old('TITTLE', $user->TITTLE) === 'Dr' ? 'selected' : '' }}>Dr.</option>
-                              <option value="Prof" {{ old('TITTLE', $user->TITTLE) === 'Prof' ? 'selected' : '' }}>Prof.</option>
+                              <option value="Mr."   {{ old('TITTLE', $user->TITTLE) === 'Mr.' ? 'selected' : '' }}>Mr.</option>
+                              <option value="Mrs."  {{ old('TITTLE', $user->TITTLE) === 'Mrs.' ? 'selected' : '' }}>Mrs.</option>
+                              <option value="Ms."   {{ old('TITTLE', $user->TITTLE) === 'Ms.' ? 'selected' : '' }}>Ms.</option>
+                              <option value="Dr."   {{ old('TITTLE', $user->TITTLE) === 'Dr.' ? 'selected' : '' }}>Dr.</option>
+                              <option value="Prof." {{ old('TITTLE', $user->TITTLE) === 'Prof.' ? 'selected' : '' }}>Prof.</option>
                           </select>
                       </div>
                         <!-- First Name -->
-                      <div class="col-md-4">
-                         <label for="FIRST_NAME" class="form-label">First Name</label>
+                      <div class="col-md-8">
+                         <label for="FIRST_NAME" class="form-label">Name (As they appear on your Certificate)</label>
                             <input name="FIRST_NAME" type="text" class="form-control" 
                                   id="FIRST_NAME" value="{{ old('FIRST_NAME', $user->FIRST_NAME) }}"style= " background-color: #e9ecef;" readonly>
-                        </div>
-
-                        <!-- Last Name -->
-                        <div class="col-md-6">
-                           <label for="LAST_NAME" class="form-label">Last Name</label>
-                            <input name="LAST_NAME" type="text" class="form-control" 
-                                  id="LAST_NAME" value="{{ old('LAST_NAME', $user->LAST_NAME) }}"style= " background-color: #e9ecef;" readonly>
-                        </div>
-
-                         <!-- Middle name -->
-                         <div class="col-md-6">
-                            <label for="MIDDLE_NAME" class="form-label">Middle name</label>
-                            <input name="MIDDLE_NAME" type="text" class="form-control" 
-                                  id="MIDDLE_NAME" value="{{ old('MIDDLE_NAME', $user->MIDDLE_NAME) }}"style= " background-color: #e9ecef;" readonly>
                         </div>
                     </div>
 
@@ -664,9 +650,9 @@
                       <div class="row mb-3">
                         <!-- Program of study-->
                         <div class="col-md-6">
-                            <label for="PROGRAM_OF_STUDY" class="form-label">Program of Study</label>
-                                <input name="PROGRAM_OF_STUDY" type="text" class="form-control" 
-                                  id="PROGRAM_OF_STUDY" value="{{ old('PROGRAM_OF_STUDY', $user->PROGRAM_OF_STUDY) }}">
+                            <label for="PREVIOUS_PROGRAM_OF_STUDY" class="form-label">Program of Study</label>
+                                <input name="PREVIOUS_PROGRAM_OF_STUDY" type="text" class="form-control" 
+                                  id="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY', $user->PREVIOUS_PROGRAM_OF_STUDY) }}">
                         </div>
 
                         <!-- 	Date -->
