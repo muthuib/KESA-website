@@ -30,7 +30,7 @@ public function index()
             
             $request->validate([
                 'FIRST_NAME' => 'required|string|max:255',
-                'LAST_NAME' => 'required|string|max:255',
+                'LAST_NAME' => 'nullable|string|max:255',
                 'MIDDLE_NAME' => 'nullable|string|max:255',
                 'EMAIL' => 'required|email|max:255|unique:users,EMAIL,' . $id . ',ID',
                 'NATIONAL_ID_NUMBER' => 'required|string|max:20|unique:users,NATIONAL_ID_NUMBER,' . $id . ',ID',
