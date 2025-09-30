@@ -120,6 +120,22 @@ Route::post('/mpesa/register/callback', [MpesaWebhookController::class, 'registr
 Route::post('/mpesa/stk/callback', [PaymentController::class, 'stkCallback'])
     ->name('mpesa.stk.callback');
 
+    // transaction status api
+//     Route::post('/mpesa/transaction/result', [MpesaWebhookController::class, 'transactionResult'])
+//     ->name('mpesa.transaction.result');
+
+// Route::post('/mpesa/transaction/timeout', [MpesaWebhookController::class, 'transactionTimeout'])
+//     ->name('mpesa.transaction.timeout');
+
+// pesa/register/callback looks like it’s handling C2B registration responses.
+
+//You still need to separate Validation and Confirmation (Safaricom hits them differently).
+// Route::post('/mpesa/c2b/validation', [MpesaWebhookController::class, 'validation'])
+//     ->name('mpesa.c2b.validation');
+
+// Route::post('/mpesa/c2b/confirmation', [MpesaWebhookController::class, 'confirmation'])
+//     ->name('mpesa.c2b.confirmation');
+
 
 //Partners registration routes
 Route::get('registration', [RegisterPartnerController::class, 'showRegistrationForm'])->name('registration');

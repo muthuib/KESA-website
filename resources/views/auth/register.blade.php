@@ -910,6 +910,7 @@
                                     <option value="">-- Select Semester --</option>
                                     <option value="1" {{ old('PREVIOUS_SCHOOL_NAME') == '1' ? 'selected' : '' }}>semester 1</option>
                                     <option value="2" {{ old('PREVIOUS_SCHOOL_NAME') == '2' ? 'selected' : '' }}>semester 2</option>
+                                    <option value="3" {{ old('PREVIOUS_SCHOOL_NAME') == '3' ? 'selected' : '' }}>semester 3</option>
                                 </select>
                             </div>
                         </div>
@@ -919,9 +920,10 @@
                                 <label for="PREVIOUS_PROGRAM_OF_STUDY" class="required-label">Program of Study </label>
                                 <input type="text" id="PREVIOUS_PROGRAM_OF_STUDY" name="PREVIOUS_PROGRAM_OF_STUDY" value="{{ old('PREVIOUS_PROGRAM_OF_STUDY') }}" required>
                             </div>
-                                <div class="form-group">
-                                    <label class="required-label">Date</label>
-                                    <input type="date" name="DATE" class="form-control" value="{{ old('DATE') }}" required>
+                              <div class="form-group">
+                                    <label class="required-label">Date of Membership</label>
+                                    <input type="date" name="DATE" class="form-control" 
+                                        value="{{ old('DATE', date('Y-m-d')) }}" readonly>
                                 </div>
                             </div>
                     <div class="form-row">
@@ -936,20 +938,6 @@
                                 <input type="file" id="PASSPORT_PHOTO" name="PASSPORT_PHOTO"
                                     class="form-control-file"
                                     accept=".jpeg,.png,.jpg" required>
-                            </div>
-
-                            <!-- Phone number -->
-                            <div class="form-group col-md-5">
-                                <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">Mpesa Phone Number</label>
-                                <p style="color: maroon; font-size: 0.7rem;">
-                                    Safaricom M-Pesa phone number that will be used to make your membership payment.
-                                </p>
-                                <input type="text" id="ALTERNATIVE_PHONE_NUMBER" name="ALTERNATIVE_PHONE_NUMBER"
-                                    class="form-control"
-                                    value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" required>
-                                @error('ALTERNATIVE_PHONE_NUMBER')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
                             </div>
                         </div>
 
@@ -982,120 +970,160 @@
                         <!-- M-Pesa Instructions (Initially Hidden) -->
             <div id="paymentInstructions" style="display:none; margin-top:20px;">
                     <!-- M-Pesa Summary + Button -->
-                       <div style="margin: 25px 0; background-color: #f9f9f9; padding: 20px; border-left: 6px solid #B22222; border-radius: 8px; font-family: Arial, sans-serif; position: relative;">
-
-                    <!-- Full Instructions Button Top Right -->
-                    <div style="
-                        position: relative; 
-                        border: 2px solid #00A859; 
-                        border-radius: 12px; 
-                        padding: 20px; 
-                        background: #f9fdf9; 
-                        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-                        font-family: Arial, sans-serif;
-                        max-width: 800px;
-                        margin: auto;
-                    ">
-                        <!-- Safaricom/M-Pesa Logo -->
-                        <div style="display: flex; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
-                            <img src="{{ asset('pictures/m-pesa-logo.jpg') }}" alt="M-Pesa Logo" 
-                                style="width: 120px; height: auto; margin-right: 12px; max-width: 40%;">
-                            <h3 style="color: #00A859; margin: 0; font-size: 20px; font-weight: bold; flex: 1; min-width: 200px;">
-                                M-Pesa Payment Instructions
-                            </h3>
-                        </div>
-
-                        <!-- Full Instructions Button -->
-                        <div style="position: absolute; top: 15px; right: 20px;">
-                            <button onclick="openModal()" 
-                                style="background-color: #B22222; color: white; border: none; 
-                                    padding: 10px 16px; border-radius: 6px; cursor: pointer; 
-                                    font-size: 14px; font-weight: bold; transition: background-color 0.2s;">
-                                Full Instructions
-                            </button>
-                        </div>
-
-                        <!-- Instruction Text -->
-                        <div style="margin-right: 0px; font-size: 15px; line-height: 1.6;">
-                            <p style="margin: 8px 0; font-size: 16px;">
-                                <strong style="color:#00A859; font-size: 17px;">Pay KES 300 via M-Pesa:</strong>
-                            </p>
-                            <p style="margin: 8px 0;">
-                                Click <strong style="color:#00A859;">Register & Pay via M-Pesa</strong> and an 
-                                <span style="color:#B22222; font-weight:bold;">STK Push</span> prompt will appear on your phone automatically.
-                            </p>
-                            <p style="margin: 8px 0;">
-                                <strong style="color:#00A859;">Enter your M-Pesa PIN</strong> to authorize payment.
-                            </p>
-                            <p style="margin: 8px 0;">
-                                Wait for the <strong style="color:#00A859;">M-Pesa confirmation SMS</strong>.
-                            </p>
-                            <p style="margin: 8px 0;">
-                                <strong>After successful payment, check the email you provided to receive your login details and membership card.</strong>
-                            </p>
-                        </div>
-                    </div>
-
-
-                    <!-- Modal Popup -->
-                   <!-- STK Push Payment Modal -->
-                    <div id="paymentModal" class="modal">
-                        <div class="modal-content">
-                            <!-- Close Button -->
-                            <span class="close-btn" onclick="closeModal()">&times;</span>
-
-                            <h3>STK Push Payment Instructions</h3>
-
-                            <p class="highlight">
-                                You will receive an <strong>MPESA prompt on your phone</strong> to complete the payment. Please follow these steps:
-                            </p>
-
-                            <ol class="instructions">
-                                <li>Ensure the phone number you entered is the one linked to your <strong>M-Pesa</strong> account.</li>
-                                <li>Once you submit the form, you will receive a prompt on your phone to approve the payment.</li>
-                                <li>Enter your <strong>M-Pesa PIN</strong> to authorize the payment.</li>
-                                <li>Wait for the confirmation message from M-Pesa that the payment was successful.</li>
-                                <li>After confirmation, your registration/payment will be marked as complete automatically.</li>
-                                <li>If you do not receive the prompt, ensure your phone has network coverage and try again.</li>
-                            </ol>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Modal Script -->
-                    <script>
-                        function openModal() {
-                            document.getElementById('paymentModal').style.display = 'block';
-                        }
-
-                        function closeModal() {
-                            document.getElementById('paymentModal').style.display = 'none';
-                        }
-
-                        // Optional: Close modal if user clicks outside the box
-                        window.onclick = function(event) {
-                            const modal = document.getElementById('paymentModal');
-                            if (event.target == modal) {
-                                modal.style.display = "none";
-                            }
-                        }
-                    </script>
+                       <div>
                     
                     <div class="mb-3">
                         <label>Registration Fee</label>
                         <input type="number" name="REGISTRATION_FEE" class="form-control" value="1" readonly>
                     </div>
+
+               <!-- Payment Method Radios -->
+                 <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="stk_method" value="stk" checked onclick="togglePaymentFields()">
+                        <label class="form-check-label" for="stk_method">
+                            Pay with M-Pesa – STK Push
+                        </label>
+                    </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="standard_method" value="standard" onclick="togglePaymentFields()">
+                            <label class="form-check-label" for="standard_method">
+                                Pay with M-Pesa – Standard
+                            </label>
+                        </div>
+
+                        <!-- STK PUSH CARD -->
+                        <div id="stk_block" class="payment-card show-card">
+                        <div class="mpesa-card stk">
+                            <h4>Pay KES. 300 with MPESA - STK PUSH</h4>
+                            <p><strong>Customer Care:</strong> 0715752644 / 0792523226</p>
+                            <img src="{{ asset('pictures/m-pesa-logo.jpg') }}" alt="M-Pesa Logo" class="mpesa-logo">
+                            
+                            <ol>
+                            <li>Enter your <strong>mobile phone number</strong> below and click <em>Register and submit payment details button</em>.</li>
+                            <li>An STK Push prompt will appear on your phone automatically.</li>
+                            <li>Enter your <strong>M-Pesa PIN</strong> on your phone.</li>
+                            <li>Transaction completes instantly and you will receive<strong> Login Credentials</strong> and <strong>Membership card</strong> in your email you provided .</li>
+                            </ol>
+
+                            <div class="form-group mt-3">
+                                <label for="ALTERNATIVE_PHONE_NUMBER" class="required-label">Enter Mobile Number for Payment</label>
+                                <input type="text" name="ALTERNATIVE_PHONE_NUMBER" id="ALTERNATIVE_PHONE_NUMBER" class="form-control" value="{{ old('ALTERNATIVE_PHONE_NUMBER') }}" placeholder="e.g., 07XXXXXXXX" required>
+                                @error('ALTERNATIVE_PHONE_NUMBER')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                            </div>
+
+                          <!-- Buttons -->
+                              <!-- submit button -->
+                               <button type="submit" class="btn btn-success mt-3" style="width: 100%;">
+                                    Register & Submit Payment Details
+                                </button> <br> <br>
+                                <!-- Go Back Button -->
+                                <button type="button" class="btn btn-secondary" onclick="goBackToForm()" style="width: 100%;">
+                                    Go Back & Edit Details
+                                </button>
+
+                        </div>
+                        </div>
+
+                        <!-- STANDARD CARD -->
+                        <div id="standard_block" class="payment-card">
+                            <div class="mpesa-card standard">
+                                <h4>Pay Kes 300 with MPESA - Standard</h4>
+                                <p><strong>Customer Care:</strong> 0715752644 / 0792523226</p>
+
+                                <div class="row align-items-center">
+                                    <!-- Logo (Left Side) -->
+                                    <div class="col-md-4 text-center">
+                                        <img src="{{ asset('pictures/m-pesa-logo.jpg') }}" alt="M-Pesa Logo" class="img-fluid mpesa-logo">
+                                    </div>
+
+                                    <!-- Instructions (Right Side) -->
+                                    <div class="col-md-8">
+                                        <div class="alert alert-info">
+                                            <h6><strong>Instructions:</strong></h6>
+                                            <ol class="mb-0">
+                                                <li>Go to the <strong>M-PESA</strong> menu on your phone.</li>
+                                                <li>Select <strong>Lipa na M-PESA</strong>.</li>
+                                                <li>Choose <strong>Paybill</strong>.</li>
+                                                <li>Enter the Business Number: <strong>4182983</strong>.</li>
+                                                <li>Enter the Account Number: <strong>Your Name</strong>.</li>
+                                                <li>Enter the Amount: KES 300.</li>
+                                                <li>Enter your M-PESA PIN and confirm.</li>
+                                                <li>After payment, you’ll receive an SMS with a <strong>Transaction Code</strong>.</li>
+                                                <li>Enter the code below to verify your payment.</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Form -->
+                                <div class="form-group mt-3">
+                                    <label for="manual_code">M-Pesa Transaction Code</label>
+                                    <input type="text" name="manual_code" id="manual_code" class="form-control" placeholder="e.g., QKN4S6XYZ1" maxlength="15">
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="manual-number" class="required-label">Phone Number used</label>
+                                    <input type="text" name="manual-number" id="manual-number" class="form-control" value="{{ old('manual_number') }}" placeholder="e.g., 07XXXXXXXX">
+                                    @error('manual_number')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                             <!-- Buttons -->
+                              <!-- submit button -->
+                               <button type="button" class="btn btn-success mt-3" style="width: 100%;">
+                                    Register & Submit Payment Details
+                                </button> <br> <br>
+                                <!-- Go Back Button -->
+                                <button type="button" class="btn btn-secondary" onclick="goBackToForm()" style="width: 100%;">
+                                    Go Back & Edit Details
+                                </button>
+
+                            </div>
+                        </div>
+
+
+                        <!-- Script -->
+                        <script>
+                        function togglePaymentFields() {
+                        const stk = document.getElementById('stk_block');
+                        const standard = document.getElementById('standard_block');
+
+                        if (document.getElementById('stk_method').checked) {
+                            stk.classList.add("show-card");
+                            standard.classList.remove("show-card");
+                        } else {
+                            stk.classList.remove("show-card");
+                            standard.classList.add("show-card");
+                        }
+                        }
+
+                        function proceedStkPayment() {
+                        alert("STK Push initiated. Please check your phone for the M-Pesa prompt.");
+                        }
+
+                        function proceedStandardPayment() {
+                        alert("Your payment details have been submitted for verification.");
+                        }
+
+                        // Show STK by default
+                        document.addEventListener("DOMContentLoaded", () => {
+                        document.getElementById("stk_block").classList.add("show-card");
+                        });
+                        </script>
+
                      <!-- Buttons -->
-                      <div class="d-flex justify-content-between">
+                      <!-- <div class="d-flex justify-content-between"> -->
                             <!-- Go Back Button -->
-                            <button type="button" class="btn btn-secondary" onclick="goBackToForm()">
+                            <!-- <button type="button" class="btn btn-secondary" onclick="goBackToForm()">
                                 Go Back & Edit Details
-                            </button>
+                            </button> -->
 
                             <!-- Submit -->
-                            <button type="submit" class="btn btn-success">Register & Pay via M-Pesa </button>
-                        </div>
+                            <!-- <button type="submit" class="btn btn-success">Register & Pay via M-Pesa </button>
+                        </div> -->
                 </div>
             </div>
         </form>
@@ -1845,4 +1873,45 @@ function goBackToForm() {
         text-align: right;
     }
 }
+/* MPESA CARD STYLES */
+.payment-card {
+    display: none;
+    max-width: 550px;
+    margin: 20px auto;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    }
+    .payment-card.show-card {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    }
+
+    .mpesa-card {
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    }
+
+    .mpesa-card.stk {
+    border: 2px solid #00A859;
+    background: #f9fdf9;
+    }
+    .mpesa-card.standard {
+    border: 2px solid #B22222;
+    background: #fff8f8;
+    }
+
+    .mpesa-card h4 {
+    margin-bottom: 10px;
+    font-weight: 600;
+    }
+
+    .mpesa-logo {
+    width: 120px;
+    margin-bottom: 15px;
+    }
 </style>
