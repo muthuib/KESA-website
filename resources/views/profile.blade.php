@@ -427,7 +427,7 @@
                   </div>
 
                   <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Date</div>
+                      <div class="col-lg-3 col-md-4 label">Membership Date</div>
                       <div class="col-lg-9 col-md-8">{{ $user->DATE ?: 'N/A' }}</div>
                   </div>
 
@@ -561,7 +561,7 @@
                        <div class="col-md-6">
                           <label for="PHONE_NUMBER" class="form-label">Phone Number</label>
                             <input name="PHONE_NUMBER" type="text" class="form-control" 
-                                  id="PHONE_NUMBER" value="{{ old('PHONE_NUMBER', $user->PHONE_NUMBER) }}">
+                                  id="PHONE_NUMBER" value="{{ old('PHONE_NUMBER', $user->PHONE_NUMBER) }}" style= " background-color: #e9ecef;" readonly>
                         </div>
                     </div>
 
@@ -673,7 +673,7 @@
                       <div class="col-md-6">
                           <label for="DATE" class="form-label">Date</label>
                           <input name="DATE" type="date" class="form-control" 
-                                id="DATE" value="{{ old('DATE', $user->DATE) }}">
+                                id="DATE" value="{{ old('DATE', $user->DATE) }}" style= " background-color: #e9ecef;" readonly>
                       </div>
 
                     </div>
