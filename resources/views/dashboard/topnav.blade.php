@@ -152,7 +152,7 @@
             }
             /* adjusting space between tabs */
             .navbar-nav .nav-item {
-                margin-right: 26px; /* Adjust spacing as needed */
+                margin-right: 6px; /* Adjust spacing as needed */
             }
             #navbarNav {
                 margin-left: 160px; /* Apply left margin by default */
@@ -250,7 +250,8 @@
             </div>
             <div class="menu-item"><a href="{{ route('contact.display') }}">Contact</a></div>
             <div class="menu-item"><a href="{{ route('live-events.list') }}">Live Media</a></div><br>
-            <div class="menu-item"><a href="{{ route('blog.display') }}">Blog</a></div>
+            <div class="menu-item"><a href="{{ route('blog.display') }}">Blog</a></div><br>
+            <div class="menu-item"><a href="{{ route('careers.index') }}">Careers</a></div>
             @guest
             <li class="nav-item dropdown" style="margin-right: 15px;">
                 <a class="nav-link dropdown-toggle" href="#" id="membershipDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; color: black; font-weight: bold; border-radius: 5px; padding: 7px 10px;">
@@ -324,8 +325,7 @@
             <!-- events dropdown -->
             <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" 
-                    style="@if(request()->routeIs('events.showAll') || request()->routeIs('activities.display') || request()->routeIs('news.display')
-)
+                    style="@if(request()->routeIs('events.showAll') || request()->routeIs('activities.display') || request()->routeIs('news.display'))
                                 color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; 
                             @else 
                                 color: white; font-weight: bold; text-decoration: none; margin-top: 22px; 
@@ -427,10 +427,18 @@
                         </li>
                     </ul>
                     <ul class="nav responsive-nav">
-                        <!-- Live Media tab -->
+                        <!-- blog tab -->
                         <li class="nav-item">
                             <a href="{{ route('blog.display') }}" class="nav-link responsive-text"style="@if(request()->routeIs('blog.display') || request()->routeIs('blog.show')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">
                                Blog
+                            </a>
+                        </li>
+                    </ul>
+                                        <ul class="nav responsive-nav">
+                        <!-- careers tab -->
+                        <li class="nav-item">
+                            <a href="{{ route('careers.index') }}" class="nav-link responsive-text"style="@if(request()->routeIs('careers.index') || request()->routeIs('careers.apply')) color: aqua; font-weight: bold; text-decoration: none; margin-top: 22px; @else color: white; font-weight: bold; text-decoration: none; margin-top: 22px; @endif">
+                               Careers
                             </a>
                         </li>
                     </ul>
