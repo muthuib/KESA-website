@@ -9,6 +9,22 @@
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
+     @if(!auth()->user()->hasRole('admin'))
+          <!--  Careers -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('careers.index') }}">
+          <i class="bi bi-briefcase"></i>
+          <span>Career opportunities</span>
+        </a>
+      </li><!-- End careers Nav -->
+       <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('careers.myApplications') }}">
+          <i class="bi bi-list-check"></i>
+          <span>My Applications</span>
+        </a>
+      </li><!-- End my applications Nav -->
+      @endif
+
 <!-- Admin roles authentication -->
    @if(auth()->user()->hasRole('admin'))
    <!-- statistics -->
@@ -77,6 +93,13 @@
           <span>Manage Blogs</span>
         </a>
       </li><!-- End Manage blogs Nav -->
+       <!-- Manage Careers -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('admin.careers.index') }}">
+          <i class="bi bi-briefcase"></i>
+          <span>Manage Careers</span>
+        </a>
+      </li><!-- End Manage careers Nav -->
 
       <!-- Manage Testimonials -->
     <li class="nav-item">

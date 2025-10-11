@@ -53,6 +53,7 @@ use App\Models\User;
 use App\Http\Controllers\MpesaWebhookController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\CareerController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -560,6 +561,26 @@ Route::get('/verify/{membership}', function ($membership) {
 // TAG ROUTE
 Route::get('/blogs/tags/{tag}', [BlogController::class, 'tag'])->name('blog.tag');
 
+// CAREER PAGE
+// PUBLIC
+Route::get('/careers', [CareerController::class, 'index'])->name('careers.index');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/careers/{career}/apply', [CareerController::class, 'apply'])->name('careers.apply');
+    Route::get('/my-applications', [CareerController::class, 'myApplications'])->name('careers.myApplications');
+});
+
+
+// ADMIN
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::post('/careers', [CareerController::class, 'store'])->name('admin.careers.store');
+    Route::get('/careers', [CareerController::class, 'adminIndex'])->name('admin.careers.index');
+    Route::get('/careers/{id}/applicants', [CareerController::class, 'viewApplicants'])->name('admin.careers.applicants');
+    Route::post('/applications/{id}/status', [CareerController::class, 'updateApplicationStatus'])->name('admin.applications.update');
+    Route::get('/careers/{id}', [CareerController::class, 'show'])->name('admin.careers.show');
+    Route::get('/careers/{id}/edit', [CareerController::class, 'edit'])->name('admin.careers.edit');
+    Route::put('/careers/{id}', [CareerController::class, 'update'])->name('admin.careers.update');
+    Route::delete('/careers/{id}', [CareerController::class, 'destroy'])->name('admin.careers.destroy');
+});
 
 
 
