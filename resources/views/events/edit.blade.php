@@ -5,7 +5,7 @@
     <div class="row justify-content-left">
         <div class="col-md-8">
             <!-- Card Container -->
-            <div class="card shadow-lg" style="width: 1200px;">
+            <div class="card shadow-lg" style="width: 1100px;">
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>

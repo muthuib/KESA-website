@@ -5,7 +5,7 @@
     <div class="row justify-content-left">
         <div class="col-md-8">
             <!-- Card Container -->
-            <div class="card shadow-lg" style="width: 1200px;">
+            <div class="card shadow-lg" style="width: 1100px;">
                 <!-- Card Header with Back Button -->
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0" style="color: black;">Create New Event</h4>
