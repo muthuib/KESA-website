@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h1 class="fw-bold text-center mb-5" data-aos="fade-down">
+    <h1 class="fw-bold text-center mb-5" data-aos="fade-down" style="font-size: 30px;">
     🌟 Upcoming <span style="color: #20c997;">Events</span>
 </h1>
 
@@ -76,7 +76,7 @@
 
                             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                                 <a href="{{ $event->link }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-4">
-                                    <i class="bi bi-link-45deg"></i> Register
+                                    <i class="bi bi-link-45deg"></i> Register here
                                 </a>
                                 <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ urlencode($event->name) }}&dates={{ \Carbon\Carbon::parse($event->start_date)->format('Ymd') }}T{{ \Carbon\Carbon::parse($event->start_time)->format('His') }}/{{ \Carbon\Carbon::parse($event->end_time)->format('His') }}&details={{ urlencode($event->description) }}&location={{ urlencode($event->venue) }}" 
                                 target="_blank" class="btn btn-sm btn-success rounded-pill px-4">
