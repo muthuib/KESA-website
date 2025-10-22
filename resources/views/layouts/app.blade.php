@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    
     {{-- Default meta tags --}}
     <meta property="og:title" content="KESA Kenya">
     <meta property="og:description" content="Official website of the Economics Students Association of Kenya">
@@ -17,6 +18,9 @@
     <meta name="twitter:image" content="{{ asset('default.jpg') }}">
     <meta name="description" content="" />
     <meta name="author" content="" />
+
+       {{-- ✅ Dynamic OG tags from pages like publication --}}
+    @yield('head')
    
     <link rel="icon" href="{{ asset('public/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url('favicon.ico') }}" type="image/x-icon">
@@ -61,16 +65,17 @@
         <!-- Template Main CSS File -->
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
         <!-- END OF TEMPLATE CSS -->
-    
+
+
     <title>@yield('title', 'KESA Kenya')</title>
     
-    @yield('meta') <!-- Add this line -->
+    @yield('meta') <
     <!--  CSS -->
     <style>
         * {
             font-family: 'Poppins';
         }
-              <style>
+              
           /* Logged-in users: left content */
                 #main.main-auth {
                   text-align: left;
@@ -94,7 +99,6 @@
                   color: #f8f9fa;
                 }
 
-      </style>
     </style>
         @yield('styles')
 
