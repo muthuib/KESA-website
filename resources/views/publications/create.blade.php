@@ -11,6 +11,12 @@
 
     <form action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <!-- Cover Image -->
+         <div class="mb-3">
+            <label for="cover" class="form-label" style="color: brown; font-weight: bold;">Cover Image (optional)</label>
+            <input type="file" name="cover" id="cover" class="form-control" accept="image/*">
+            <small class="text-muted">Upload a JPG, PNG, or WEBP image (max 5MB)</small>
+        </div>
 
         <!-- Title -->
         <div class="mb-3">

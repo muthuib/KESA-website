@@ -13,6 +13,17 @@
         @csrf
         @method('PUT')
 
+        <!-- Cover page -->
+         <div class="mb-3">
+                <label for="cover" class="form-label" style="color: brown; font-weight: bold;">Cover Image (optional)</label>
+                <input type="file" name="cover" id="cover" class="form-control" accept="image/*">
+                @if($publication->cover_image)
+                    <p class="mt-2">Current Cover: 
+                        <img src="{{ asset($publication->cover_image) }}" alt="Cover" style="width: 100px; height: auto; border-radius: 5px;">
+                    </p>
+                @endif
+            </div>
+
         <!-- Title -->
         <div class="mb-3">
             <label for="title" class="form-label" style="color: brown; font-weight: bold;">Publication Title</label>

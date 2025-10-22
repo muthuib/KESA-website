@@ -410,12 +410,15 @@ Route::get('/publications/{publication}', [PublicationController::class, 'show']
 Route::get('/publications/{publication}/edit', [PublicationController::class, 'edit'])->name('publications.edit');
 Route::put('/publications/{publication}', [PublicationController::class, 'update'])->name('publications.update');
 Route::delete('/publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
+Route::delete('/publications/{id}/cover', [PublicationController::class, 'deleteCover'])->name('publications.deleteCover');
+
 });
 });
 Route::get('/publications/download/{publication}', [PublicationController::class, 'download'])->name('publications.download');
 Route::get('/publication/display', [PublicationController::class, 'display'])->name('publications.display');
+Route::get('/publication/display/{id?}', [PublicationController::class, 'display'])->name('publications.display.show'); //route for highlighting a specific publication
+Route::get('/publication/display/{slug?}', [PublicationController::class, 'display'])->name('publications.display.show');
 Route::get('/publications/download/{id}', [App\Http\Controllers\PublicationController::class, 'download'])->name('publications.download');
-
 
 //ACTIVITIES ROUTES
 // List all activities (Index)
