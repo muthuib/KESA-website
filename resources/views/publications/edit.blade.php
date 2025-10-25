@@ -8,6 +8,22 @@
     <a href="{{ route('publications.index') }}" class="btn btn-dark" style="position: absolute; top: 20px; right: 20px; z-index: 10; padding: 10px;">
         <i class="fas fa-backward"></i> Back
     </a>
+    {{-- Separate Delete Cover Form --}}
+    @if($publication->cover_image)
+        <div class="d-flex justify-content-end mt-3">
+            <form action="{{ route('publications.deleteCover', $publication->id) }}" 
+                method="POST" 
+                onsubmit="return confirm('Are you sure you want to delete this cover image?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" 
+                        class="btn btn-danger btn-sm shadow-sm px-3 py-1"
+                        style="border-radius: 20px; font-weight: 500;">
+                    <i class="fas fa-trash me-1"></i> Remove Cover page
+                </button>
+            </form>
+        </div>
+    @endif
 
     <form action="{{ route('publications.update', $publication->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

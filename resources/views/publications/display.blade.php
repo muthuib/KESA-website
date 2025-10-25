@@ -105,16 +105,20 @@
 
             @forelse($publications as $publication)
             <div id="publication-{{ $publication->id }}" class="row align-items-center mb-3 publication-row {{ isset($id) && $id == $publication->id ? 'highlighted' : '' }}">
-            <div class="col-md-1 text-center">
-                @if($publication->cover_image)
-                    <img src="{{ asset($publication->cover_image) }}" 
-                        alt="Cover Image for {{ $publication->title }}" 
-                        class="img-fluid rounded shadow-sm"
-                        style="width: 80px; height: 90px; border: 2px solid #d0e3e9ff;">
-                @else
-                    <i class="fas fa-file-alt text-brown publication-icon" style="font-size: 45px;"></i>
-                @endif
-            </div>
+                <div class="col-12 col-md-1 d-flex justify-content-center align-items-center mb-3 mb-md-0 text-center">
+                    @if($publication->cover_image)
+                        <div class="publication-img-wrapper rounded shadow-sm"
+                            style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #d0e3e9ff;">
+                            <img src="{{ asset($publication->cover_image) }}" 
+                                alt="Cover Image for {{ $publication->title }}" 
+                                class="img-fluid publication-cover" 
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                    @else
+                        <i class="fas fa-file-alt text-brown publication-icon" style="font-size: 45px;"></i>
+                    @endif
+                </div>
+
 
                 <div class="col-md-7">
                     <h5 class="mb-1 publication-title">{{ $publication->title }}</h5>
@@ -209,6 +213,9 @@
 @endsection
 
 @section('scripts')
+<!-- each publication image to automatically set a matching background color using Color Thief -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+
 <!-- Bootstrap Bundle JS (includes Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -259,6 +266,29 @@ if (highlighted) {
     }, 10000);
 }
 
+// --- Color Thief for publication images ---
+    const colorThief = new ColorThief();
+
+    document.querySelectorAll('.publication-cover').forEach(img => {
+        // Ensure image is loaded
+        if (img.complete) {
+            setBackground(img);
+        } else {
+            img.addEventListener('load', () => setBackground(img));
+        }
+    });
+
+    function setBackground(img) {
+        try {
+            const color = colorThief.getColor(img); // [r, g, b]
+            const wrapper = img.closest('.publication-img-wrapper');
+            if (wrapper) {
+                wrapper.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+            }
+        } catch (e) {
+            console.error('ColorThief error:', e);
+        }
+    }
 
 });
 </script>
