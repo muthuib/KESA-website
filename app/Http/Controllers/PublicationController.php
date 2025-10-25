@@ -184,6 +184,7 @@ public function update(Request $request, Publication $publication)
         return redirect()->route('publications.index')->with('danger', 'Publication deleted successfully.');
     }
 
+    
     public function download($id)
     {
         $publication = Publication::findOrFail($id);
@@ -198,4 +199,19 @@ public function update(Request $request, Publication $publication)
         return response()->download($file, $publication->title . '.' . pathinfo($file, PATHINFO_EXTENSION));
     }
     
+    // remove/delete cover page
+    public function deleteCover($id)
+    {
+        $publication = Publication::findOrFail($id);
+
+        if ($publication->cover_image && file_exists(public_path($publication->cover_image))) {
+            unlink(public_path($publication->cover_image));
+        }
+
+        $publication->cover_image = null;
+        $publication->save();
+
+        return redirect()->back()->with('danger', 'Cover image removed successfully.');
+    }
+
 }
