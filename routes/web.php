@@ -111,6 +111,9 @@ Route::post('/mpesa/register/callback', [MpesaWebhookController::class, 'registr
     Route::post('/renew', [PaymentController::class, 'renewMembership'])
         ->name('membership.renew');
 
+        // check email role
+     Route::post('/membership/check-email', [App\Http\Controllers\PaymentController::class, 'checkEmailRole'])->name('membership.checkEmail');
+
     // Dashboard – protected by membership check
     Route::get('/dashboard', function () {
         return view('dashboard');
