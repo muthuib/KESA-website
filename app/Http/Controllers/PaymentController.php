@@ -35,7 +35,7 @@ class PaymentController extends Controller
                 return back()->with('error', 'No account found for this email. Please register first.');
             }
 
-            $amount = config('kesa.renewal_fee', 1);
+            $amount = $user->role->renewal_fee ?? 1000;
             $accountRef = 'RENEW-' . now('UTC')->format('YmdHis');
 
             Log::info('Initiating STK push for renewal', [
@@ -138,7 +138,7 @@ class PaymentController extends Controller
                 return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Payment failed recorded']);
             }
 
-            // Process successful payment - Extend membership
+            // ✅ Process successful payment - Extend membership for ALL users
             $user = User::find($payment->user_id);
 
             if (!$user) {
@@ -149,13 +149,8 @@ class PaymentController extends Controller
                 ]);
             }
 
-            $currentExpiry = $user->membership_expiry
-                ? Carbon::parse($user->membership_expiry)
-                : now('UTC');
-
-            $newExpiry = $currentExpiry->greaterThan(now('UTC'))
-                ? $currentExpiry->copy()->addYear()
-                : now('UTC')->addYear();
+            // Extend membership by exactly 1 year from expiry or today
+            $newExpiry = $this->calculateNewExpiry($user->membership_expiry);
 
             $user->update([
                 'membership_expiry' => $newExpiry,
@@ -164,6 +159,9 @@ class PaymentController extends Controller
                 'amount_paid'       => $payment->amount,
                 'payment_date'      => $paidAt,
             ]);
+
+            Log::info("Membership renewed for {$user->EMAIL} until {$newExpiry->toDateString()}");
+
 
             DB::commit();
             return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Success']);
@@ -183,6 +181,19 @@ class PaymentController extends Controller
     }
 
     /**
+ * Calculate new membership expiry (always +1 year)
+ */
+    private function calculateNewExpiry($currentExpiry)
+        {
+            $current = $currentExpiry ? Carbon::parse($currentExpiry) : now('UTC');
+
+            // If still active, add 1 year from expiry; otherwise start from today
+            return $current->greaterThan(now('UTC'))
+                ? $current->copy()->addYear()
+                : now('UTC')->addYear();
+        }
+
+    /**
      * Batch process unprocessed renewals
      */
     public function processRenewals()
@@ -197,14 +208,7 @@ class PaymentController extends Controller
                 $user = User::find($payment->user_id);
 
                 if ($user) {
-                    $currentExpiry = $user->membership_expiry
-                        ? Carbon::parse($user->membership_expiry)
-                        : now('UTC');
-
-                    $newExpiry = $currentExpiry->greaterThan(now('UTC'))
-                        ? $currentExpiry->copy()->addYear()
-                        : now('UTC')->addYear();
-
+                   $newExpiry = $this->calculateNewExpiry($user->membership_expiry);
                     $user->update([
                         'membership_expiry' => $newExpiry,
                         'payment_status'    => 'successful',
@@ -247,4 +251,33 @@ class PaymentController extends Controller
         if (str_starts_with($p, '+')) return ltrim($p, '+');
         return $p;
     }
+
+    // check email role
+public function checkEmailRole(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $email = $request->email;
+        $user = \App\Models\User::where('EMAIL', $email)->with('role')->first();
+
+        if (!$user) {
+            return response()->json([
+                'exists' => false,
+                'message' => 'No account found for this email.',
+            ]);
+        }
+
+        $roleName = strtolower($user->role->name ?? 'unknown');
+        $renewalFee = $user->role->renewal_fee ?? 1000; // 🔹 get from DB column
+
+        return response()->json([
+            'exists' => true,
+            'role' => $roleName,
+            'renewal_fee' => (float) $renewalFee,
+            'message' => 'Account found: ' . ucfirst($roleName),
+        ]);
+    }
+
 }
