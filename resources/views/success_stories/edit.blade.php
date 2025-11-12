@@ -4,13 +4,12 @@
 
 @section('styles')
 <style>
-    .ck-editor__editable {
-        min-height: 300px;
-    }
-    .img-thumbnail {
-        max-width: 220px;
-        height: auto;
-    }
+    body { background-color: #f8f9fc; }
+    .ck-editor__editable { min-height: 300px; }
+    .img-thumbnail { max-width: 220px; height: auto; }
+    .form-label strong { font-weight: 600; }
+    .card { border-radius: 12px; }
+    .form-section { margin-bottom: 1.5rem; }
 </style>
 @endsection
 
@@ -23,88 +22,76 @@
         </a>
     </div>
 
-    <form action="{{ route('success_stories.update', $success_story->id) }}" 
-          method="POST" 
-          enctype="multipart/form-data" 
-          id="editStoryForm">
+    <div class="card shadow-sm p-4 bg-white">
+        <form action="{{ route('success_stories.update', $success_story->id) }}" 
+              method="POST" 
+              enctype="multipart/form-data" 
+              id="editStoryForm">
 
-        @csrf
-        @method('PUT')
+            @csrf
+            @method('PUT')
 
-        <!-- Title -->
-        <div class="mb-3">
-            <label for="title" class="form-label">
-                Title <span class="text-danger">*</span>
-            </label>
-            <input type="text" 
-                   name="title" 
-                   id="title" 
-                   class="form-control @error('title') is-invalid @enderror" 
-                   value="{{ old('title', $success_story->title) }}" 
-                   required>
-            @error('title')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Author -->
-        <div class="mb-3">
-            <label for="author" class="form-label">Author</label>
-            <input type="text" 
-                   name="author" 
-                   id="author" 
-                   class="form-control" 
-                   value="{{ old('author', $success_story->author) }}" 
-                   placeholder="e.g. Jane Doe">
-        </div>
-
-        <!-- Cover Image -->
-        <div class="mb-3">
-            <label for="cover_image" class="form-label">Cover Image</label>
-            @if($success_story->cover_image)
-                <div class="mb-2">
-                    <img src="{{ asset($success_story->cover_image) }}" 
-                         alt="Current Cover" 
-                         class="img-thumbnail rounded shadow-sm">
-                    <small class="text-muted d-block mt-1">Current image</small>
+            <div class="form-section row g-3">
+                <!-- Title -->
+                <div class="col-md-6">
+                    <div class="form-floating mb-2">
+                        <input type="text" name="title" id="title" class="form-control" 
+                               value="{{ old('title', $success_story->title) }}" required>
+                        <label for="title"><strong>Title <span class="text-danger">*</span></strong></label>
+                    </div>
                 </div>
-            @endif
-            <input type="file" 
-                   name="cover_image" 
-                   id="cover_image" 
-                   class="form-control form-control-sm" 
-                   accept=".jpg,.jpeg,.png">
-            <small class="text-muted">JPG, JPEG, or PNG only</small>
-        </div>
 
-        <!-- Story Body with CKEditor -->
-        <div class="mb-3">
-            <label for="body-editor" class="form-label">
-                Story Body <span class="text-danger">*</span>
-            </label>
+                <!-- Author -->
+                <div class="col-md-6">
+                    <div class="form-floating mb-2">
+                        <input type="text" name="author" id="author" class="form-control" 
+                               value="{{ old('author', $success_story->author) }}" required>
+                        <label for="author"><strong>Author <span class="text-danger">*</span></strong></label>
+                    </div>
+                </div>
 
-            {{-- Hidden textarea – NO `required` to avoid browser focus error --}}
-            <textarea name="body" 
-                      id="body-editor" 
-                      class="form-control d-none">
-                {{ old('body', $success_story->body) }}
-            </textarea>
+                <!-- Published Date -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label for="published_at" class="form-label"><strong>Published Date <span class="text-danger">*</span></strong></label>
+                        <input type="date" name="published_at" id="published_at" class="form-control"
+                               value="{{ old('published_at', $success_story->published_at ? $success_story->published_at->format('Y-m-d') : now()->format('Y-m-d')) }}" required>
+                        <small class="text-muted">Select date for story publication</small>
+                    </div>
+                </div>
 
-            @error('body')
-                <div class="text-danger small mt-1">{{ $message }}</div>
-            @enderror
-        </div>
+                <!-- Cover Image -->
+                <div class="col-md-6">
+                    <label for="cover_image" class="form-label"><strong>Cover Image</strong></label>
+                    @if($success_story->cover_image)
+                        <div class="mb-2">
+                            <img src="{{ asset($success_story->cover_image) }}" 
+                                 alt="Current Cover" 
+                                 class="img-thumbnail rounded shadow-sm">
+                            <small class="text-muted d-block mt-1">Current image</small>
+                        </div>
+                    @endif
+                    <input type="file" name="cover_image" id="cover_image" class="form-control" accept=".jpg,.jpeg,.png">
+                    <small class="text-muted">JPG, JPEG, or PNG only</small>
+                </div>
+            </div>
 
-        <!-- Buttons -->
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary px-4">
-                Update Story
-            </button>
-            <a href="{{ route('success_stories.index') }}" class="btn btn-secondary px-4">
-                Cancel
-            </a>
-        </div>
-    </form>
+            <!-- Story Content -->
+            <div class="form-section mt-4">
+                <label for="body-editor" class="form-label"><strong>Story Content <span class="text-danger">*</span></strong></label>
+                <textarea name="body" id="body-editor" class="form-control d-none">{{ old('body', $success_story->body) }}</textarea>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fas fa-paper-plane"></i> Update Story
+                </button>
+                <a href="{{ route('success_stories.index') }}" class="btn btn-secondary btn-sm mt-2">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
 
@@ -127,10 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(ed => {
             editor = ed;
-            window.ckEditor = ed; // for debugging
             console.log('CKEditor loaded successfully');
-
-            // Optional: Hide the original textarea visually
             textarea.style.display = 'none';
         })
         .catch(err => {
@@ -138,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Rich text editor failed to load. Please try again.');
         });
 
-    // === CLIENT-SIDE VALIDATION (Recommended) ===
+    // Sync editor content before submitting
     const form = document.getElementById('editStoryForm');
     form.addEventListener('submit', function (e) {
         if (editor) {
@@ -148,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Please write the success story content.');
                 return;
             }
-            // Sync final content
             textarea.value = content;
         }
     });

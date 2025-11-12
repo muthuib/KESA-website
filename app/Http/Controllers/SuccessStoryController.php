@@ -31,13 +31,23 @@ class SuccessStoryController extends Controller
      * -------------------------------- */
     public function store(Request $request)
     {
-        $request->validate([
+      $request->validate([
             'title'       => 'required|string|max:255',
-            'body'        => 'required|string', // CKEditor HTML content
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'body'        => 'required|string',
+            'cover_image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
             'caption'     => 'nullable|string|max:255',
             'author'      => 'nullable|string|max:100',
+        ], [
+            'cover_image.mimes' => 'Accepted formats: JPG, JPEG, PNG only.',
+            'cover_image.image' => 'The file must be an image.',
+            'cover_image.max'   => 'The image must not exceed 2MB in size.',
         ]);
+
 
         $data = $request->only(['title', 'body', 'caption', 'author']);
         $data['uuid'] = Str::uuid();
@@ -74,13 +84,22 @@ class SuccessStoryController extends Controller
      * -------------------------------- */
     public function update(Request $request, SuccessStory $success_story)
     {
-        $request->validate([
-            'title'       => 'required|string|max:255',
-            'body'        => 'required|string',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'caption'     => 'nullable|string|max:255',
-            'author'      => 'nullable|string|max:100',
-        ]);
+       $request->validate([
+                'title'       => 'required|string|max:255',
+                'body'        => 'required|string',
+                'cover_image' => [
+                    'nullable',
+                    'image',
+                    'mimes:jpg,jpeg,png',
+                    'max:2048',
+                ],
+                'caption'     => 'nullable|string|max:255',
+                'author'      => 'nullable|string|max:100',
+            ], [
+                'cover_image.mimes' => 'Accepted formats: JPG, JPEG, PNG only.',
+                'cover_image.image' => 'The file must be an image.',
+                'cover_image.max'   => 'The image must not exceed 2MB in size.',
+            ]);
 
         $data = $request->only(['title', 'body', 'caption', 'author']);
         $data['slug'] = Str::slug($request->title);
