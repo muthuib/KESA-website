@@ -75,6 +75,11 @@
                   <i class="bi bi-circle"></i><span>Live Events</span>
                 </a>
               </li>
+              <li>
+                <a href="{{ route('success_stories.index') }}">
+                  <i class="bi bi-circle"></i><span>Success Stories</span>
+                </a>
+              </li>
             </ul>
         </li>    <!-- end of manage events hub -->
 
