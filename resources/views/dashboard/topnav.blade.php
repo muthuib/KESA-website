@@ -234,9 +234,10 @@
             <div class="menu-item dropdown">
                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">News & Events</a> <br>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ route('news.display') }}">News</a></li>
-                <li><a class="dropdown-item" href="{{ route ('events.showAll') }}">Upcoming Events</a></li>
-                <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
+                    <li><a class="dropdown-item" href="{{ route('news.display') }}">News</a></li>
+                    <li><a class="dropdown-item" href="{{ route ('events.showAll') }}">Upcoming Events</a></li>
+                    <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
+                    <li><a class="dropdown-item" href="{{ route('public.success_stories.index') }}">Success Stories</a></li>
                 </ul>
             </div>
             <!-- resource HUB Dropdown -->
@@ -336,6 +337,7 @@
                     <li><a class="dropdown-item @if(request()->routeIs('news.display'))  @endif" href="{{ route('news.display') }}">News</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">Upcoming Events</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Past Events</a></li>
+                        <li><a class="dropdown-item @if(request()->routeIs('public.success_stories.index'))  @endif" href="{{ route('public.success_stories.index') }}">Success Stories</a></li>
                         </ul>
                 </li>
                     <!-- Economics Hub Dropdown (Fixed) -->

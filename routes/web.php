@@ -54,6 +54,7 @@ use App\Http\Controllers\MpesaWebhookController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CareerController;
+use App\Http\Controllers\SuccessStoryController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -589,7 +590,38 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 
+// SUCCESS STORIES
+Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+    // View all success stories (Admin & Public)
+    Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('success_stories.index');
 
+    // Show the form to create a new success story (Admin)
+    Route::get('/success-stories/create', [SuccessStoryController::class, 'create'])->name('success_stories.create');
+
+    // Store a new success story (Admin)
+    Route::post('/success-stories', [SuccessStoryController::class, 'store'])->name('success_stories.store');
+
+    // Show a single success story (Public)
+    Route::get('/success-stories/{success_story}', [SuccessStoryController::class, 'show'])->name('success_stories.show');
+
+    // Show the edit form (Admin)
+    Route::get('/success-stories/{success_story}/edit', [SuccessStoryController::class, 'edit'])->name('success_stories.edit');
+
+    // Update the success story (Admin)
+    Route::put('/success-stories/{success_story}', [SuccessStoryController::class, 'update'])->name('success_stories.update');
+
+    // Delete the success story (Admin)
+    Route::delete('/success-stories/{success_story}', [SuccessStoryController::class, 'destroy'])->name('success_stories.destroy');
+
+   });
+});
+
+// Public list of success stories (with optional search)
+Route::get('/stories', [SuccessStoryController::class, 'publicIndex'])->name('public.success_stories.index');
+
+// Public single story view by slug
+Route::get('/stories/{slug}', [SuccessStoryController::class, 'show'])->name('public.success_stories.show');
 
 // CLEAR CACHE ROUTE RUN https://www.kesakenya.org/clearcache
 
