@@ -30,7 +30,7 @@
 
         <li class="nav-item dropdown">
 
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" style="color: white;">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" style="color: white; background-color: maroon;">
             <i class="bi bi-bell"></i>
             <!-- <span class="badge bg-primary badge-number">4</span> -->
           </a><!-- End Notification Icon -->
@@ -106,7 +106,7 @@
 
         <li class="nav-item dropdown">
 
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" style="color: white;">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" style="color: white; background-color: maroon;">
             <i class="bi bi-chat-left-text"></i>
             <!-- <span class="badge bg-success badge-number">3</span> -->
           </a><!-- End Messages Icon -->

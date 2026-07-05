@@ -29,14 +29,14 @@
             @error('bio')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-        </div>
+        </div> -->
         <div class="mb-3">
-            <label for="cv_link" class="form-label">CV Link</label>
+            <label for="cv_link" class="form-label">LinkedIn Profile</label>
             <input type="url" name="cv_link" id="cv_link" class="form-control">
             @error('cv_link')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-        </div> -->
+        </div>
         <div class="mb-3">
             <label for="image" class="form-label">Profile Image</label>
             <input type="file" name="image" id="image" class="form-control" required>

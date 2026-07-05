@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
+<div class="container py-1">
     <h4 class="fw-bold mb-3">Applicants for {{ $career->title }}</h4>
 
     @php
@@ -12,10 +12,11 @@
        {{ $applicantCount }} {{ $applicantCount !== 1 ? 's' : '' }}
     </span> </p>
 
-    <table class="table table-hover align-middle">
-        <thead class="table-light">
+    <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+          <thead class="thead">
             <tr>
-                <th>#</th>
+                <!-- <th>#</th> -->
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -28,7 +29,7 @@
         <tbody>
             @forelse($career->applications as $applicant)
             <tr>
-                <td>{{ $loop->iteration }}.</td>
+                <!-- <td>{{ $loop->iteration }}.</td> -->
                 <td>{{ $applicant->name }}</td>
                 <td>{{ $applicant->email }}</td>
                 <td>{{ $applicant->phone }}</td>

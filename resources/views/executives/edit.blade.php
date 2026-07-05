@@ -26,22 +26,22 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-<!--         
-        <div class="mb-3">
+        
+        <!-- <div class="mb-3">
             <label for="bio" class="form-label">Bio</label>
             <textarea name="bio" id="bio" rows="4" class="form-control">{{ old('bio', $executive->bio) }}</textarea>
             @error('bio')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-        </div>
+        </div> -->
         
         <div class="mb-3">
-            <label for="cv_link" class="form-label">CV Link</label>
+            <label for="cv_link" class="form-label">LinkedIn Profile</label>
             <input type="url" name="cv_link" id="cv_link" class="form-control" value="{{ old('cv_link', $executive->cv_link) }}">
             @error('cv_link')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-        </div> -->
+        </div>
         
         <div class="mb-3">
             <label for="image" class="form-label">Profile Image</label>

@@ -1,13 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0">📚 Blog Posts</h5>
-        <a href="{{ route('blog.create') }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus me-1"></i> Add Blog
-        </a>
-    </div>
+<div class="container mt-1">
+    <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">KESA</p>
+                <h1 class="h3 mb-1">Blog Posts</h1>
+                <p class="text-muted mb-0">Central Hub for KESA Blogs</p>
+              </div>
+            </div>
+              <!-- Upload New Button -->
+            <div class="mb-3 d-flex justify-content-end">
+                <a  style = "font-size:12px;" href="{{ route('blog.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Blog
+                </a>
+            </div>
+          </div>
 
     <!-- Search Form -->
     <form action="{{ route('blog.index') }}" method="GET" class="mb-3">
@@ -20,11 +30,11 @@
     </form>
 
     <!-- Blog Posts Table -->
-    <div class="table-responsive">
-       <table class="table table-bordered table-hover align-middle small custom-blog-table">
-            <thead class="table-light text-center">
+     <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+          <thead class="thead">
                 <tr>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>Title</th>
                     <th>Date</th>
                     <th>Image</th>
@@ -36,7 +46,7 @@
             <tbody>
                 @forelse ($blogs as $index => $item)
                     <tr>
-                        <td>{{ ($blogs->currentPage() - 1) * $blogs->perPage() + $index + 1 }}</td>
+                        <!-- <td>{{ ($blogs->currentPage() - 1) * $blogs->perPage() + $index + 1 }}</td> -->
                         <td class="fw-semibold">{{ $item->title }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}</td>
                         <td class="text-center">
@@ -50,7 +60,7 @@
                         <td class="text-center">
                         <!-- Example Button -->
                         <button
-                            class="btn btn-primary open-stats-modal"
+                            class="btn btn-micro btn-info" title="View"
                             data-bs-toggle="modal"
                             data-bs-target="#statsModal"
                             data-blog-id="{{ $item->id }}"
@@ -63,14 +73,16 @@
                             View Stats
                         </button>
                         </td>
-                        <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('blog.show', $item->slug) }}" class="btn btn-info" title="View"><i class="fas fa-eye"></i></a>
-                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                        <td class="p-1">
+                            <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
+                                <a href="{{ route('blog.show', $item->slug) }}" class="btn btn-micro btn-info" title="View"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-micro btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('blog.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog post?');" style="display:inline;">
                                     @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                        @method('DELETE')
+                                    <button class="btn btn-micro btn-danger">
+                                        <i class="fas fa-trash-alt me-2"></i> 
+                                    </button>
                                 </form>
                             </div>
                         </td>
@@ -85,8 +97,8 @@
     </div>
 
     <!-- Pagination -->
-    <div class="d-flex justify-content-center mt-3">
-        {{ $blogs->appends(['search' => request('search')])->links() }}
+    <div class="d-flex justify-content-center">
+      {{ $blogs->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
     </div>
 </div>
 
@@ -124,7 +136,7 @@
     </div>
 </div>
 
-<style>
+<!-- <style>
     /* Modal styling */
     .modal-content {
         background: linear-gradient(145deg, #ffffff, #f8f9fa);
@@ -250,7 +262,7 @@
     white-space: nowrap;
 }
 
-</style>
+</style> -->
 @endsection
 <script>
 document.addEventListener('DOMContentLoaded', function () {
