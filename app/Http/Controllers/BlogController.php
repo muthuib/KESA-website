@@ -27,7 +27,7 @@ class BlogController extends Controller
     }
 
     // Paginate blogs (once)
-    $blogs = $blogsQuery->orderBy('created_at', 'desc')->paginate(10);
+    $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(10);
 
     // Initialize stats array
     $today = Carbon::today();
@@ -245,7 +245,7 @@ class BlogController extends Controller
                       ->orWhere('content', 'like', "%{$search}%");
         }
 
-        $blogs = $blogsQuery->orderBy('created_at', 'desc')->paginate(6);
+        $blogs = $blogsQuery->orderBy('date', 'desc')->paginate(6);
 
         return view('blog.display', compact('blogs', 'search'));
     }

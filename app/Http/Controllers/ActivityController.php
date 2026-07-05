@@ -10,7 +10,7 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $activities = Activity::orderBy('created_at', 'desc')->get();
+        $activities = Activity::orderBy('date', 'desc')->get();
         return view('activities.index', compact('activities'));
     }
 
@@ -125,7 +125,7 @@ class ActivityController extends Controller
 
     public function display()
     {
-        $activities = Activity::orderBy('created_at', 'desc')->get();
+        $activities = Activity::orderBy('date', 'desc')->get();
         return view('activities.display', compact('activities'));
     }
 

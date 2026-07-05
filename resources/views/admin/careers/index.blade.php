@@ -1,17 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <h4 class="fw-bold mb-4">Manage Career Opportunities</h4>
+<div class="container py-1">
+    <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">KESA</p>
+                <h1 class="h3 mb-1">Career Opportunities</h1>
+                <p class="text-muted mb-0">Central Hub for KESA Career Opportunities</p>
+              </div>
+            </div>
+              <!-- Upload New Button -->
+            <div class="mb-3 d-flex justify-content-end">
+                <a style = "font-size:12px;" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCareerModal">
+                    <i class="fas fa-plus"></i> Add New Career
+                </a>
+            </div>
+          </div>
 
-    <div class="mb-3 text-end">
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCareerModal">+ Add New Career</a>
-    </div>
 
-    <table class="table table-hover align-middle">
-    <thead class="table-light">
+    <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+          <thead class="thead">
         <tr>
-            <th>#</th>
+            <!-- <th>#</th> -->
             <th>Title</th>
             <th>Department</th>
             <th>Location</th>
@@ -24,7 +37,7 @@
     <tbody>
         @forelse ($careers as $index => $career)
         <tr>
-            <td>{{ $loop->iteration }}.</td>
+            <!-- <td>{{ $loop->iteration }}.</td> -->
             <td>{{ $career->title }}</td>
             <td>{{ $career->department }}</td>
             <td>{{ $career->location }}</td>
@@ -80,8 +93,8 @@
 </table>
 
     {{ $careers->links() }}
+  </div>
 </div>
-
 <!-- Add Career Modal -->
 <div class="modal fade" id="addCareerModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">

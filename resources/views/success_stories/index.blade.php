@@ -1,21 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-        <h3 class="mb-0">All Success Stories</h3>
-        <a href="{{ route('success_stories.create') }}" class="btn btn-success mt-2 mt-sm-0">
-            <i class="bi bi-plus-circle me-1"></i> <span class="d-none d-sm-inline">Add Story</span>
-        </a>
-    </div>
-
+<div class="container mt-1">
+     <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">KESA</p>
+                <h1 class="h3 mb-1">Success Stories</h1>
+                <p class="text-muted mb-0">Central Hub for KESA Success Stories</p>
+              </div>
+            </div>
+              <!-- Upload New Button -->
+            <div class="mb-3 d-flex justify-content-end">
+                <a  style = "font-size:12px;" href="{{ route('success_stories.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Story
+                </a>
+            </div>
+          </div>
     @if($stories->count())
-        <div class="table-responsive shadow-sm">
-            <table class="table table-bordered align-middle table-striped text-center mb-0">
-                <thead class="table-light">
+  <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+          <thead class="thead">
                     <tr>
-                        <th style="width: 60px;">#</th>
+                        <!-- <th style="width: 60px;">#</th> -->
                         <th style="width: 30%;">Title</th>
                         <th style="width: 20%;">Author</th>
                         <th style="width: 20%;">Published At</th>
@@ -25,23 +33,21 @@
                 <tbody>
                     @foreach($stories as $index => $story)
                         <tr>
-                            <td>{{ ($stories->currentPage() - 1) * $stories->perPage() + $index + 1 }}</td>
+                            <!-- <td>{{ ($stories->currentPage() - 1) * $stories->perPage() + $index + 1 }}</td> -->
                             <td class="text-start text-truncate" style="max-width: 250px;" title="{{ $story->title }}">
                                 {{ $story->title }}
                             </td>
                             <td>{{ $story->author ?? '—' }}</td>
                             <td>{{ $story->published_at ? $story->published_at->format('d M Y') : '—' }}</td>
-                            <td>
-                                <div class="d-flex justify-content-center flex-wrap gap-2">
+                            <td class="p-1">
+                                <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
                                     <a href="{{ route('success_stories.show', $story->slug) }}" 
-                                       class="btn btn-sm btn-info text-white d-flex align-items-center gap-1 action-btn">
+                                       class="btn btn-micro btn-info" title="View">
                                         <i class="bi bi-eye"></i> 
-                                        <span class="d-none d-md-inline">View</span>
                                     </a>
                                     <a href="{{ route('success_stories.edit', $story->id) }}" 
-                                       class="btn btn-sm btn-warning d-flex align-items-center gap-1 action-btn">
+                                       class="btn btn-micro btn-warning" title="Edit">
                                         <i class="bi bi-pencil-square"></i> 
-                                        <span class="d-none d-md-inline">Edit</span>
                                     </a>
                                     <form action="{{ route('success_stories.destroy', $story->id) }}" 
                                           method="POST" 
@@ -49,9 +55,9 @@
                                           class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center gap-1 action-btn">
+                                        <button type="submit" class="btn btn-micro btn-danger">
                                             <i class="bi bi-trash"></i> 
-                                            <span class="d-none d-md-inline">Delete</span>
+                                            
                                         </button>
                                     </form>
                                 </div>
@@ -61,15 +67,15 @@
                 </tbody>
             </table>
         </div>
-
         <div class="mt-3 d-flex justify-content-center">
             {{ $stories->appends(request()->query())->links() }}
         </div>
     @else
         <div class="alert alert-info mt-4 text-center">No success stories found.</div>
     @endif
-</div>
-
+   </div>
+ </div>
+<!-- 
 <style>
     /* Table General Styling */
     .table td, .table th {
@@ -122,5 +128,5 @@
         border-radius: 10px;
         overflow-x: auto;
     }
-</style>
+</style> -->
 @endsection

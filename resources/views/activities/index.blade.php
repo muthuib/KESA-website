@@ -1,23 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Past Events and Activities</h2>
-        <a href="{{ route('activities.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add Past Event
-        </a>
-    </div>
+<div class="container py-1">
+    <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">KESA</p>
+                <h1 class="h3 mb-1">Past Events & Activities</h1>
+                <p class="text-muted mb-0">Central Hub for KESA Past Events</p>
+              </div>
+            </div>
+              <!-- Upload  Button -->
+            <div class="mb-3 d-flex justify-content-end">
+                <a  style = "font-size:12px;" href="{{ route('activities.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Past Event
+                </a>
+            </div>
+          </div>
 
-    <table class="table table-striped table-bordered">
-        <thead>
+    <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+        <thead class="thead">
             <tr>
-                <th>#</th>
+                <!-- <th>#</th> -->
                 <th>Title</th>
-                <th>Activity Title</th>
+                 <th>Date</th>
+                <!-- <th>Activity Title</th> -->
                 <!-- <th>Organizer Name</th>
                 <th>Location</th>
-                <th>Date</th>
                 <th>Time</th> -->
                 <th>Description</th>
                 <th>Media</th>
@@ -28,12 +39,12 @@
         <tbody>
             @foreach($activities as $activity)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <!-- <td>{{ $loop->iteration }}</td> -->
                     <td>{{ $activity->title }}</td>
-                    <td>{{ $activity->activity_title ?? '-' }}</td>
+                    <td>{{ $activity->date ? \Carbon\Carbon::parse($activity->date)->format('M d, Y') : '-' }}</td>
+                    <!-- <td>{{ $activity->activity_title ?? '-' }}</td> -->
                     <!-- <td>{{ $activity->name ?? '-' }}</td>
                     <td>{{ $activity->location ?? '-' }}</td>
-                    <td>{{ $activity->date ? \Carbon\Carbon::parse($activity->date)->format('M d, Y') : '-' }}</td>
                     <td>
                         @if($activity->start_time && $activity->end_time)
                             {{ \Carbon\Carbon::parse($activity->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($activity->end_time)->format('H:i') }}
@@ -55,46 +66,37 @@
                             <span class="text-muted">No Media</span>
                         @endif
                     </td>
-                    <td>
+                    <td class="p-1">
                         @if($activity->youtube_link)
                             <a href="{{ $activity->youtube_link }}" target="_blank" class="btn btn-sm btn-outline-danger">
-                                <i class="fab fa-youtube"></i> Watch
+                                <i class="fab fa-youtube" style = "font-size: 10px;"></i> 
                             </a>
                         @else
                             <span class="text-muted">No Link</span>
                         @endif
                     </td>
-                    <td>
-                        <div class="card p-2">
-                            <div class="d-flex justify-content-between">
-                                <a href="{{ route('activities.show', $activity->id) }}" class="btn btn-info btn-sm">
-                                    <div class="d-flex align-items-center">
+
+                     <td class="p-1">
+                                <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
+                                    <a href="{{ route('activities.show', $activity->id) }}" class="btn btn-micro btn-info" title="View">
                                         <i class="fas fa-eye"></i>
-                                        <span class="ms-2">View</span>
-                                    </div>
-                                </a>
-                                <a href="{{ route('activities.edit', $activity->id) }}" class="btn btn-warning btn-sm">
-                                    <div class="d-flex align-items-center">
+                                    </a>
+                                    <a href="{{ route('activities.edit', $activity->id) }}" class="btn btn-micro btn-warning" title="Edit">
                                         <i class="fas fa-edit"></i>
-                                        <span class="ms-2">Edit</span>
-                                    </div>
-                                </a>
-                                <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this activity?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-trash-alt"></i>
-                                            <span class="ms-2">Delete</span>
-                                        </div>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </td>
+                                    </a>
+                                    <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" class="d-inline">
+                                       @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-micro btn-danger" onclick="return confirm('Are you sure you want to delete this Event?')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                        </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+  </div>
 </div>
 @endsection

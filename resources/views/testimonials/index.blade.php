@@ -1,17 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Testimonials</h2>
-        <a href="{{ route('testimonials.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add Testimonial
-        </a>
-    </div>
-    <table class="table table-bordered">
-        <thead class="table-light">
+<div class="container py-1">
+       <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">KESA</p>
+                <h1 class="h3 mb-1">Testimonials</h1>
+                <p class="text-muted mb-0">Central Hub for KESA Testimonials</p>
+              </div>
+            </div>
+              <!-- Upload New Button -->
+            <div class="mb-3 d-flex justify-content-end">
+                <a  style = "font-size:12px;" href="{{ route('testimonials.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Testimonial
+                </a>
+            </div>
+          </div>
+   <div class="table-responsive">
+        <table class="table table-tiny table-sm">
+          <thead class="thead">
             <tr>
-                <th>#</th>
+                <!-- <th>#</th> -->
                 <th style="width: 150px;">Name</th>
                 <th>Position</th>
                 <th style="width: 150px;">Date</th>
@@ -23,7 +34,7 @@
         <tbody>
             @foreach($testimonials as $testimonial)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <!-- <td>{{ $loop->iteration }}</td> -->
                     <td>{{ $testimonial->name }}</td>
                     <td>{{ $testimonial->position }}</td>
                     <td>{{ $testimonial->date ? $testimonial->date->format('D, M j, Y') : 'N/A' }}</td>
@@ -35,19 +46,19 @@
                             No photo
                         @endif
                     </td>
-                    <td>
-                        <div class="card p-2 d-flex flex-row gap-1 justify-content-center align-items-center">
-                            <a href="{{ route('testimonials.show', $testimonial->id) }}" class="btn btn-info btn-sm">
-                                <i class="bi bi-eye"></i> View
+                    <td class="p-1">
+                        <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
+                            <a href="{{ route('testimonials.show', $testimonial->id) }}" class="btn btn-micro btn-info" title="View">
+                                <i class="bi bi-eye"></i> 
                             </a>
-                            <a href="{{ route('testimonials.edit', $testimonial->id) }}" class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil"></i> Edit
+                            <a href="{{ route('testimonials.edit', $testimonial->id) }}" class="btn btn-micro btn-warning" title="Edit">
+                                <i class="bi bi-pencil"></i> 
                             </a>
                             <form action="{{ route('testimonials.destroy', $testimonial->id) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i> Delete
+                                <button type="submit" class="btn btn-micro btn-danger">
+                                    <i class="bi bi-trash"></i> 
                                 </button>
                             </form>
                         </div>
@@ -56,5 +67,6 @@
             @endforeach
         </tbody>
     </table>
+  </div>
 </div>
 @endsection

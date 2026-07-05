@@ -187,16 +187,16 @@ public function index(Request $request)
             // 🕒 Get today's date
             $today = \Carbon\Carbon::today();
 
-            // ✅ Automatically close any job whose deadline has *passed* (before today)
+            //  Automatically close any job whose deadline has *passed* (before today)
             // but keep jobs with today's date still Open
             \App\Models\Career::where('deadline', '<', $today)
                 ->where('status', 'Open')
                 ->update(['status' => 'Closed']);
 
-            // 📋 Retrieve all careers (newest first)
-            $careers = \App\Models\Career::latest()->paginate(10);
+            // Retrieve all careers 
+             $careers = \App\Models\Career::orderBy('deadline', 'desc')->paginate(10);
 
-            // 📦 Return to admin view
+            // Return to admin view
             return view('admin.careers.index', compact('careers'));
         }
 

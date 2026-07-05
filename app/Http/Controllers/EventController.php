@@ -12,7 +12,7 @@ class EventController extends Controller
     // Show list of events
     public function index()
     {
-        $events  = Event::orderBy('created_at', 'desc')->get();
+        $events  = Event::orderBy('start_date', 'desc')->get();
         return view('events.index', compact('events'));
     }
 
@@ -147,7 +147,7 @@ class EventController extends Controller
     // Display all events to the user (for public view or similar purpose)
     public function showAllEvents()
     {
-        $events  = Event::orderBy('created_at', 'desc')->get();
+        $events  = Event::orderBy('start_date', 'asc')->get();
         return view('events.display', compact('events'));
     }
 }

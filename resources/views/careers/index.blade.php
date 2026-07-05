@@ -163,7 +163,7 @@
                 </div>
             </div>
 
-            <!-- 📝 Apply Modal -->
+            <!-- Apply Modal -->
             <div class="modal fade" id="applyModal{{ $career->id }}" tabindex="-1" aria-labelledby="applyModalLabel{{ $career->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg rounded-4">
@@ -215,31 +215,158 @@
                         </div>
 
                         <!-- Resume -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Resume (PDF/DOC)</label>
+                       <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Resume (PDF)</label>
                             <input type="file" name="resume" class="form-control border-2 rounded-3" 
-                                accept=".pdf,.doc,.docx" required>
-                            <small class="text-muted">Upload a professional and updated version of your resume.</small>
+                                accept=".pdf,application/pdf" required>
+                            <small class="text-muted">Upload a professional and updated version of your resume. (Only PDF files are allowed)</small>
                         </div>
                     </div>
 
 
                         <!-- Cover Letter -->
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold text-dark">Cover Letter</label>
-                            <textarea name="cover_letter" class="form-control border-2 rounded-3" rows="4" placeholder="Write a short cover letter to express your interest..."></textarea>
-                        </div>
+                   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Cover Letter</label>
+                        <textarea name="cover_letter" class="form-control border-2 rounded-3" rows="4" 
+                            placeholder="Write a short cover letter to express your interest..." 
+                            id="coverLetter" maxlength="2000"></textarea>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">Write a professional cover letter</small>
+                            <small class="text-muted" id="wordCount">Words: 0 / 250</small>
                         </div>
+                        <input type="hidden" id="isValidWordCount" value="0">
+                    </div>
 
-                        <!-- Footer -->
-                        <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-lg w-100 fw-bold text-white shadow"
-                                style="background: linear-gradient(135deg, #28a745, #20c997); border: none;">
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const coverLetter = document.getElementById('coverLetter');
+                        const form = coverLetter.closest('form');
+                        const submitBtn = document.getElementById('submitBtn');
+                        const maxWords = 250;
+                        const hiddenField = document.getElementById('isValidWordCount');
+                        
+                        function validateWordCount() {
+                            const text = coverLetter.value.trim();
+                            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+                            const wordCountElement = document.getElementById('wordCount');
+                            const isValid = wordCount <= maxWords;
+                            
+                            // Update hidden field for server-side check
+                            hiddenField.value = isValid ? '1' : '0';
+                            
+                            wordCountElement.textContent = `Words: ${wordCount} / ${maxWords}`;
+                            
+                            if (!isValid) {
+                                wordCountElement.style.color = '#dc3545';
+                                coverLetter.style.borderColor = '#dc3545';
+                                coverLetter.classList.add('is-invalid');
+                                
+                                if (submitBtn) {
+                                    submitBtn.disabled = true;
+                                    submitBtn.style.opacity = '0.5';
+                                    submitBtn.style.cursor = 'not-allowed';
+                                    submitBtn.style.background = 'linear-gradient(135deg, #6c757d, #adb5bd)';
+                                }
+                                
+                                let error = document.getElementById('wordError');
+                                if (!error) {
+                                    error = document.createElement('small');
+                                    error.id = 'wordError';
+                                    error.style.color = '#dc3545';
+                                    error.style.display = 'block';
+                                    error.style.marginTop = '5px';
+                                    coverLetter.parentNode.appendChild(error);
+                                }
+                                error.textContent = `❌ Please limit your cover letter to ${maxWords} words. Current: ${wordCount} words.`;
+                                
+                            } else {
+                                wordCountElement.style.color = '#198754';
+                                coverLetter.style.borderColor = '#ced4da';
+                                coverLetter.classList.remove('is-invalid');
+                                
+                                if (submitBtn) {
+                                    submitBtn.disabled = false;
+                                    submitBtn.style.opacity = '1';
+                                    submitBtn.style.cursor = 'pointer';
+                                    submitBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                                }
+                                
+                                const error = document.getElementById('wordError');
+                                if (error) {
+                                    error.remove();
+                                }
+                            }
+                            
+                            return isValid;
+                        }
+                        
+                        coverLetter.addEventListener('input', validateWordCount);
+                        
+                        // Multiple submission prevention methods
+                        form.addEventListener('submit', function(e) {
+                            const text = coverLetter.value.trim();
+                            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+                            
+                            if (wordCount > maxWords) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Word Limit Exceeded',
+                                    text: `Please limit your cover letter to ${maxWords} words. Current: ${wordCount} words.`,
+                                    confirmButtonColor: '#dc3545',
+                                    confirmButtonText: 'OK, I understand'
+                                });
+                                
+                                coverLetter.focus();
+                                coverLetter.style.borderColor = '#dc3545';
+                                coverLetter.classList.add('is-invalid');
+                                return false;
+                            }
+                        }, false);
+                        
+                        // Prevent default button click if invalid
+                        if (submitBtn) {
+                            submitBtn.addEventListener('click', function(e) {
+                                const text = coverLetter.value.trim();
+                                const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+                                
+                                if (wordCount > maxWords) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Word Limit Exceeded',
+                                        text: `Please limit your cover letter to ${maxWords} words. Current: ${wordCount} words.`,
+                                        confirmButtonColor: '#dc3545',
+                                        confirmButtonText: 'OK, I understand'
+                                    });
+                                    
+                                    coverLetter.focus();
+                                    coverLetter.style.borderColor = '#dc3545';
+                                    coverLetter.classList.add('is-invalid');
+                                    return false;
+                                }
+                            });
+                        }
+                        
+                        // Validate on page load
+                        validateWordCount();
+                    });
+                    </script>
+
+                    <!-- Footer -->
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="btn btn-lg w-100 fw-bold text-white shadow" id="submitBtn"
+                                style="background: linear-gradient(135deg, #28a745, #20c997); border: none;" disabled>
                             <i class="bi bi-send-fill me-2"></i> Submit Application
                         </button>
-                        </div>
-                    </form>
+                    </div>
+                 </form>
 
                     @else
                     <div class="modal-body text-center py-5">
