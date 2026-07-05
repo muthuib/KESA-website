@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Meet the Team Section -->
-    <div class="container my-5">
-    <h3 class="text-center mb-4 section-title" style="margin-top: 115px;">Organizational Structure</h3>
+    <div class="container my-1">
+    <h3 class="text-center mb-1 section-title" style="margin-top: 115px;">Organizational Structure</h3>
 <!-- BOARD MEMBERS -->
     <p class="section-subtitle" style="text-align: center; font-size: 30px;">Board of Management </p>
     @if($teamMembers->isNotEmpty())
@@ -25,7 +25,7 @@
                             </a>
                         @endif
                     </h5>
-                    
+                     <p class="text-primary team-role text-center">{{ $member->designation }}</p>
                     <!-- Bio Section -->
                     <div class="bio-text collapsed text-muted" id="bio-{{ $member->id }}">
                         {!! nl2br(e($member->bio)) !!}
