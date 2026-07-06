@@ -39,7 +39,7 @@
                     <th>Date</th>
                     <th>Image</th>
                     <th>Snippet</th>
-                    <th>Views</th>
+                    <th>Views/Reads</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -58,20 +58,10 @@
                         </td>
                         <td>{{ \Illuminate\Support\Str::limit(strip_tags($item->content), 80, '...') }}</td>
                         <td class="text-center">
-                        <!-- Example Button -->
-                        <button
-                            class="btn btn-micro btn-info" title="View"
-                            data-bs-toggle="modal"
-                            data-bs-target="#statsModal"
-                            data-blog-id="{{ $item->id }}"
-                            data-blog-title="{{ $item->title }}"
-                            data-last_1_day="{{ $stats[$item->id]['last_1_day'] ?? 0 }}"
-                            data-last_7_days="{{ $stats[$item->id]['last_7_days'] ?? 0 }}"
-                            data-last_30_days="{{ $stats[$item->id]['last_30_days'] ?? 0 }}"
-                            data-last_365_days="{{ $stats[$item->id]['last_365_days'] ?? 0 }}"
-                        >
-                            View Stats
-                        </button>
+                            <span class="badge bg-{{ ($item->views ?? 0) > 100 ? 'secondary' : (($item->views ?? 0) > 50 ? 'secondary' : 'secondary') }}">
+                                <i class="fas fa-eye me-1"></i>
+                                {{ number_format($item->views ?? 0) }}
+                            </span>
                         </td>
                         <td class="p-1">
                             <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
@@ -108,7 +98,7 @@
         <div class="modal-content bg-white rounded-xl shadow-2xl p-6">
             <div class="modal-header border-0 pb-0">
                 <h2 class="modal-title text-2xl font-bold text-gray-800 flex items-center" id="statsModalLabel">
-                    <span class="mr-2">📊</span> Blog View Stats
+                    <span class="mr-2">ðŸ“Š</span> Blog View Stats
                 </h2>
                 <button type="button" class="btn-close text-gray-500" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

@@ -51,7 +51,8 @@ class NewsController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'date' => $request->date,
-            'image' => $imagePath
+            'image' => $imagePath,
+            'views' => 0  
         ]);
 
         return redirect()->route('news.index')->with('success', 'News added successfully!');
@@ -91,14 +92,41 @@ class NewsController extends Controller
         return redirect()->route('news.index')->with('success', 'News updated successfully!');
     }
     
+        // public function show($id)
+        // {
+        //     $news = News::findOrFail($id);
+
+        //     $otherNews = News::where('id', '!=', $id)
+        //                     ->orderBy('date', 'desc')
+        //                     ->get();
+
+        //     return view('news.show', compact('news', 'otherNews'));
+        // }
         public function show($id)
         {
             $news = News::findOrFail($id);
-
+            
+            // VIEW COUNTING LOGIC
+            // Create a unique session key for this article
+            $sessionKey = 'viewed_news_' . $id;
+            
+            // Check if this article hasn't been viewed in this session
+            if (!session()->has($sessionKey)) {
+                // Increment the view count by 1
+                $news->increment('views');
+                
+                // Store in session to prevent counting again in this session
+                session()->put($sessionKey, true);
+                
+                // Optional: Store when it was viewed
+                // session()->put($sessionKey . '_time', now());
+            }
+            // END OF VIEW COUNTING LOGIC
+        
             $otherNews = News::where('id', '!=', $id)
                             ->orderBy('date', 'desc')
                             ->get();
-
+        
             return view('news.show', compact('news', 'otherNews'));
         }
 
@@ -110,6 +138,21 @@ class NewsController extends Controller
         $news->delete();
         return redirect()->route('news.index')->with('danger', 'News deleted successfully.');
     }
+    // public function display(Request $request)
+    // {
+    //     $search = $request->input('search');
+    
+    //     $newsQuery = News::query();
+    
+    //     if ($search) {
+    //         $newsQuery->where('title', 'like', "%{$search}%")
+    //                   ->orWhere('content', 'like', "%{$search}%");
+    //     }
+    
+    //     $news = $newsQuery->orderBy('date', 'desc')->paginate(6);
+    
+    //     return view('news.display', compact('news', 'search'));
+    // }
     public function display(Request $request)
     {
         $search = $request->input('search');
@@ -121,7 +164,10 @@ class NewsController extends Controller
                       ->orWhere('content', 'like', "%{$search}%");
         }
     
-        $news = $newsQuery->orderBy('date', 'desc')->paginate(6);
+        // optionally order by views (most popular first)
+        $news = $newsQuery->orderBy('date', 'desc')
+                        // ->orderBy('views', 'desc') // Optional: show popular first
+                         ->paginate(6);
     
         return view('news.display', compact('news', 'search'));
     }

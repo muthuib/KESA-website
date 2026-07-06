@@ -54,6 +54,7 @@ class ActivityController extends Controller
                 $validated[$key] = 'activities/' . $filename;
             }
         }
+         $validated['views'] = 0;
 
         Activity::create($validated);
 
@@ -153,9 +154,30 @@ class ActivityController extends Controller
         return redirect()->route('activities.index')->with('danger', 'Activity deleted successfully.');
     }
     
+    // public function view($id)
+    // {
+    //     $activity = Activity::findOrFail($id);
+    //     $otherActivities = Activity::where('id', '!=', $id)
+    //                               ->orderBy('date', 'desc')
+    //                               ->get();
+        
+    //     return view('activities.view-event', compact('activity', 'otherActivities'));
+    // }
     public function view($id)
     {
         $activity = Activity::findOrFail($id);
+        
+        // VIEW COUNTING LOGIC
+        $sessionKey = 'viewed_activity_' . $id;
+        
+        if (!session()->has($sessionKey)) {
+            // Increment views
+            \DB::table('activities')->where('id', $id)->increment('views');
+            // OR use: $activity->increment('views');
+            
+            session()->put($sessionKey, true);
+        }
+        
         $otherActivities = Activity::where('id', '!=', $id)
                                   ->orderBy('date', 'desc')
                                   ->get();

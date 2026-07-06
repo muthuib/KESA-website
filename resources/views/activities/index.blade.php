@@ -33,6 +33,7 @@
                 <th>Description</th>
                 <th>Media</th>
                 <th>YouTube Link</th>
+                <th class="text-center">Views/Reads</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -75,6 +76,12 @@
                             <span class="text-muted">No Link</span>
                         @endif
                     </td>
+                    <td class="text-center">
+                            <span class="badge bg-{{ $activity->views > 100 ? 'danger' : ($activity->views > 50 ? 'warning' : 'secondary') }}">
+                                <i class="fas fa-eye me-1"></i>
+                                {{ number_format($activity->views ?? 0) }}
+                            </span>
+                        </td>
 
                      <td class="p-1">
                                 <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
