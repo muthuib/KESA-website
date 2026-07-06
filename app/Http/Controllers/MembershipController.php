@@ -116,4 +116,30 @@ class MembershipController extends Controller
 
         return redirect()->route('memberships.index')->with('danger', 'Membership deleted successfully!');
     }
+    
+    public function display()
+    {
+        $memberships = Membership::paginate(8); // paginate 8 per page
+        return view('partials.memberships', compact('memberships'));
+    }
+    
+    public function getDetails($id)
+{
+    try {
+        $membership = Membership::findOrFail($id);
+        
+        return response()->json([
+            'id' => $membership->ID,
+            'name' => $membership->NAME,
+            'description' => $membership->DESCRIPTION,
+            'website' => $membership->WEBSITE,
+            'logo_path' => $membership->LOGO_PATH ? asset($membership->LOGO_PATH) : null,
+            'email' => $membership->EMAIL ?? null,
+            'phone' => $membership->PHONE ?? null,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Member not found'], 404);
+    }
+}
+
 }

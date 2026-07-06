@@ -470,6 +470,7 @@ Route::delete('/executives/{executive}', [ExecutiveController::class, 'destroy']
 Route::get('/executivess', [ExecutiveController::class, 'display'])->name('executives.display');
 
 // MEMBERSHIPS ROUTES
+Route::get('/memberships/{id}', [MembershipController::class, 'getDetails'])->name('memberships.details');
 Route::middleware(['role:admin'])->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/memberships', [MembershipController::class, 'index'])->name('memberships.index'); // List all memberships
