@@ -23,5 +23,6 @@ class Activity extends Model
         'media3',
         'youtube_link',
         'description',
+        'views' ,
     ];
 }

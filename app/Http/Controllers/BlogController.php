@@ -173,7 +173,7 @@ class BlogController extends Controller
     $now = now();
 
     // Check if session exists and if 24 hours have passed
-    if (!session()->has($sessionKey) || $now->diffInHours(session($sessionKey)) >= 24) {
+    if (!session()->has($sessionKey) || $now->diffInHours(session($sessionKey)) >= 2) {
         $blog->increment('views');
         session()->put($sessionKey, $now);
 

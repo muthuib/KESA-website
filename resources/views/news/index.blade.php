@@ -39,6 +39,7 @@
                     <th>Date</th>
                     <th>Image</th>
                     <th>Content Snippet</th>
+                    <th class="text-center">Views/Reads</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -54,6 +55,12 @@
                             @endif
                         </td>
                         <td>{{ Str::limit(strip_tags($item->content), 100, '...') }}</td>
+                         <td class="text-center">
+                            <span class="badge bg-{{ $item->views > 100 ? 'danger' : ($item->views > 50 ? 'warning' : 'secondary') }}">
+                                <i class="fas fa-eye me-1"></i>
+                                {{ number_format($item->views ?? 0) }}
+                            </span>
+                        </td>
                         <td class="p-1">
                                 <div class="d-flex gap-1 justify-content-center align-items-center" style="flex-wrap: nowrap;">
                                     <a href="{{ route('news.show', $item->id) }}" class="btn btn-micro btn-info" title="View">
@@ -83,7 +90,7 @@
 
     <!-- Pagination -->
     <div class="d-flex justify-content-center">
-     {{ $news->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
+    {{ $news->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
    </div>
 </div>
 @endsection

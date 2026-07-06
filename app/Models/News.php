@@ -13,5 +13,11 @@ class News extends Model
         'content',
         'image',
         'date',
+        'views',
     ];
+    
+   public function incrementViews()
+    {
+        $this->increment('views');
+    }
 }
