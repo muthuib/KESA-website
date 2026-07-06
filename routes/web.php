@@ -426,6 +426,7 @@ Route::get('/publications/download/{id}', [App\Http\Controllers\PublicationContr
 
 //ACTIVITIES ROUTES
 // List all activities (Index)
+Route::get('/events/view/{id}', [ActivityController::class, 'view'])->name('events.view');
 Route::middleware(['role:admin'])->group(function () {
     Route::middleware('auth')->group(function () {
 Route::get('/activity', [ActivityController::class, 'index'])->name('activities.index');
