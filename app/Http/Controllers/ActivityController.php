@@ -123,9 +123,17 @@ class ActivityController extends Controller
         return redirect()->route('activities.index')->with('success', 'Activity updated successfully.');
     }
 
-    public function display()
+    public function display(Request $request)
     {
-        $activities = Activity::orderBy('date', 'desc')->get();
+        $search = $request->input('search');
+        
+        $activities = Activity::when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                         ->orWhere('description', 'like', "%{$search}%");
+        })
+        ->orderBy('date', 'desc')
+        ->paginate(9); // Changed from get() to paginate()
+        
         return view('activities.display', compact('activities'));
     }
 
@@ -143,5 +151,15 @@ class ActivityController extends Controller
         $activity->delete();
 
         return redirect()->route('activities.index')->with('danger', 'Activity deleted successfully.');
+    }
+    
+    public function view($id)
+    {
+        $activity = Activity::findOrFail($id);
+        $otherActivities = Activity::where('id', '!=', $id)
+                                  ->orderBy('date', 'desc')
+                                  ->get();
+        
+        return view('activities.view-event', compact('activity', 'otherActivities'));
     }
 }
