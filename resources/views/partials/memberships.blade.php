@@ -3,10 +3,10 @@
         <div class="container">
             <!-- Section Header -->
             <div class="section-header text-center mb-5">
-                <span class="section-badge">Our Community</span>
-                <h2 class="section-title">Our <span class="highlight">Members</span></h2>
+                <!--<span class="section-badge">Our Community</span>-->
+                <h2 class="section-title">Our Community</h2>
                 <div class="section-divider"></div>
-                <p class="section-subtitle">Meet the organizations and institutions that make up our vibrant community</p>
+                <p class="section-subtitle">Meet our partner organizations and member institutions that make up our vibrant community.</p>
             </div>
 
             <!-- Members Grid -->
