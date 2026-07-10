@@ -405,6 +405,7 @@ Route::get('/team-member', [TeamMemberController::class, 'display'])->name('team
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 //PUBLICATIONS ROUTES
+Route::get('/publications/statistics', [PublicationController::class, 'statistics'])->name('publications.statistics');
 Route::middleware(['role:admin'])->group(function () {
     Route::middleware('auth')->group(function () {
 Route::get('/publication', [PublicationController::class, 'index'])->name('publications.index');
@@ -547,6 +548,7 @@ Route::middleware(['role:admin'])->group(function () {
         Route::get('/blog/{blog}/edit', [BlogController::class, 'edit'])->name('blog.edit');
         Route::put('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update');
         Route::delete('/blog/{blog}', [BlogController::class, 'destroy'])->name('blog.destroy');
+        Route::get('/blog/statistics', [BlogController::class, 'statistics'])->name('blog.statistics');
     });
 });
 
