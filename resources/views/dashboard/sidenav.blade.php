@@ -28,13 +28,41 @@
 <!-- Admin roles authentication -->
    @if(auth()->user()->hasRole('admin'))
    <!-- statistics -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('dashboard') }}">
           <i class="fas fa-chart-bar"></i>
           <span>Statistics</span>
         </a>
-      </li><!-- End Statistics Nav -->
+      </li> -->
+      <!-- End Statistics Nav -->
+  <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#statisticsDropdown" aria-expanded="false" aria-controls="statisticsDropdown">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistics</span>
+          <!--<span class="badge bg-primary rounded-pill ms-1">3</span>-->
+          <i class="fas fa-chevron-down ms-auto"></i>
+      </a>
+      <div id="statisticsDropdown" class="collapse" data-bs-parent="#sidebarMenu">
+          <ul class="nav flex-column ms-3">
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('blog.statistics') }}">
+                      <i class="fas fa-blog me-2"></i>
+                      <span>Blog Statistics</span>
+                      <!--<span class="badge bg-info rounded-pill ms-auto">{{ App\Models\Blog::count() }}</span>-->
+                  </a>
+              </li>
 
+               <!-- Publication Statistics -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('publications.statistics') }}">
+                    <i class="fas fa-file-pdf me-2"></i>
+                    <span>Publication Statistics</span>
+                </a>
+            </li>
+
+          </ul>
+      </div>
+  </li>
      <!-- Dropdown Menu for Resource Hub -->
     <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">

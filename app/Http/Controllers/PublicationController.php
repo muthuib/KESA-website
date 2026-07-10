@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Publication;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Carbon\Carbon; 
 
 class PublicationController extends Controller
 {
@@ -213,5 +214,136 @@ public function update(Request $request, Publication $publication)
 
         return redirect()->back()->with('danger', 'Cover image removed successfully.');
     }
+   public function statistics(Request $request)
+    {
+        $search = $request->input('search');
+        $period = $request->input('period', 'all');
 
+        $publicationsQuery = Publication::query();
+
+        if ($search) {
+            $publicationsQuery->where('title', 'like', "%{$search}%")
+                            ->orWhere('authors', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        // Apply period filter to the publications query
+        $this->applyPeriodFilter($publicationsQuery, $period);
+
+        $publications = $publicationsQuery->orderBy('downloads', 'desc')->paginate(15);
+
+        $today = Carbon::today();
+        $stats = [];
+        
+        // Get overall stats with period filter applied
+        $overallStats = $this->getPublicationOverallStats($period, $today);
+        
+        // Get most downloaded with period filter
+        $mostDownloaded = $this->getMostDownloaded($period, $today);
+        
+        // Get least downloaded with period filter
+        $leastDownloaded = $this->getLeastDownloaded($period, $today);
+        
+        // Get recent publications with period filter
+        $recentPublications = $this->getRecentPublications($period, $today);
+
+        // Calculate stats for each publication in the paginated results
+        foreach ($publications as $pub) {
+            $stats[$pub->id] = [
+                'total_downloads' => $pub->downloads ?? 0,
+                'file_size' => $pub->file_size ?? 0,
+                'created_at' => $pub->created_at,
+            ];
+        }
+
+        $overallStats['most_downloaded'] = $mostDownloaded;
+        $overallStats['least_downloaded'] = $leastDownloaded;
+        $overallStats['recent_publications'] = $recentPublications;
+
+        return view('publications.statistics', compact(
+            'publications',
+            'stats',
+            'overallStats',
+            'period',
+            'search'
+        ));
+    }
+
+    /**
+     * Apply period filter to a query
+     */
+    private function applyPeriodFilter($query, $period)
+    {
+        switch ($period) {
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+            case 'week':
+                $query->whereDate('created_at', '>=', Carbon::today()->subDays(6));
+                break;
+            case 'month':
+                $query->whereDate('created_at', '>=', Carbon::today()->subDays(29));
+                break;
+            case 'year':
+                $query->whereDate('created_at', '>=', Carbon::today()->subDays(364));
+                break;
+            case 'all':
+            default:
+                // No date filter - all time
+                break;
+        }
+    }
+
+    /**
+     * Get overall statistics with period filter
+     */
+    private function getPublicationOverallStats($period, $today)
+    {
+        $query = Publication::query();
+        $this->applyPeriodFilter($query, $period);
+        
+        $publications = $query->get();
+        
+        $totalPublications = $publications->count();
+        $publicationsWithDownloads = $publications->where('downloads', '>', 0)->count();
+        $totalDownloads = $publications->sum('downloads');
+        $averageDownloads = $publicationsWithDownloads > 0 ? round($totalDownloads / $publicationsWithDownloads, 1) : 0;
+        
+        return [
+            'total_publications' => $totalPublications,
+            'publications_with_downloads' => $publicationsWithDownloads,
+            'total_downloads' => $totalDownloads,
+            'average_downloads' => $averageDownloads,
+        ];
+    }
+
+    /**
+     * Get most downloaded publication with period filter
+     */
+    private function getMostDownloaded($period, $today)
+    {
+        $query = Publication::query();
+        $this->applyPeriodFilter($query, $period);
+        return $query->orderBy('downloads', 'desc')->first();
+    }
+
+    /**
+     * Get least downloaded publication with period filter
+     */
+    private function getLeastDownloaded($period, $today)
+    {
+        $query = Publication::query();
+        $this->applyPeriodFilter($query, $period);
+        return $query->where('downloads', '>', 0)->orderBy('downloads', 'asc')->first();
+    }
+
+    /**
+     * Get recent publications with period filter
+     */
+    private function getRecentPublications($period, $today)
+    {
+        $query = Publication::query();
+        $this->applyPeriodFilter($query, $period);
+        return $query->orderBy('created_at', 'desc')->limit(5)->get();
+    }
 }
