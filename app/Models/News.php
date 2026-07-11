@@ -13,6 +13,9 @@ class News extends Model
         'content',
         'image',
         'date',
+        'media1',   
+        'media2',
+        'media3',
         'views',
     ];
     

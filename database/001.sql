@@ -1,0 +1,5 @@
+-- Add columns to the news table
+ALTER TABLE news 
+ADD COLUMN media1 VARCHAR(255) NULL AFTER image,
+ADD COLUMN media2 VARCHAR(255) NULL AFTER media1,
+ADD COLUMN media3 VARCHAR(255) NULL AFTER media2;

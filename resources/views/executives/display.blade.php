@@ -2,8 +2,8 @@
 @php $isAjax = true; @endphp
 @section('content')
     <!-- Meet the Executives Section -->
-    <div class="container my-5">
-        <p class="section-subtitle" style="font-size: 30px;">Executive Council </p>
+    <div class="container" style="margin-top: 0; padding-top: 0;">
+        <p class="section-subtitle" style="font-size: 30px; margin-top: -100px; padding-top: 0;">Executive Council</p>
 
         @if($executives->isNotEmpty())
             <div class="team-container">  <!-- Use the CSS Grid Wrapper -->
@@ -65,7 +65,7 @@
     <style>
         .section-title {
             font-weight: bold;
-            margin-top: 90px;
+            margin-top: 0px;
             font-size: 2rem;
         }
         .section-subtitle {
@@ -73,6 +73,8 @@
             color: rgb(132, 52, 52);
             font-weight: bold;
             text-align: center;
+            margin-top: 0; /* Added */
+            padding-top: 0; /* Added */
         }
         .team-img {
             width: 170px;
@@ -117,8 +119,8 @@
         }
         .team-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 columns per row by default (large screens) */
-            gap: 15px; /* Space between cards */
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
         /* Medium and small screens: 2 columns per row */
@@ -136,31 +138,37 @@
         }
 
         .linkedin-link {
-                display: inline-block;
-                margin-left: 8px;
-                text-decoration: none;
-                vertical-align: middle;
-                transition: transform 0.2s ease;
-            }
+            display: inline-block;
+            margin-left: 8px;
+            text-decoration: none;
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
 
-            .linkedin-link svg {
-                width: 15px;
-                height: 15px;
-                display: block;
-            }
+        .linkedin-link svg {
+            width: 15px;
+            height: 15px;
+            display: block;
+        }
 
-            .linkedin-link:hover {
-                transform: scale(1.15);
-            }
+        .linkedin-link:hover {
+            transform: scale(1.15);
+        }
 
-            /* If using Font Awesome or Bootstrap Icons */
-            .linkedin-link i {
-                vertical-align: middle;
-                transition: transform 0.2s ease;
-            }
+        .linkedin-link i {
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
 
-            .linkedin-link:hover i {
-                transform: scale(1.15);
-            }
+        .linkedin-link:hover i {
+            transform: scale(1.15);
+        }
+
+        /* Remove margin from container when loaded via AJAX */
+        .container {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+		
     </style>
 @endsection

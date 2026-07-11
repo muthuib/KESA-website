@@ -14,8 +14,8 @@
 @endsection
 
 @section('content')
-<div class="container mt-5">
-    <h2>Add News</h2>
+<div class="container mt-2">
+    <h4>Add News</h4>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0"></h2>
         <a href="{{ route('news.index') }}" class="btn btn-dark">
@@ -38,6 +38,23 @@
 
         <!-- Hidden Input to Store HTML Content -->
         <input type="hidden" name="content" id="content">
+        {{-- Additional Images Section --}}
+        <p style="color: brown; font-weight: bold;">Add Additional News Images</p>
+
+        <div class="mb-3">
+            <label for="media1" class="form-label">Upload Additional Image 1 (Optional)</label>
+            <input type="file" id="media1" name="media1" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+            <label for="media2" class="form-label">Upload Additional Image 2 (Optional)</label>
+            <input type="file" id="media2" name="media2" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+            <label for="media3" class="form-label">Upload Additional Image 3 (Optional)</label>
+            <input type="file" id="media3" name="media3" class="form-control" accept="image/*">
+        </div>
 
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
