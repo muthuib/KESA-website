@@ -3,8 +3,18 @@
 @section('content')
     <!-- Meet the Team Section -->
     <div class="container my-1">
-    <h3 class="text-center mb-1 section-title" style="margin-top: 115px;">Organizational Structure</h3>
-<!-- BOARD MEMBERS -->
+      <div class="page-heading">
+            <div class="page-heading-copy">
+              <div>
+                <p class="eyebrow mb-1 text-center">KESA Organization</p>
+                <p class="text-muted mb-0">The Association is run by a passionate Executive Council team and led by a board of experienced and committed Trustees.</p>
+              </div>
+            </div>
+          </div>
+<!-- EXECUTIVE MEMBERS SECTION -->
+<!-- load via ajax -->
+<div id="executives-container"></div>
+    <!-- BOARD MEMBERS -->
     <p class="section-subtitle" style="text-align: center; font-size: 30px;">Board of Management </p>
     @if($teamMembers->isNotEmpty())
         <div class="team-container">  <!-- Use the CSS Grid Wrapper -->
@@ -44,9 +54,6 @@
         <p class="text-center text-muted">No Board members added yet.</p>
     @endif
 </div>
-<!-- EXECUTIVE MEMBERS SECTION -->
-<!-- load via ajax -->
-<div id="executives-container"></div>
 
 <!-- FOUNDERS SECTION (Loaded via AJAX) -->
 <div id="founders-container"></div>

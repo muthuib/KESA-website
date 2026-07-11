@@ -70,7 +70,7 @@
 
     <title>@yield('title', 'KESA Kenya')</title>
     
-    @yield('meta') <
+    @yield('meta') 
     <!--  CSS -->
     <style>
         * {
