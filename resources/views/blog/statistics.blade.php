@@ -1,15 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-1">
-        <!-- Page Heading -->
-        <div class="page-heading mb-3">
-            <div class="page-heading-copy">
-                <span class="page-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
-                <div>
-                    <p class="eyebrow mb-0 small">Analytics</p>
-                    <h1 class="h5 mb-0">Blog Statistics</h1>
-                    <p class="text-muted small mb-0">
+<div class="container" style="margin-top: 30px;">
+    <div class="row justify-content-left">
+        <div class="col-md-12">
+            <div class="card shadow-lg" style="width: 100%;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-graph-up-arrow" style="color: #4e73df;"></i> Blog Statistics
+                    </h4>
+                    <div class="d-flex gap-1">
+                        <a href="{{ route('blog.index') }}" class="btn btn-dark btn-sm">
+                            <i class="fas fa-backward"></i> Back
+                        </a>
+                        <button class="btn btn-secondary btn-sm" type="button" onclick="window.print()">
+                            <i class="bi bi-printer"></i> Print
+                        </button>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="exportToCSV()">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <p class="text-muted small mb-3">
                         Detailed analytics for all blog posts
                         @if($period == 'today')
                             <span class="badge bg-info ms-1" style="font-size: 0.65rem;">Today</span>
@@ -23,412 +37,415 @@
                             <span class="badge bg-secondary ms-1" style="font-size: 0.65rem;">All Time</span>
                         @endif
                     </p>
-                </div>
-            </div>
-            <div class="heading-actions">
-                <a href="{{ route('blog.index') }}" class="btn btn-outline-secondary btn-sm" style="font-size: 0.7rem; padding: 0.2rem 0.6rem;">
-                    <i class="bi bi-arrow-left" aria-hidden="true"></i> Back
-                </a>
-                <button class="btn btn-secondary btn-sm" type="button" onclick="window.print()" style="font-size: 0.7rem; padding: 0.2rem 0.6rem;">
-                    <i class="bi bi-printer" aria-hidden="true"></i> Print
-                </button>
-                <button class="btn btn-primary btn-sm" type="button" onclick="exportToCSV()" style="font-size: 0.7rem; padding: 0.2rem 0.6rem;">
-                    <i class="bi bi-download" aria-hidden="true"></i> Export
-                </button>
-            </div>
-        </div>
 
-        <!-- Filter Section -->
-        <div class="panel mb-3">
-            <div class="panel-body p-2">
-                <form action="{{ route('blog.statistics') }}" method="GET">
-                    <div class="row g-2 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">Search</label>
-                            <div class="input-group" style="height: 30px;">
-                                <span class="input-group-text bg-light border-0" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input type="text" name="search" value="{{ request('search') }}" 
-                                       class="form-control bg-light border-0" placeholder="Search blog posts..." 
-                                       style="font-size: 0.75rem; padding: 0.2rem 0.5rem; height: 30px;">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">Period</label>
-                            <select name="period" class="form-select bg-light border-0" onchange="this.form.submit()" 
-                                    style="font-size: 0.75rem; padding: 0.2rem 0.5rem; height: 30px;">
-                                <option value="all" {{ $period == 'all' ? 'selected' : '' }}>🌐 All Time</option>
-                                <option value="today" {{ $period == 'today' ? 'selected' : '' }}>📅 Today</option>
-                                <option value="week" {{ $period == 'week' ? 'selected' : '' }}>📅 Last 7 Days</option>
-                                <option value="month" {{ $period == 'month' ? 'selected' : '' }}>📅 Last 30 Days</option>
-                                <option value="year" {{ $period == 'year' ? 'selected' : '' }}>📅 Last 365 Days</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">&nbsp;</label>
-                            <div class="d-flex gap-1">
-                                <button type="submit" class="btn btn-primary btn-sm flex-fill" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; height: 30px;">
-                                    <i class="bi bi-funnel me-1"></i> Apply
-                                </button>
-                                <a href="{{ route('blog.statistics') }}" class="btn btn-outline-secondary btn-sm" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; height: 30px;">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Metrics Cards -->
-        <section class="row g-2 mb-3" aria-label="Dashboard metrics">
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-primary" style="padding: 0.6rem 0.8rem;">
-                    <div class="metric-top" style="margin-bottom: 0.2rem;">
-                        <span class="metric-label" style="font-size: 0.65rem;">
-                            @if($period == 'all') Total Views
-                            @elseif($period == 'today') Today's Views
-                            @elseif($period == 'week') Last 7 Days
-                            @elseif($period == 'month') Last 30 Days
-                            @else Last Year
-                            @endif
-                        </span>
-                        <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['total_views'] ?? 0) }}</div>
-                    <div class="metric-meta" style="font-size: 0.6rem;">
-                        <span class="text-success">+12.5%</span>
-                        <span>from previous</span>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-success" style="padding: 0.6rem 0.8rem;">
-                    <div class="metric-top" style="margin-bottom: 0.2rem;">
-                        <span class="metric-label" style="font-size: 0.65rem;">Blogs with Views</span>
-                        <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
-                            <i class="bi bi-newspaper" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['blogs_with_views'] ?? 0) }}</div>
-                    <div class="metric-meta" style="font-size: 0.6rem;">
-                        <span class="text-success">+8.2%</span>
-                        <span>active blogs</span>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-warning" style="padding: 0.6rem 0.8rem;">
-                    <div class="metric-top" style="margin-bottom: 0.2rem;">
-                        <span class="metric-label" style="font-size: 0.65rem;">Avg Views per Blog</span>
-                        <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
-                            <i class="bi bi-bar-chart" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['average_views'] ?? 0, 1) }}</div>
-                    <div class="metric-meta" style="font-size: 0.6rem;">
-                        <span class="text-success">+5.1%</span>
-                        <span>average</span>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-danger" style="padding: 0.6rem 0.8rem;">
-                    <div class="metric-top" style="margin-bottom: 0.2rem;">
-                        <span class="metric-label" style="font-size: 0.65rem;">Last 30 Days Views</span>
-                        <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
-                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['views_last_30_days'] ?? 0) }}</div>
-                    <div class="metric-meta" style="font-size: 0.6rem;">
-                        <span class="text-danger">-2.1%</span>
-                        <span>from last month</span>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <!-- Charts & Categories Row -->
-        <section class="row g-2 mb-3">
-            <div class="col-12 col-xl-7">
-                <div class="panel">
-                    <div class="panel-header p-2">
-                        <div>
-                            <h2 class="section-title mb-0" style="font-size: 0.8rem;">
-                                <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                                <span>Monthly Trends</span>
-                            </h2>
-                            <p class="text-muted mb-0" style="font-size: 0.65rem;">Blog view trends over the past months.</p>
-                        </div>
-                        <span class="badge bg-light text-dark" style="font-size: 0.6rem;">{{ now()->format('Y') }}</span>
-                    </div>
-                    <div class="panel-body p-2">
-                        <div style="height: 200px;">
-                            @if(isset($monthlyTrends) && $monthlyTrends->count())
-                                <canvas id="monthlyChart"></canvas>
-                            @else
-                                <div class="text-center py-3">
-                                    <i class="bi bi-bar-chart-line text-muted mb-1" style="font-size: 1.5rem;"></i>
-                                    <p class="text-muted small mb-0">No data available</p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-xl-5">
-                <div class="panel h-100">
-                    <div class="panel-header p-2">
-                        <div>
-                            <h2 class="section-title mb-0" style="font-size: 0.8rem;">
-                                <i class="bi bi-tags" aria-hidden="true"></i>
-                                <span>Top Categories</span>
-                            </h2>
-                            <p class="text-muted mb-0" style="font-size: 0.65rem;">Most viewed blog categories.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body p-2">
-                        @if(isset($topCategories) && $topCategories->count())
-                            <div class="activity-list">
-                                @foreach($topCategories as $category)
-                                    <div class="activity-item" style="padding: 0.3rem 0;">
-                                        <span class="activity-dot bg-primary" style="width: 6px; height: 6px;"></span>
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <p class="mb-0 fw-semibold" style="font-size: 0.7rem;">{{ $category->category ?? 'Uncategorized' }}</p>
-                                                <span class="badge bg-primary-soft text-primary rounded-pill" style="font-size: 0.6rem;">
-                                                    {{ number_format($category->total_views) }}
-                                                </span>
-                                            </div>
-                                            <div class="progress" style="height: 3px;">
-                                                <div class="progress-bar bg-primary" 
-                                                     style="width: {{ ($category->total_views / ($topCategories->max('total_views') ?? 1)) * 100 }}%;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-2">
-                                <i class="bi bi-tag text-muted mb-1" style="font-size: 1.2rem;"></i>
-                                <p class="text-muted small mb-0">No category data available</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Authors & Quick Stats Row -->
-        <section class="row g-2 mb-3">
-            <div class="col-12 col-xl-6">
-                <div class="panel">
-                    <div class="panel-header p-2">
-                        <div>
-                            <h2 class="section-title mb-0" style="font-size: 0.8rem;">
-                                <i class="bi bi-people" aria-hidden="true"></i>
-                                <span>Top Authors</span>
-                            </h2>
-                            <p class="text-muted mb-0" style="font-size: 0.65rem;">Most active and viewed authors.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body p-2">
-                        @if(isset($topAuthors) && $topAuthors->count())
-                            <div class="activity-list">
-                                @foreach($topAuthors as $author)
-                                    <div class="activity-item" style="padding: 0.3rem 0;">
-                                        <span class="activity-dot bg-success" style="width: 6px; height: 6px;"></span>
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="avatar-img bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
-                                                         style="width: 22px; height: 22px; font-size: 9px; font-weight: 600;">
-                                                        {{ substr($author->author ?? 'U', 0, 1) }}
-                                                    </div>
-                                                    <p class="mb-0 fw-semibold" style="font-size: 0.7rem;">{{ $author->author ?? 'Unknown' }}</p>
-                                                </div>
-                                                <span class="badge bg-success-soft text-success rounded-pill" style="font-size: 0.6rem;">
-                                                    <i class="bi bi-eye me-1"></i> {{ number_format($author->total_views) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-2">
-                                <i class="bi bi-person text-muted mb-1" style="font-size: 1.2rem;"></i>
-                                <p class="text-muted small mb-0">No author data available</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-xl-6">
-                <div class="panel h-100">
-                    <div class="panel-header p-2">
-                        <div>
-                            <h2 class="section-title mb-0" style="font-size: 0.8rem;">
-                                <i class="bi bi-speedometer2" aria-hidden="true"></i>
-                                <span>Quick Stats</span>
-                            </h2>
-                            <p class="text-muted mb-0" style="font-size: 0.65rem;">At-a-glance performance metrics.</p>
-                        </div>
-                    </div>
-                    <div class="panel-body p-2">
-                        <div class="row g-1">
-                            <div class="col-6">
-                                <div class="p-2 bg-light rounded-2 text-center">
-                                    <div class="text-muted" style="font-size: 0.55rem;">Total Blogs</div>
-                                    <div class="fw-bold text-primary" style="font-size: 0.9rem;">{{ number_format($overallStats['total_blogs'] ?? 0) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-2 bg-light rounded-2 text-center">
-                                    <div class="text-muted" style="font-size: 0.55rem;">Unique Visitors</div>
-                                    <div class="fw-bold text-success" style="font-size: 0.9rem;">{{ number_format($overallStats['unique_visitors'] ?? 0) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-2 bg-light rounded-2 text-center">
-                                    <div class="text-muted" style="font-size: 0.55rem;">Most Viewed</div>
-                                    <div class="fw-bold text-truncate" style="font-size: 0.65rem;">
-                                        @if(isset($overallStats['most_viewed']) && $overallStats['most_viewed'])
-                                            <a href="{{ route('blog.show', $overallStats['most_viewed']->slug) }}" 
-                                               class="text-decoration-none text-dark">
-                                                {{ Str::limit($overallStats['most_viewed']->title, 12) }}
-                                            </a>
-                                        @else
-                                            N/A
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-2 bg-light rounded-2 text-center">
-                                    <div class="text-muted" style="font-size: 0.55rem;">Avg Daily Views</div>
-                                    <div class="fw-bold text-info" style="font-size: 0.9rem;">
-                                        @php
-                                            $avgDaily = 0;
-                                            if (isset($overallStats['total_views']) && $overallStats['total_views'] > 0) {
-                                                $days = 30;
-                                                if ($period == 'today') $days = 1;
-                                                elseif ($period == 'week') $days = 7;
-                                                elseif ($period == 'month') $days = 30;
-                                                elseif ($period == 'year') $days = 365;
-                                                $avgDaily = round($overallStats['total_views'] / $days, 1);
-                                            }
-                                        @endphp
-                                        {{ number_format($avgDaily, 1) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Blog Stats Table -->
-        <section class="panel">
-            <div class="panel-header p-2">
-                <div>
-                    <h2 class="section-title mb-0" style="font-size: 0.8rem;">
-                        <i class="bi bi-table" aria-hidden="true"></i>
-                        <span>Blog Post Statistics</span>
-                    </h2>
-                    <p class="text-muted mb-0" style="font-size: 0.65rem;">Detailed view count analytics for all blog posts.</p>
-                </div>
-                <span class="badge bg-light text-dark" style="font-size: 0.6rem;">
-                    <i class="bi bi-list me-1"></i> {{ $blogs->count() }} of {{ $blogs->total() }}
-                </span>
-            </div>
-            <div class="panel-body p-0">
-                <div class="table-responsive">
-                    <table class="table align-middle mb-0" style="font-size: 0.7rem;">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="font-size: 0.65rem;">#</th>
-                                <th scope="col" style="font-size: 0.65rem;">Title</th>
-                                <th scope="col" style="font-size: 0.65rem;">Author</th>
-                                <th scope="col" style="font-size: 0.65rem;">Category</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Total</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Unique</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Daily</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Weekly</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Monthly</th>
-                                <th scope="col" style="font-size: 0.65rem;">Last Viewed</th>
-                                <th scope="col" class="text-center" style="font-size: 0.65rem;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($blogs as $index => $blog)
-                                <tr>
-                                    <td style="font-size: 0.65rem;">{{ $blogs->firstItem() + $index }}</td>
-                                    <td>
-                                        <a href="{{ route('blog.show', $blog->slug) }}" 
-                                           class="text-decoration-none text-dark hover-primary" style="font-size: 0.7rem;">
-                                            {{ Str::limit($blog->title, 25) }}
-                                        </a>
-                                    </td>
-                                    <td style="font-size: 0.65rem;">{{ $blog->author ?? '-' }}</td>
-                                    <td>
-                                        <span class="badge bg-light text-dark" style="font-size: 0.55rem;">{{ $blog->category ?? 'Uncategorized' }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-{{ ($blog->views ?? 0) > 100 ? 'danger' : (($blog->views ?? 0) > 50 ? 'warning' : 'secondary') }}" style="font-size: 0.6rem;">
-                                            <i class="bi bi-eye me-1"></i> {{ number_format($blog->views ?? 0) }}
-                                        </span>
-                                    </td>
-                                    <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['unique_views'] ?? 0) }}</td>
-                                    <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['daily_views'] ?? 0) }}</td>
-                                    <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['weekly_views'] ?? 0) }}</td>
-                                    <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['monthly_views'] ?? 0) }}</td>
-                                    <td>
-                                        @if(isset($stats[$blog->id]['last_viewed']) && $stats[$blog->id]['last_viewed'])
-                                            <span class="text-muted" style="font-size: 0.6rem;" 
-                                                  title="{{ \Carbon\Carbon::parse($stats[$blog->id]['last_viewed'])->format('Y-m-d H:i:s') }}">
-                                                {{ \Carbon\Carbon::parse($stats[$blog->id]['last_viewed'])->diffForHumans() }}
+                    <!-- Filter Section -->
+                    <div class="panel mb-3">
+                        <div class="panel-body p-2">
+                            <form action="{{ route('blog.statistics') }}" method="GET">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-12 col-sm-6 col-md-4">
+                                        <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">Search</label>
+                                        <div class="input-group" style="height: 30px;">
+                                            <span class="input-group-text bg-light border-0" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">
+                                                <i class="bi bi-search"></i>
                                             </span>
-                                        @else
-                                            <span class="text-muted" style="font-size: 0.6rem;">Never</span>
+                                            <input type="text" name="search" value="{{ request('search') }}" 
+                                                   class="form-control bg-light border-0" placeholder="Search blog posts..." 
+                                                   style="font-size: 0.75rem; padding: 0.2rem 0.5rem; height: 30px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-md-3">
+                                        <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">Period</label>
+                                        <select name="period" class="form-select bg-light border-0" onchange="this.form.submit()" 
+                                                style="font-size: 0.75rem; padding: 0.2rem 0.5rem; height: 30px;">
+                                            <option value="all" {{ $period == 'all' ? 'selected' : '' }}>🌐 All Time</option>
+                                            <option value="today" {{ $period == 'today' ? 'selected' : '' }}>📅 Today</option>
+                                            <option value="week" {{ $period == 'week' ? 'selected' : '' }}>📅 Last 7 Days</option>
+                                            <option value="month" {{ $period == 'month' ? 'selected' : '' }}>📅 Last 30 Days</option>
+                                            <option value="year" {{ $period == 'year' ? 'selected' : '' }}>📅 Last 365 Days</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-md-3">
+                                        <label class="form-label text-muted small mb-0" style="font-size: 0.7rem;">&nbsp;</label>
+                                        <div class="d-flex gap-1">
+                                            <button type="submit" class="btn btn-primary btn-sm flex-fill" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; height: 30px;">
+                                                <i class="bi bi-funnel me-1"></i> Apply
+                                            </button>
+                                            <a href="{{ route('blog.statistics') }}" class="btn btn-outline-secondary btn-sm" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; height: 30px;">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Cards -->
+                    <section class="row g-2 mb-3" aria-label="Dashboard metrics">
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <article class="metric-card metric-primary" style="padding: 0.6rem 0.8rem;">
+                                <div class="metric-top" style="margin-bottom: 0.2rem;">
+                                    <span class="metric-label" style="font-size: 0.65rem;">
+                                        @if($period == 'all') Total Views
+                                        @elseif($period == 'today') Today's Views
+                                        @elseif($period == 'week') Last 7 Days
+                                        @elseif($period == 'month') Last 30 Days
+                                        @else Last Year
                                         @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('blog.show', $blog->slug) }}" 
-                                           class="btn btn-light btn-sm" title="View Post" 
-                                           style="padding: 0.1rem 0.3rem; font-size: 0.65rem;">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="11" class="text-center py-3">
-                                        <i class="bi bi-inbox text-muted d-block mb-1" style="font-size: 1.2rem;"></i>
-                                        <p class="text-muted small mb-0">No blog posts found for this period</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                    </span>
+                                    <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['total_views'] ?? 0) }}</div>
+                                <div class="metric-meta" style="font-size: 0.6rem;">
+                                    <span class="text-success">+12.5%</span>
+                                    <span>from previous</span>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <article class="metric-card metric-success" style="padding: 0.6rem 0.8rem;">
+                                <div class="metric-top" style="margin-bottom: 0.2rem;">
+                                    <span class="metric-label" style="font-size: 0.65rem;">Blogs with Views</span>
+                                    <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
+                                        <i class="bi bi-newspaper" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['blogs_with_views'] ?? 0) }}</div>
+                                <div class="metric-meta" style="font-size: 0.6rem;">
+                                    <span class="text-success">+8.2%</span>
+                                    <span>active blogs</span>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <article class="metric-card metric-warning" style="padding: 0.6rem 0.8rem;">
+                                <div class="metric-top" style="margin-bottom: 0.2rem;">
+                                    <span class="metric-label" style="font-size: 0.65rem;">Avg Views per Blog</span>
+                                    <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
+                                        <i class="bi bi-bar-chart" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['average_views'] ?? 0, 1) }}</div>
+                                <div class="metric-meta" style="font-size: 0.6rem;">
+                                    <span class="text-success">+5.1%</span>
+                                    <span>average</span>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <article class="metric-card metric-danger" style="padding: 0.6rem 0.8rem;">
+                                <div class="metric-top" style="margin-bottom: 0.2rem;">
+                                    <span class="metric-label" style="font-size: 0.65rem;">Last 30 Days Views</span>
+                                    <span class="metric-icon" style="font-size: 0.8rem; width: 24px; height: 24px;">
+                                        <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="metric-value" style="font-size: 1.2rem; font-weight: 700;">{{ number_format($overallStats['views_last_30_days'] ?? 0) }}</div>
+                                <div class="metric-meta" style="font-size: 0.6rem;">
+                                    <span class="text-danger">-2.1%</span>
+                                    <span>from last month</span>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- Charts & Categories Row -->
+                    <section class="row g-2 mb-3">
+                        <div class="col-12 col-xl-7">
+                            <div class="panel">
+                                <div class="panel-header p-2">
+                                    <div>
+                                        <h2 class="section-title mb-0" style="font-size: 0.8rem;">
+                                            <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                            <span>Monthly Trends</span>
+                                        </h2>
+                                        <p class="text-muted mb-0" style="font-size: 0.65rem;">Blog view trends over the past months.</p>
+                                    </div>
+                                    <span class="badge bg-light text-dark" style="font-size: 0.6rem;">{{ now()->format('Y') }}</span>
+                                </div>
+                                <div class="panel-body p-2">
+                                    <div style="height: 200px;">
+                                        @if(isset($monthlyTrends) && $monthlyTrends->count())
+                                            <canvas id="monthlyChart"></canvas>
+                                        @else
+                                            <div class="text-center py-3">
+                                                <i class="bi bi-bar-chart-line text-muted mb-1" style="font-size: 1.5rem;"></i>
+                                                <p class="text-muted small mb-0">No data available</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-5">
+                            <div class="panel h-100">
+                                <div class="panel-header p-2">
+                                    <div>
+                                        <h2 class="section-title mb-0" style="font-size: 0.8rem;">
+                                            <i class="bi bi-tags" aria-hidden="true"></i>
+                                            <span>Top Categories</span>
+                                        </h2>
+                                        <p class="text-muted mb-0" style="font-size: 0.65rem;">Most viewed blog categories.</p>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-2">
+                                    @if(isset($topCategories) && $topCategories->count())
+                                        <div class="activity-list">
+                                            @foreach($topCategories as $category)
+                                                <div class="activity-item" style="padding: 0.3rem 0;">
+                                                    <span class="activity-dot bg-primary" style="width: 6px; height: 6px;"></span>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <p class="mb-0 fw-semibold" style="font-size: 0.7rem;">{{ $category->category ?? 'Uncategorized' }}</p>
+                                                            <span class="badge bg-primary-soft text-primary rounded-pill" style="font-size: 0.6rem;">
+                                                                {{ number_format($category->total_views) }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="progress" style="height: 3px;">
+                                                            <div class="progress-bar bg-primary" 
+                                                                 style="width: {{ ($category->total_views / ($topCategories->max('total_views') ?? 1)) * 100 }}%;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="text-center py-2">
+                                            <i class="bi bi-tag text-muted mb-1" style="font-size: 1.2rem;"></i>
+                                            <p class="text-muted small mb-0">No category data available</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Authors & Quick Stats Row -->
+                    <section class="row g-2 mb-3">
+                        <div class="col-12 col-xl-6">
+                            <div class="panel">
+                                <div class="panel-header p-2">
+                                    <div>
+                                        <h2 class="section-title mb-0" style="font-size: 0.8rem;">
+                                            <i class="bi bi-people" aria-hidden="true"></i>
+                                            <span>Top Authors</span>
+                                        </h2>
+                                        <p class="text-muted mb-0" style="font-size: 0.65rem;">Most active and viewed authors.</p>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-2">
+                                    @if(isset($topAuthors) && $topAuthors->count())
+                                        <div class="activity-list">
+                                            @foreach($topAuthors as $author)
+                                                <div class="activity-item" style="padding: 0.3rem 0;">
+                                                    <span class="activity-dot bg-success" style="width: 6px; height: 6px;"></span>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="avatar-img bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                                                                     style="width: 22px; height: 22px; font-size: 9px; font-weight: 600;">
+                                                                    {{ substr($author->author ?? 'U', 0, 1) }}
+                                                                </div>
+                                                                <p class="mb-0 fw-semibold" style="font-size: 0.7rem;">{{ $author->author ?? 'Unknown' }}</p>
+                                                            </div>
+                                                            <span class="badge bg-success-soft text-success rounded-pill" style="font-size: 0.6rem;">
+                                                                <i class="bi bi-eye me-1"></i> {{ number_format($author->total_views) }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="text-center py-2">
+                                            <i class="bi bi-person text-muted mb-1" style="font-size: 1.2rem;"></i>
+                                            <p class="text-muted small mb-0">No author data available</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-6">
+                            <div class="panel h-100">
+                                <div class="panel-header p-2">
+                                    <div>
+                                        <h2 class="section-title mb-0" style="font-size: 0.8rem;">
+                                            <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                                            <span>Quick Stats</span>
+                                        </h2>
+                                        <p class="text-muted mb-0" style="font-size: 0.65rem;">At-a-glance performance metrics.</p>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-2">
+                                    <div class="row g-1">
+                                        <div class="col-6">
+                                            <div class="p-2 bg-light rounded-2 text-center">
+                                                <div class="text-muted" style="font-size: 0.55rem;">Total Blogs</div>
+                                                <div class="fw-bold text-primary" style="font-size: 0.9rem;">{{ number_format($overallStats['total_blogs'] ?? 0) }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-2 bg-light rounded-2 text-center">
+                                                <div class="text-muted" style="font-size: 0.55rem;">Unique Visitors</div>
+                                                <div class="fw-bold text-success" style="font-size: 0.9rem;">{{ number_format($overallStats['unique_visitors'] ?? 0) }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-2 bg-light rounded-2 text-center">
+                                                <div class="text-muted" style="font-size: 0.55rem;">Most Viewed</div>
+                                                <div class="fw-bold text-truncate" style="font-size: 0.65rem;">
+                                                    @if(isset($overallStats['most_viewed']) && $overallStats['most_viewed'])
+                                                        <a href="{{ route('blog.show', $overallStats['most_viewed']->slug) }}" 
+                                                           class="text-decoration-none text-dark">
+                                                            {{ Str::limit($overallStats['most_viewed']->title, 12) }}
+                                                        </a>
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-2 bg-light rounded-2 text-center">
+                                                <div class="text-muted" style="font-size: 0.55rem;">Avg Daily Views</div>
+                                                <div class="fw-bold text-info" style="font-size: 0.9rem;">
+                                                    @php
+                                                        $avgDaily = 0;
+                                                        if (isset($overallStats['total_views']) && $overallStats['total_views'] > 0) {
+                                                            $days = 30;
+                                                            if ($period == 'today') $days = 1;
+                                                            elseif ($period == 'week') $days = 7;
+                                                            elseif ($period == 'month') $days = 30;
+                                                            elseif ($period == 'year') $days = 365;
+                                                            $avgDaily = round($overallStats['total_views'] / $days, 1);
+                                                        }
+                                                    @endphp
+                                                    {{ number_format($avgDaily, 1) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Blog Stats Table -->
+                    <section class="panel">
+                        <div class="panel-header p-2">
+                            <div>
+                                <h2 class="section-title mb-0" style="font-size: 0.8rem;">
+                                    <i class="bi bi-table" aria-hidden="true"></i>
+                                    <span>Blog Post Statistics</span>
+                                </h2>
+                                <p class="text-muted mb-0" style="font-size: 0.65rem;">Detailed view count analytics for all blog posts.</p>
+                            </div>
+                            <span class="badge bg-light text-dark" style="font-size: 0.6rem;">
+                                <i class="bi bi-list me-1"></i> {{ $blogs->count() }} of {{ $blogs->total() }}
+                            </span>
+                        </div>
+                        <div class="panel-body p-0">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0" style="font-size: 0.7rem;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="font-size: 0.65rem;">#</th>
+                                            <th scope="col" style="font-size: 0.65rem;">Title</th>
+                                            <th scope="col" style="font-size: 0.65rem;">Author</th>
+                                            <th scope="col" style="font-size: 0.65rem;">Category</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Total</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Unique</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Daily</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Weekly</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Monthly</th>
+                                            <th scope="col" style="font-size: 0.65rem;">Last Viewed</th>
+                                            <th scope="col" class="text-center" style="font-size: 0.65rem;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($blogs as $index => $blog)
+                                            <tr>
+                                                <td style="font-size: 0.65rem;">{{ $blogs->firstItem() + $index }}</td>
+                                                <td>
+                                                    <a href="{{ route('blog.show', $blog->slug) }}" 
+                                                       class="text-decoration-none text-dark hover-primary" style="font-size: 0.7rem;">
+                                                        {{ Str::limit($blog->title, 25) }}
+                                                    </a>
+                                                </td>
+                                                <td style="font-size: 0.65rem;">{{ $blog->author ?? '-' }}</td>
+                                                <td>
+                                                    <span class="badge bg-light text-dark" style="font-size: 0.55rem;">{{ $blog->category ?? 'Uncategorized' }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    @php
+                                                        $views = $blog->views ?? 0;
+                                                        $badgeClass = 'success';
+                                                        if ($views > 100) {
+                                                            $badgeClass = 'success';
+                                                        } elseif ($views > 50) {
+                                                            $badgeClass = 'info';
+                                                        } elseif ($views > 20) {
+                                                            $badgeClass = 'warning';
+                                                        } else {
+                                                            $badgeClass = 'secondary';
+                                                        }
+                                                    @endphp
+                                                    <span class="badge bg-{{ $badgeClass }}" style="font-size: 0.6rem; min-width: 40px;">
+                                                        <i class="bi bi-eye me-1"></i> {{ number_format($views) }}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['unique_views'] ?? 0) }}</td>
+                                                <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['daily_views'] ?? 0) }}</td>
+                                                <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['weekly_views'] ?? 0) }}</td>
+                                                <td class="text-center" style="font-size: 0.65rem;">{{ number_format($stats[$blog->id]['monthly_views'] ?? 0) }}</td>
+                                                <td>
+                                                    @if(isset($stats[$blog->id]['last_viewed']) && $stats[$blog->id]['last_viewed'])
+                                                        <span class="text-muted" style="font-size: 0.6rem;" 
+                                                              title="{{ \Carbon\Carbon::parse($stats[$blog->id]['last_viewed'])->format('Y-m-d H:i:s') }}">
+                                                            {{ \Carbon\Carbon::parse($stats[$blog->id]['last_viewed'])->diffForHumans() }}
+                                                        </span>
+                                                    @else
+                                                        <span class="text-muted" style="font-size: 0.6rem;">Never</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="{{ route('blog.show', $blog->slug) }}" 
+                                                       class="btn btn-light btn-sm" title="View Post" 
+                                                       style="padding: 0.1rem 0.3rem; font-size: 0.65rem;">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="11" class="text-center py-3">
+                                                    <i class="bi bi-inbox text-muted d-block mb-1" style="font-size: 1.2rem;"></i>
+                                                    <p class="text-muted small mb-0">No blog posts found for this period</p>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-footer d-flex justify-content-center p-2">
+                            {{ $blogs->appends(['search' => request('search'), 'period' => request('period')])->links('pagination::bootstrap-5') }}
+                        </div>
+                    </section>
                 </div>
             </div>
-            <div class="panel-footer d-flex justify-content-center p-2">
-                {{ $blogs->appends(['search' => request('search'), 'period' => request('period')])->links('pagination::bootstrap-5') }}
-            </div>
-        </section>
+        </div>
     </div>
+</div>
 @endsection
 
 @push('scripts')

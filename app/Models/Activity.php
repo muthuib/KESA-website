@@ -24,5 +24,6 @@ class Activity extends Model
         'youtube_link',
         'description',
         'views' ,
+        'photo_credit',
     ];
 }

@@ -43,13 +43,14 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'  => 'required|string|max:255',
-            'content'=> 'required|string',
-            'date'   => 'required|date',
-            'image'  => 'nullable|mimes:jpg,jpeg,png,gif,webp,mp4,mov,avi|max:51200',
-            'media1' => 'nullable|image|max:10240',
-            'media2' => 'nullable|image|max:10240',
-            'media3' => 'nullable|image|max:10240',
+            'title'        => 'required|string|max:255',
+            'content'      => 'required|string',
+            'date'         => 'required|date',
+            'photo_credit' => 'nullable|string|max:255', 
+            'image'        => 'nullable|mimes:jpg,jpeg,png,gif,webp,mp4,mov,avi|max:51200',
+            'media1'       => 'nullable|image|max:10240',
+            'media2'       => 'nullable|image|max:10240',
+            'media3'       => 'nullable|image|max:10240',
         ]);
 
         // --- Main media (image or video) ---
@@ -66,14 +67,15 @@ class NewsController extends Controller
         $media3Path = $this->uploadAdditionalImage($request, 'media3', 'img3');
 
         News::create([
-            'title'   => $request->title,
-            'content' => $request->content,
-            'date'    => $request->date,
-            'image'   => $mediaPath,   // main media stored in 'image' column
-            'media1'  => $media1Path,
-            'media2'  => $media2Path,
-            'media3'  => $media3Path,
-            'views'   => 0,
+            'title'        => $request->title,
+            'content'      => $request->content,
+            'date'         => $request->date,
+            'photo_credit' => $request->photo_credit, 
+            'image'        => $mediaPath,   // main media stored in 'image' column
+            'media1'       => $media1Path,
+            'media2'       => $media2Path,
+            'media3'       => $media3Path,
+            'views'        => 0,
         ]);
 
         return redirect()->route('news.index')->with('success', 'News added successfully!');
@@ -93,16 +95,17 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $request->validate([
-            'title'  => 'required|string|max:255',
-            'content'=> 'required|string',
-            'date'   => 'required|date',
-            'media'  => 'nullable|mimes:jpg,jpeg,png,gif,webp,mp4,mov,avi|max:51200',
-            'media1' => 'nullable|image|max:10240',
-            'media2' => 'nullable|image|max:10240',
-            'media3' => 'nullable|image|max:10240',
+            'title'        => 'required|string|max:255',
+            'content'      => 'required|string',
+            'date'         => 'required|date',
+            'photo_credit' => 'nullable|string|max:255', 
+            'media'        => 'nullable|mimes:jpg,jpeg,png,gif,webp,mp4,mov,avi|max:51200',
+            'media1'       => 'nullable|image|max:10240',
+            'media2'       => 'nullable|image|max:10240',
+            'media3'       => 'nullable|image|max:10240',
         ]);
 
-        $data = $request->only('title', 'content', 'date');
+        $data = $request->only('title', 'content', 'date', 'photo_credit'); 
 
         // --- Main media ---
         if ($request->hasFile('media')) {

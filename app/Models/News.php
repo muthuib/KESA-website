@@ -13,6 +13,7 @@ class News extends Model
         'content',
         'image',
         'date',
+        'photo_credit',
         'media1',   
         'media2',
         'media3',

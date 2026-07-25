@@ -19,6 +19,7 @@ class Publication extends Model
         'file_size',
         'downloads',
         'cover_image',
+	    'photo_credit',
     ];
 
     /**

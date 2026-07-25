@@ -16,7 +16,7 @@ class PublicationController extends Controller
         return view('publications.index', compact('publications'));
     }
 
-public function display($slug = null)
+    public function display($slug = null)
     {
         $publications = Publication::latest()->get();
         $id = null;
@@ -32,7 +32,6 @@ public function display($slug = null)
         return view('publications.display', compact('publications', 'id', 'publication'));
     }
 
-
     public function create()
     {
         return view('publications.create');
@@ -41,11 +40,12 @@ public function display($slug = null)
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'authors'     => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'file'        => 'required|file|mimes:pdf,doc,docx,txt|max:10000',
-            'cover'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // validation for cover image (max 5MB)
+            'title'        => 'required|string|max:255',
+            'authors'      => 'nullable|string|max:255',
+            'description'  => 'nullable|string',
+            'file'         => 'required|file|mimes:pdf,doc,docx,txt|max:10000',
+            'cover'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'photo_credit' => 'nullable|string|max:255', // photo_credit validation
         ]);
 
         // ✅ Handle main publication file upload
@@ -71,7 +71,7 @@ public function display($slug = null)
 
             $cover->move(public_path('publication_cover/'), $coverName);
 
-            $validated['cover_image'] = $coverPath; // Save path in DB
+            $validated['cover_image'] = $coverPath;
         }
 
         // ✅ Default values
@@ -91,7 +91,6 @@ public function display($slug = null)
         return redirect()->route('publications.index')->with('success', 'Publication uploaded successfully.');
     }
 
-
     public function show(Publication $publication)
     {
         return view('publications.show', compact('publication'));
@@ -102,14 +101,15 @@ public function display($slug = null)
         return view('publications.edit', compact('publication'));
     }
 
-public function update(Request $request, Publication $publication)
+    public function update(Request $request, Publication $publication)
     {
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'authors'     => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'file'        => 'sometimes|file|mimes:pdf,doc,docx,txt|max:10000',
-            'cover'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // Cover image validation
+            'title'        => 'required|string|max:255',
+            'authors'      => 'nullable|string|max:255',
+            'description'  => 'nullable|string',
+            'file'         => 'sometimes|file|mimes:pdf,doc,docx,txt|max:10000',
+            'cover'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'photo_credit' => 'nullable|string|max:255', // photo_credit validation
         ]);
 
         // ✅ Handle new publication file upload
@@ -185,7 +185,6 @@ public function update(Request $request, Publication $publication)
         return redirect()->route('publications.index')->with('danger', 'Publication deleted successfully.');
     }
 
-    
     public function download($id)
     {
         $publication = Publication::findOrFail($id);
@@ -199,7 +198,7 @@ public function update(Request $request, Publication $publication)
 
         return response()->download($file, $publication->title . '.' . pathinfo($file, PATHINFO_EXTENSION));
     }
-    
+
     // remove/delete cover page
     public function deleteCover($id)
     {
@@ -214,7 +213,8 @@ public function update(Request $request, Publication $publication)
 
         return redirect()->back()->with('danger', 'Cover image removed successfully.');
     }
-   public function statistics(Request $request)
+
+    public function statistics(Request $request)
     {
         $search = $request->input('search');
         $period = $request->input('period', 'all');
