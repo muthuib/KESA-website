@@ -238,6 +238,11 @@
                     <li><a class="dropdown-item" href="{{ route ('events.showAll') }}">Upcoming Events</a></li>
                     <li><a class="dropdown-item" href="{{ route('activities.display') }}">Past Events</a></li>
                     <li><a class="dropdown-item" href="{{ route('public.success_stories.index') }}">Success Stories</a></li>
+                    <li>
+				            <a class="dropdown-item" href="{{ route('gallery.index') }}">
+				                Gallery
+				            </a>
+				        </li>
                 </ul>
             </div>
             <!-- resource HUB Dropdown -->
@@ -338,7 +343,12 @@
                         <li><a class="dropdown-item @if(request()->routeIs('events.showAll')) @endif" href="{{ route('events.showAll') }}">Upcoming Events</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('activities.display'))  @endif" href="{{ route('activities.display') }}">Past Events</a></li>
                         <li><a class="dropdown-item @if(request()->routeIs('public.success_stories.index'))  @endif" href="{{ route('public.success_stories.index') }}">Success Stories</a></li>
-                        </ul>
+                        <li>
+				            <a class="dropdown-item" href="{{ route('gallery.index') }}">
+				                Gallery
+				            </a>
+				        </li>
+                    </ul>
                 </li>
                     <!-- Economics Hub Dropdown (Fixed) -->
                 <li class="nav-item dropdown">
