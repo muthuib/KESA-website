@@ -16,6 +16,7 @@ class Event extends Model
         'link',
         'venue',
         'description',
+        'photo_credit',
         'start_date',
         'end_date',
         'start_time', // New field

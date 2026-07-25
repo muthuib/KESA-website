@@ -87,6 +87,75 @@
         transform: translateY(0);
     }
 
+    /* Photo Credit Styles for Publication Display */
+    .photo-credit-display {
+        background: linear-gradient(135deg, rgba(128, 0, 0, 0.08), rgba(128, 0, 0, 0.02));
+        border-left: 3px solid #800000;
+        padding: 0.4rem 1rem;
+        /* margin: 0.5rem 0 0.5rem 0; */
+        border-radius: 4px;
+        font-size: 0.6rem;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .photo-credit-display i {
+        color: #800000;
+        font-size: 0.95rem;
+    }
+    
+    .photo-credit-display .credit-label {
+        color: #800000;
+        font-weight: 500;
+		font-style: italic;
+    }
+    
+    .photo-credit-display .credit-name {
+        color: #333;
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    /* Publication image wrapper with photo credit */
+    .publication-img-wrapper {
+        position: relative;
+        width: 80px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 2px solid #d0e3e9ff;
+        flex-direction: column;
+    }
+    
+    .publication-img-wrapper img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    .publication-cover-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* For highlighted publication, show photo credit more prominently */
+    .highlighted .photo-credit-display {
+        background: linear-gradient(135deg, rgba(128, 0, 0, 0.15), rgba(128, 0, 0, 0.05));
+        border-left-color: #b8860b;
+    }
+    
+    .highlighted .photo-credit-display i {
+        color: #b8860b;
+    }
+    
+    .highlighted .photo-credit-display .credit-label {
+        color: #b8860b;
+    }
 </style>
 @endsection
 
@@ -106,17 +175,19 @@
             @forelse($publications as $publication)
             <div id="publication-{{ $publication->id }}" class="row align-items-center mb-3 publication-row {{ isset($id) && $id == $publication->id ? 'highlighted' : '' }}">
                 <div class="col-12 col-md-1 d-flex justify-content-center align-items-center mb-3 mb-md-0 text-center">
-                    @if($publication->cover_image)
-                        <div class="publication-img-wrapper rounded shadow-sm"
-                            style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #d0e3e9ff;">
-                            <img src="{{ asset($publication->cover_image) }}" 
-                                alt="Cover Image for {{ $publication->title }}" 
-                                class="img-fluid publication-cover" 
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        </div>
-                    @else
-                        <i class="fas fa-file-alt text-brown publication-icon" style="font-size: 45px;"></i>
-                    @endif
+                    <div class="publication-cover-container">
+                        @if($publication->cover_image)
+                            <div class="publication-img-wrapper rounded shadow-sm"
+                                style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #d0e3e9ff;">
+                                <img src="{{ asset($publication->cover_image) }}" 
+                                    alt="Cover Image for {{ $publication->title }}" 
+                                    class="img-fluid publication-cover" 
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                        @else
+                            <i class="fas fa-file-alt text-brown publication-icon" style="font-size: 45px;"></i>
+                        @endif
+                    </div>
                 </div>
 
 
@@ -124,6 +195,15 @@
                     <h5 class="mb-1 publication-title">{{ $publication->title }}</h5>
                     <p class="mb-1 text-muted"><strong>Author(s):</strong> {{ $publication->authors }}</p>
                     <p class="mb-1 text-muted"><strong>Description:</strong> {{ \Illuminate\Support\Str::limit(strip_tags($publication->description), 190) }}</p>
+                    
+                    <!-- Photo Credit - Shown below description for all publications (alternative position) -->
+                    @if($publication->photo_credit)
+                        <div class="photo-credit-display" style="margin-top: 0.3rem; padding: 0.25rem 0.75rem;">
+                            <i class="fas fa-camera"></i>
+                            <span class="credit-label">Photo Credit:</span>
+                            <span class="credit-name">{{ $publication->photo_credit }}</span>
+                        </div>
+                    @endif
                 </div>
                 <div class="col-md-2">
                     <p class="mb-0 publication-date">

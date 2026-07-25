@@ -87,6 +87,13 @@
                 <strong>{{ \Carbon\Carbon::parse($news->date)->format('l, F j, Y') }}</strong>
             </p>
 
+            {{-- Photo Credit --}}
+            @if($news->photo_credit)
+                <div class="photo-credit">
+                    <i class="fas fa-camera"></i> <em>Photo Credit: <span>{{ $news->photo_credit }}</span></em>
+                </div>
+            @endif
+
             <div class="news-content">
                 {!! $news->content !!}
             </div>
@@ -249,7 +256,31 @@
 
     .news-date {
         color: #666;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Photo Credit Styles */
+    .photo-credit {
+        background-color: #f8f9fa;
+        border-left: 4px solid #800000;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 4px;
+        font-size: 0.80rem;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .photo-credit i {
+        color: #800000;
+        font-size: 1.1rem;
+    }
+
+    .photo-credit span {
+        color: #333;
+        font-weight: 500;
     }
 
     .news-content {

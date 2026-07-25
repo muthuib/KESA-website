@@ -28,13 +28,13 @@
 
                         <!-- Image & Meta Section -->
                         <div class="d-flex flex-md-row flex-column align-items-stretch">
-                            @if($event->image)
-                                <div class="col-md-5 p-0">
+                            <div class="col-md-5 p-0">
+                                @if($event->image)
                                     <div class="event-img-wrapper">
                                         <img src="{{ asset($event->image) }}" alt="{{ $event->name }}" class="event-img">
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
 
                             <div class="col-md-7 p-4 d-flex flex-column justify-content-between">
                                 <div>
@@ -61,6 +61,15 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Photo Credit - Positioned between image/meta and description -->
+                        @if($event->photo_credit)
+                            <div class="photo-credit-below-image">
+                                <i class="bi bi-camera-fill" style="color:maroon;"></i>
+                                <span class="credit-label">Photo Credit:</span>
+                                <span class="credit-name">{{ $event->photo_credit }}</span>
+                            </div>
+                        @endif
 
                         <!-- Description & Buttons -->
                         <div class="p-4 border-top bg-light-subtle d-flex flex-column justify-content-between">
@@ -164,6 +173,45 @@ body {
 }
 .event-card:hover .event-img { transform: scale(1.05); }
 
+/* Photo Credit - Full width between sections - Left Aligned */
+.photo-credit-below-image {
+    /* background: linear-gradient(135deg, rgba(128, 0, 0, 0.9), rgba(80, 0, 0, 0.95));
+    color: #fff; */
+    padding: 5px 10px;
+    /* font-size: 0.85rem;
+    text-align: left;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; */
+}
+
+.photo-credit-below-image i {
+    color: #ffd700;
+    font-size: 1rem;
+}
+
+.photo-credit-below-image .credit-label {
+    color: grey;
+    font-weight: 600;
+    font-size: 0.6rem;
+	font-style: italic;
+    /* text-transform: uppercase; */
+    letter-spacing: 0.5px;
+}
+
+.photo-credit-below-image .credit-name {
+    color: grey;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 0.6rem;
+}
+
 /* RIBBON */
 .event-ribbon {
     position: absolute;
@@ -190,6 +238,22 @@ body {
 @media (max-width: 767px) {
     .event-img-wrapper { min-height: 180px; }
     .countdown div span { font-size: 1rem; }
+}
+
+@media (max-width: 768px) {
+    .photo-credit-below-image {
+        font-size: 0.75rem;
+        padding: 8px 14px;
+        flex-wrap: wrap;
+    }
+    
+    .photo-credit-below-image .credit-label {
+        font-size: 0.7rem;
+    }
+    
+    .photo-credit-below-image .credit-name {
+        font-size: 0.8rem;
+    }
 }
 </style>
 

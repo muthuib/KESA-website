@@ -35,6 +35,7 @@ class ActivityController extends Controller
             'media3'        => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:20480',
             'youtube_link'  => 'nullable|url|max:255',
             'description'   => 'nullable|string',
+            'photo_credit'  => 'nullable|string|max:255', //  photo_credit validation
         ]);
 
         // Handle media files upload
@@ -54,7 +55,8 @@ class ActivityController extends Controller
                 $validated[$key] = 'activities/' . $filename;
             }
         }
-         $validated['views'] = 0;
+        
+        $validated['views'] = 0;
 
         Activity::create($validated);
 
@@ -91,6 +93,7 @@ class ActivityController extends Controller
             'media3'        => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:20480',
             'youtube_link'  => 'nullable|url|max:255',
             'description'   => 'nullable|string',
+            'photo_credit'  => 'nullable|string|max:255', // photo_credit validation
         ]);
 
         // Delete old media files if they exist
@@ -133,7 +136,7 @@ class ActivityController extends Controller
                          ->orWhere('description', 'like', "%{$search}%");
         })
         ->orderBy('date', 'desc')
-        ->paginate(9); // Changed from get() to paginate()
+        ->paginate(9);
         
         return view('activities.display', compact('activities'));
     }
@@ -154,15 +157,6 @@ class ActivityController extends Controller
         return redirect()->route('activities.index')->with('danger', 'Activity deleted successfully.');
     }
     
-    // public function view($id)
-    // {
-    //     $activity = Activity::findOrFail($id);
-    //     $otherActivities = Activity::where('id', '!=', $id)
-    //                               ->orderBy('date', 'desc')
-    //                               ->get();
-        
-    //     return view('activities.view-event', compact('activity', 'otherActivities'));
-    // }
     public function view($id)
     {
         $activity = Activity::findOrFail($id);
@@ -173,7 +167,6 @@ class ActivityController extends Controller
         if (!session()->has($sessionKey)) {
             // Increment views
             \DB::table('activities')->where('id', $id)->increment('views');
-            // OR use: $activity->increment('views');
             
             session()->put($sessionKey, true);
         }
