@@ -55,6 +55,7 @@ use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\SuccessStoryController;
+use App\Http\Controllers\GalleryController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -626,6 +627,52 @@ Route::get('/stories', [SuccessStoryController::class, 'publicIndex'])->name('pu
 
 // Public single story view by slug
 Route::get('/stories/{slug}', [SuccessStoryController::class, 'show'])->name('public.success_stories.show');
+
+Route::prefix('photo-gallery')->name('gallery.')->group(function () {
+    // Public routes
+    Route::get('/', [GalleryController::class, 'index'])->name('index');
+    Route::middleware(['role:admin'])->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', [GalleryController::class, 'create'])->name('create');
+        Route::post('/store', [GalleryController::class, 'store'])->name('store');
+        Route::get('/event/{slug}/edit', [GalleryController::class, 'edit'])->name('edit');
+        Route::put('/event/{slug}', [GalleryController::class, 'update'])->name('update');
+        Route::delete('/photo/{slug}', [GalleryController::class, 'destroyPhoto'])->name('photo.delete');
+         });
+       });
+        // Event routes with slug
+        Route::get('/event/{slug}', [GalleryController::class, 'show'])->name('show');
+        Route::get('/event/{slug}/upload', [GalleryController::class, 'uploadPage'])->name('upload.page');
+        Route::post('/event/{slug}/upload', [GalleryController::class, 'uploadPhotos'])->name('upload');
+        Route::post('/event/{slug}/process', [GalleryController::class, 'processEventImages'])->name('process');
+        Route::delete('/event/{slug}', [GalleryController::class, 'destroyEvent'])->name('destroy');
+        
+        // Photo routes with slug
+        Route::get('/photo/{slug}', [GalleryController::class, 'viewPhoto'])->name('photo');
+        Route::get('/search/{slug}', [GalleryController::class, 'search'])->name('search');
+        
+        // Download routes with slug
+        Route::get('/download/{slug}/{size}', [GalleryController::class, 'downloadPhoto'])->name('download');
+        Route::post('/download/record/{slug}', [GalleryController::class, 'recordDownload'])->name('download.record');
+        Route::get('/download-options/{slug}', [GalleryController::class, 'downloadOptions'])->name('download.options');
+});
+
+// Legacy routes - redirect to new slug routes (optional)
+Route::get('/gallery/{id}', function ($id) {
+    $event = App\Models\GalleryEvent::find($id);
+    if ($event && $event->slug) {
+        return redirect()->route('gallery.show', $event->slug);
+    }
+    abort(404);
+})->name('gallery.show.legacy');
+
+Route::get('/gallery/photo/{id}', function ($id) {
+    $photo = App\Models\GalleryPhoto::find($id);
+    if ($photo && $photo->slug) {
+        return redirect()->route('gallery.photo', $photo->slug);
+    }
+    abort(404);
+})->name('gallery.photo.legacy');
 
 // CLEAR CACHE ROUTE RUN https://www.kesakenya.org/clearcache
 
