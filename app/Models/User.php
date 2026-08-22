@@ -136,5 +136,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(MpesaPayment::class, 'user_id', 'ID');
     }
-
+   public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id', 'ID');
+    }
 }

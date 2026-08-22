@@ -42,7 +42,7 @@
 <div class="row align-items-start">
     <!-- Left Column -->
     <div class="col-md-8 col-12">
-        <h2 class="mb-3 blog-title responsive-title">
+        <h2 class="mt-5 blog-title responsive-title">
             {{ $blog->title }}
         </h2>
         <p class="text-muted text-center">
@@ -105,7 +105,7 @@
 
                 <!-- Share Section -->
                 <div class="share-section d-none d-lg-block">
-                    <div id="share-options" class="share-options mt-3 d-flex flex-wrap gap-2">
+                    <div id="share-options" class="share-options mt-0 d-flex flex-wrap gap-2">
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
                         target="_blank" 
@@ -163,7 +163,7 @@
             <img src="{{ asset($blog->image) }}" 
                 class="blog-image" 
                 alt="Blog Image" 
-                style="width: 300px; height: 220px; margin-top:150px;">
+                style="width: 300px; height: 220px; margin-top:50px;">
             <figcaption class="image-caption text-muted" style="font-size: 0.9rem; text-align: left;">
                 {{ $blog->name }}
             </figcaption>
@@ -329,6 +329,14 @@
             <div class="blog-content">
                 {!! $blog->content !!}
             </div>
+        </div>
+			 <!-- ========================================== -->
+        <!-- ===== COMMENT SECTION ===== -->
+        <!-- ========================================== -->
+        
+        {{-- Add the comments section here --}}
+        <div class="fullwidth-mobile-content">
+            <x-comments :blog="$blog" />
         </div>
         <!-- Footer Notice -->
          <div class="fullwidth-mobile-content">

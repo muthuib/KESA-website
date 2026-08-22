@@ -56,6 +56,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\SuccessStoryController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\CommentController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -673,6 +674,23 @@ Route::get('/gallery/photo/{id}', function ($id) {
     }
     abort(404);
 })->name('gallery.photo.legacy');
+
+// Blog Comment Routes
+Route::prefix('blogs')->group(function () {
+    Route::get('{blog}/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::post('{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('{blog}/subscribe', [CommentController::class, 'subscribe'])->name('comments.subscribe');
+    Route::post('{blog}/unsubscribe', [CommentController::class, 'unsubscribe'])->name('comments.unsubscribe');
+    Route::get('{blog}/subscription-status', [CommentController::class, 'subscriptionStatus'])->name('comments.subscription-status'); // Add this
+});
+
+// Comment Management Routes
+Route::prefix('comments')->group(function () {
+    Route::put('{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('{comment}/like', [CommentController::class, 'like'])->name('comments.like');
+    Route::post('{comment}/report', [CommentController::class, 'report'])->name('comments.report');
+});
 
 // CLEAR CACHE ROUTE RUN https://www.kesakenya.org/clearcache
 

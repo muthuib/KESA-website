@@ -14,7 +14,7 @@ class Blog extends Model
     protected $fillable = [
         'title',
         'slug',
-        'name', // ✅ Newly added field
+        'name', 
         'content',
         'image',
         'date',
@@ -34,7 +34,7 @@ class Blog extends Model
      */
     public function viewLogs()
     {
-        return $this->hasMany(BlogViewLog::class, 'blog_id'); // ✅ Fixed: should be 'blog_id'
+        return $this->hasMany(BlogViewLog::class, 'blog_id'); 
     }
 
     public function viewsInDays($days)
@@ -62,5 +62,42 @@ protected static function boot()
         }
     });
 }
+
+/**
+     * Get all comments for this blog
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'blog_id', 'id')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get approved top-level comments
+     */
+    public function approvedComments()
+    {
+        return $this->hasMany(Comment::class, 'blog_id', 'id')
+            ->whereNull('parent_id')
+            ->where('is_approved', true)
+            ->with(['user', 'replies'])
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get comment count
+     */
+    public function getCommentCountAttribute()
+    {
+        return $this->comments()->where('is_approved', true)->count();
+    }
+
+    /**
+     * Get subscriptions for this blog
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(CommentSubscription::class, 'blog_id', 'id');
+    }
 
 }
