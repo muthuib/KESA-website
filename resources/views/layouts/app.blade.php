@@ -66,7 +66,9 @@
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
         <!-- END OF TEMPLATE CSS -->
-
+     <!-- blog comments styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
 
     <title>@yield('title', 'KESA Kenya')</title>
     
@@ -333,5 +335,9 @@
         });
     });
 </script>
-
+ <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Scripts -->
+    <script src="{{ asset('js/comments.js') }}"></script>
 </body>
