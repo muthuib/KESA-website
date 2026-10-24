@@ -3,15 +3,11 @@
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/gallery-index.css') }}">
 <style>
-    /* ============================================
-       PAGE HEADER 
-       ============================================ */
     .gallery-page-header {
         position: relative;
         padding: 5px 3px 4px;
-		margin-top: 20px;
+        margin-top: 20px;
         margin-bottom: 35px;
-        /* background: linear-gradient(145deg, #0d0505 0%, #1a0a0a 30%, #2d1515 60%, #1a0a0a 100%); */
         border-radius: 20px;
         overflow: hidden;
         text-align: center;
@@ -21,7 +17,6 @@
             inset 0 1px 0 rgba(128,0,0,0.1);
     }
 
-    /* Animated Orbs */
     .header-orb {
         position: absolute;
         border-radius: 50%;
@@ -74,7 +69,6 @@
         75% { transform: translate(30px, 20px) scale(1.05); }
     }
 
-    /* Gradient Overlay */
     .header-gradient-overlay {
         position: absolute;
         inset: 0;
@@ -82,13 +76,11 @@
         pointer-events: none;
     }
 
-    /* ===== CONTENT ===== */
     .header-content {
         position: relative;
         z-index: 1;
     }
 
-    /* ===== TITLE WRAPPER ===== */
     .header-title-wrapper {
         display: flex;
         align-items: center;
@@ -97,7 +89,6 @@
         flex-wrap: wrap;
     }
 
-    /* ===== ICON WITH PREMIUM EFFECTS ===== */
     .header-icon-wrapper {
         position: relative;
         display: inline-block;
@@ -128,7 +119,6 @@
         box-shadow: 0 16px 56px rgba(128,0,0,0.45);
     }
 
-    /* Icon Glow */
     .icon-glow {
         position: absolute;
         inset: -10px;
@@ -142,7 +132,6 @@
         50% { opacity: 1; transform: scale(1.08); }
     }
 
-    /* Icon Rings */
     .icon-ring {
         position: absolute;
         border-radius: 28px;
@@ -173,7 +162,6 @@
         50% { transform: scale(1.2); opacity: 0; }
     }
 
-    /* Sparkles */
     .icon-sparkle {
         position: absolute;
         color: rgba(255,255,255,0.12);
@@ -212,7 +200,6 @@
         50% { transform: translateY(-8px); }
     }
 
-    /* ===== TITLE WITH VISIBLE SHIMMER ===== */
     .header-title {
         margin: 0;
         position: relative;
@@ -233,7 +220,6 @@
         z-index: 1;
     }
 
-    /* Title Shimmer - VISIBLE & PREMIUM */
     .title-shimmer {
         position: absolute;
         top: 0;
@@ -265,7 +251,6 @@
         100% { transform: translateX(100%); }
     }
 
-    /* Title Underline */
     .title-underline {
         display: block;
         width: 70px;
@@ -297,7 +282,6 @@
         100% { transform: translateX(100%); }
     }
 
-    /* ===== SUBTITLE ===== */
     .header-subtitle {
         display: flex;
         align-items: center;
@@ -341,9 +325,6 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* ============================================
-       GALLERY GRID
-       ============================================ */
     .gallery-grid-wrapper {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -511,7 +492,18 @@
         font-size: 11px;
     }
 
-    /* View Album Button - Maroon */
+    .event-date-location .date-range {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .event-date-location .date-range .date-separator {
+        color: #800000;
+        font-weight: 300;
+        margin: 0 2px;
+    }
+
     .btn-view-album {
         padding: 8px 16px;
         border-radius: 8px;
@@ -554,7 +546,21 @@
         font-size: 12px;
     }
 
-    /* Edit Button - Admin Only */
+    .btn-view-album.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: #6c757d;
+    }
+
+    .btn-view-album.disabled::before {
+        display: none;
+    }
+
+    .btn-view-album.expired {
+        background: #dc3545;
+    }
+
     .btn-edit-event {
         position: absolute;
         top: 10px;
@@ -591,7 +597,6 @@
         font-size: 14px;
     }
 
-    /* Delete Button - Admin Only */
     .btn-delete-event {
         position: absolute;
         top: 10px;
@@ -628,7 +633,6 @@
         font-size: 14px;
     }
 
-    /* Delete Confirmation Modal */
     .delete-modal-overlay {
         display: none;
         position: fixed;
@@ -749,9 +753,6 @@
         font-weight: 500;
     }
 
-    /* ============================================
-       PAGINATION
-       ============================================ */
     .pagination-wrapper {
         margin-top: 30px;
         display: flex;
@@ -786,9 +787,6 @@
         box-shadow: 0 4px 16px rgba(128,0,0,0.25);
     }
 
-    /* ============================================
-       EMPTY STATE
-       ============================================ */
     .empty-state {
         padding: 60px 20px;
         text-align: center;
@@ -819,9 +817,84 @@
         font-size: 14px;
     }
 
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
+    .expired-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+        backdrop-filter: blur(4px);
+        animation: fadeInOverlay 0.5s ease;
+    }
+
+    @keyframes fadeInOverlay {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .expired-overlay .expired-text {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        box-shadow: 0 4px 30px rgba(220, 53, 69, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transform: rotate(-12deg);
+        animation: pulseExpired 2s ease-in-out infinite;
+        text-align: center;
+        min-width: 180px;
+    }
+
+    .expired-overlay .expired-text i {
+        margin-right: 10px;
+        font-size: 18px;
+        animation: spinClock 3s linear infinite;
+    }
+
+    @keyframes pulseExpired {
+        0%, 100% {
+            transform: rotate(-12deg) scale(1);
+            box-shadow: 0 4px 30px rgba(220, 53, 69, 0.6);
+        }
+        50% {
+            transform: rotate(-12deg) scale(1.05);
+            box-shadow: 0 8px 50px rgba(220, 53, 69, 0.8);
+        }
+    }
+
+    @keyframes spinClock {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .admin-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background: rgba(255, 193, 7, 0.9);
+        color: #000;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+    }
+
     @media (max-width: 768px) {
         .gallery-page-header {
             padding: 35px 20px 28px;
@@ -978,92 +1051,87 @@
             top: 6px;
             right: 6px;
         }
+
+        .expired-overlay .expired-text {
+            font-size: 12px;
+            padding: 8px 16px;
+            min-width: 140px;
+            transform: rotate(-8deg);
+        }
+        
+        .expired-overlay .expired-text i {
+            font-size: 14px;
+            margin-right: 6px;
+        }
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container py-3">
-    <!-- ============================================
-         HEADER - WORLD CLASS MAROON & BLACK
-         ============================================ -->
-    <!-- <div class="gallery-page-header"> -->
-        <!-- Animated Background Orbs -->
-        <div class="header-orb header-orb-1"></div>
-        <div class="header-orb header-orb-2"></div>
-        <div class="header-orb header-orb-3"></div>
-        <div class="header-orb header-orb-4"></div>
-        
-        <!-- Gradient Overlay -->
-        <div class="header-gradient-overlay"></div>
+    <div class="header-orb header-orb-1"></div>
+    <div class="header-orb header-orb-2"></div>
+    <div class="header-orb header-orb-3"></div>
+    <div class="header-orb header-orb-4"></div>
+    
+    <div class="header-gradient-overlay"></div>
 
-        <div class="header-content">
-            <div class="header-title-wrapper">
-                <!-- Icon with Premium Effects -->
-                <div class="header-icon-wrapper">
-                    <div class="header-icon" style="margin-top: 40px;">
-                        <i class="fa fa-images"></i>
-                        <div class="icon-glow"></div>
-                    </div>
-                    <div class="icon-ring"></div>
-                    <div class="icon-ring ring-2"></div>
-                    <div class="icon-ring ring-3"></div>
-                    <div class="icon-sparkle sparkle-1">✦</div>
-                    <div class="icon-sparkle sparkle-2">✦</div>
-                    <div class="icon-sparkle sparkle-3">✦</div>
+    <div class="header-content">
+        <div class="header-title-wrapper">
+            <div class="header-icon-wrapper">
+                <div class="header-icon" style="margin-top: 40px;">
+                    <i class="fa fa-images"></i>
+                    <div class="icon-glow"></div>
                 </div>
-                
-                <!-- Title -->
-                <h1 class="header-title">
-                    <span class="title-text" style="color:black; margin-top: 20px;">Our Photo Gallery</span>
-                    <span class="title-shimmer"></span>
-                    <span class="title-underline"></span>
-                </h1>
+                <div class="icon-ring"></div>
+                <div class="icon-ring ring-2"></div>
+                <div class="icon-ring ring-3"></div>
+                <div class="icon-sparkle sparkle-1">✦</div>
+                <div class="icon-sparkle sparkle-2">✦</div>
+                <div class="icon-sparkle sparkle-3">✦</div>
             </div>
             
-            <!-- Subtitle -->
-            <p class="header-subtitle" style="color:maroon; margin-bottom: 40px;">
-                <span class="subtitle-line"></span>
-                <span class="subtitle-text" style="color:black;">
-                    <i class="fa fa-camera subtitle-icon" style="color:maroon;"></i>
-                    Browse our events through photos
-                    <i class="fa fa-camera subtitle-icon" style="color:maroon;"></i>
-                </span>
-                <span class="subtitle-line"></span>
-            </p>
+            <h1 class="header-title">
+                <span class="title-text" style="color:black; margin-top: 20px;">Our Photo Gallery</span>
+                <span class="title-shimmer"></span>
+                <span class="title-underline"></span>
+            </h1>
         </div>
-    <!-- </div> -->
+        
+        <p class="header-subtitle" style="color:maroon; margin-bottom: 40px;">
+            <span class="subtitle-line"></span>
+            <span class="subtitle-text" style="color:black;">
+                <i class="fa fa-camera subtitle-icon" style="color:maroon;"></i>
+                Browse our events through photos
+                <i class="fa fa-camera subtitle-icon" style="color:maroon;"></i>
+            </span>
+            <span class="subtitle-line"></span>
+        </p>
+    </div>
 
-    <!-- ============================================
-         GALLERY GRID
-         ============================================ -->
     @if($events->count())
         <div class="gallery-grid-wrapper">
             @foreach($events as $event)
+                @php
+                    $isAdmin = auth()->check() && auth()->user()->hasRole('admin');
+                    $today = \Carbon\Carbon::today();
+                    $displayEndDate = $event->display_end_date ? \Carbon\Carbon::parse($event->display_end_date) : null;
+                    $isExpired = $displayEndDate && $displayEndDate->lt($today);
+                    
+                    // For non-admins, skip expired events
+                    if (!$isAdmin && $isExpired) {
+                        continue;
+                    }
+                @endphp
+                
                 <div class="gallery-event-card">
-                    <!-- @php
-                        $cover = $event->photos->first();
-                        $imageUrl = asset('images/no-image.jpg');
-                        $hasImage = false;
-                        
-                        if ($cover) {
-                            $sizes = ['small_path', 'medium_path', 'thumbnail_path', 'original_path'];
-                            foreach ($sizes as $size) {
-                                if (!empty($cover->$size)) {
-                                    $fullPath = public_path($cover->$size);
-                                    if (File::exists($fullPath)) {
-                                        $imageUrl = asset($cover->$size);
-                                        $hasImage = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    @endphp -->
-						@php
-					    $imageUrl = $event->getCoverPhotoUrl();
-					    $hasImage = $event->hasCoverPhoto();
-					@endphp
+                    @php
+                        $imageUrl = $event->getCoverPhotoUrl();
+                        $hasImage = $event->hasCoverPhoto();
+                        $startDate = \Carbon\Carbon::parse($event->event_date)->format('d M Y');
+                        $endDate = $event->event_end_date ? \Carbon\Carbon::parse($event->event_end_date)->format('d M Y') : null;
+                        $displayEndDateFormatted = $event->display_end_date ? \Carbon\Carbon::parse($event->display_end_date)->format('d M Y') : null;
+                    @endphp
                     
                     <div class="card-img-wrapper">
                         @if($hasImage)
@@ -1088,6 +1156,17 @@
                         <span class="image-count">
                             <i class="fa fa-image"></i> {{ $event->photos_count }}
                         </span>
+                        
+                        @if($isExpired && $isAdmin)
+                            <div class="expired-overlay">
+                                <div class="expired-text">
+                                    <i class="fa fa-clock-o"></i> Not Available to Public
+                                </div>
+                            </div>
+                            <div class="admin-badge">
+                                <i class="fa fa-user-shield"></i> Admin View
+                            </div>
+                        @endif
                     </div>
 
                     <div class="card-body">
@@ -1095,8 +1174,30 @@
                         <p class="card-text">{{ \Illuminate\Support\Str::limit($event->description, 70) }}</p>
                         
                         <div class="event-date-location">
-                            <div><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</div>
-                            <div><i class="fa fa-map-marker"></i> {{ $event->location }}</div>
+                            <div class="date-range">
+                                <i class="fa fa-calendar"></i>
+                                @if($endDate && $endDate !== $startDate)
+                                    <span>{{ $startDate }}</span>
+                                    <span class="date-separator">—</span>
+                                    <span>{{ $endDate }}</span>
+                                @else
+                                    <span>{{ $startDate }}</span>
+                                @endif
+                            </div>
+                            
+                            @if($displayEndDateFormatted)
+                                <div>
+                                    <i class="fa fa-clock-o"></i> 
+                                    Available until: {{ $displayEndDateFormatted }}
+                                    @if($isExpired && $isAdmin)
+                                        <span style="color: #dc3545; font-weight: 600; margin-left: 4px;">(Expired)</span>
+                                    @endif
+                                </div>
+                            @endif
+                            
+                            @if($event->location)
+                                <div><i class="fa fa-map-marker"></i> {{ $event->location }}</div>
+                            @endif
                         </div>
                         
                         <a href="{{ route('gallery.show', $event->slug) }}" class="btn-view-album">
@@ -1104,13 +1205,12 @@
                         </a>
                     </div>
 
-                    <!-- Edit & Delete Buttons - Admin Only -->
                     @auth
-                        @if(auth()->user()->hasRole('admin'))
+                        @if($isAdmin)
                             <button class="btn-edit-event" onclick="editEvent('{{ $event->slug }}')" title="Edit Event">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button class="btn-delete-event" onclick="confirmDelete('{{ $event->slug }}', '{{ $event->event_name }}')" title="Delete Event">
+                            <button class="btn-delete-event" onclick="confirmDelete({{ json_encode($event->slug) }}, {{ json_encode($event->event_name) }})" title="Delete Event">
                                 <i class="fa fa-trash"></i>
                             </button>
                         @endif
@@ -1118,8 +1218,8 @@
                 </div>
             @endforeach
         </div>
-       <div class="pagination-wrapper mt-5">
-                {{ $events->links('pagination::bootstrap-5') }}
+        <div class="pagination-wrapper mt-5">
+            {{ $events->links('pagination::bootstrap-5') }}
         </div>
     @else
         <div class="empty-state">
@@ -1130,7 +1230,6 @@
     @endif
 </div>
 
-<!-- Delete Confirmation Modal -->
 <div class="delete-modal-overlay" id="deleteModal">
     <div class="delete-modal">
         <div class="modal-icon">
@@ -1164,14 +1263,12 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('active');
 }
 
-// Close modal when clicking outside
 document.getElementById('deleteModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeDeleteModal();
     }
 });
 
-// Close modal with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeDeleteModal();

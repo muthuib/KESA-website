@@ -103,6 +103,20 @@ ADD UNIQUE INDEX `gallery_photos_slug_unique` (`slug`);
 ALTER TABLE `gallery_photos` 
 ADD COLUMN `status` VARCHAR(50) DEFAULT 'Active' AFTER `downloads`;
 
+
+
+
+
+
+ALTER TABLE gallery_events 
+ADD COLUMN event_end_date DATE NULL AFTER event_date,
+ADD COLUMN display_end_date DATE NULL AFTER event_end_date;
+
+
+-- Add time columns to gallery_events table
+ALTER TABLE gallery_events 
+ADD COLUMN start_time TIME NULL AFTER event_date,
+ADD COLUMN end_time TIME NULL AFTER start_time;
 -- composer require intervention/image
 -- Upload:
 -- vendor/

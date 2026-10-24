@@ -34,21 +34,16 @@ class GalleryController extends Controller
     /**
      * Show upload page by event slug
      */
-    // public function uploadPage($slug)
-    // {
-    //     $event = GalleryEvent::where('slug', $slug)->firstOrFail();
-    //     return view('gallery.upload', compact('event'));
-    // }
-	public function uploadPage($slug)
-	{
-	    \Log::info('uploadPage received slug: ' . $slug);
-	    
-	    $event = GalleryEvent::where('slug', $slug)->firstOrFail();
-	    
-	    \Log::info('Event found: ID=' . $event->id . ', Slug=' . $event->slug);
-	    
-	    return view('gallery.upload', compact('event'));
-	}
+    public function uploadPage($slug)
+    {
+        \Log::info('uploadPage received slug: ' . $slug);
+        
+        $event = GalleryEvent::where('slug', $slug)->firstOrFail();
+        
+        \Log::info('Event found: ID=' . $event->id . ', Slug=' . $event->slug);
+        
+        return view('gallery.upload', compact('event'));
+    }
 
     /**
      * Show create event form
@@ -66,6 +61,14 @@ class GalleryController extends Controller
         $request->validate([
             'event_name' => 'required|max:255',
             'event_date' => 'required|date',
+            'event_end_date' => 'nullable|date|after_or_equal:event_date',
+            'display_end_date' => 'nullable|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i|after:start_time',
+            'location' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'cover_photo' => 'nullable|string|max:500',
+            'total_photos' => 'nullable|integer|min:0',
         ]);
 
         DB::beginTransaction();
@@ -83,7 +86,13 @@ class GalleryController extends Controller
                 'slug' => $slug,
                 'description' => $request->description,
                 'event_date' => $request->event_date,
+                'event_end_date' => $request->event_end_date,
+                'display_end_date' => $request->display_end_date,
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
                 'location' => $request->location,
+                'cover_photo' => $request->cover_photo,
+                'total_photos' => $request->total_photos ?? 0,
                 'created_by' => auth()->id(),
                 'status' => 'Published',
             ]);
@@ -125,95 +134,193 @@ class GalleryController extends Controller
         return view('gallery.show', compact('event', 'photos'));
     }
 
-	/**
- * Show the form for editing the event
- */
-public function edit($slug)
-{
-    $event = GalleryEvent::where('slug', $slug)->firstOrFail();
-    return view('gallery.edit', compact('event'));
-}
-
-/**
- * Update the event
- */
-	public function update(Request $request, $slug)
-	{
-	    $request->validate([
-	        'event_name' => 'required|max:255',
-	        'event_date' => 'required|date',
-	        'description' => 'nullable|string',
-	        'location' => 'nullable|string|max:255',
-	        'status' => 'nullable|in:Published,Draft'
-	    ]);
-	
-	    $event = GalleryEvent::where('slug', $slug)->firstOrFail();
-	
-	    DB::beginTransaction();
-	
-	    try {
-	        // Update event details
-	        $event->event_name = $request->event_name;
-	        $event->description = $request->description;
-	        $event->event_date = $request->event_date;
-	        $event->location = $request->location;
-	        
-	        if ($request->has('status')) {
-	            $event->status = $request->status;
-	        }
-	        
-	        // If event name changed, update slug
-	        if ($event->isDirty('event_name')) {
-	            $newSlug = Str::slug($request->event_name);
-	            
-	            // Ensure uniqueness
-	            if (GalleryEvent::where('slug', $newSlug)->where('id', '!=', $event->id)->exists()) {
-	                $newSlug = $newSlug . '-' . time();
-	            }
-	            
-	            $event->slug = $newSlug;
-	        }
-	
-	        $event->save();
-	
-	        DB::commit();
-	
-	        return redirect()
-	            ->route('gallery.show', $event->slug)
-	            ->with('success', 'Event updated successfully.');
-	
-	    } catch (\Exception $e) {
-	        DB::rollBack();
-	        
-	        return back()
-	            ->withInput()
-	            ->with('error', 'Failed to update event: ' . $e->getMessage());
-	    }
-	}
+    /**
+     * Show the form for editing the event
+     */
+    public function edit($slug)
+    {
+        $event = GalleryEvent::where('slug', $slug)->firstOrFail();
+        return view('gallery.edit', compact('event'));
+    }
 
     /**
-     * Delete event by slug
+     * Update the event
      */
-    public function destroyEvent($slug)
+    public function update(Request $request, $slug)
     {
+        $request->validate([
+            'event_name' => 'required|max:255',
+            'event_date' => 'required|date',
+            'event_end_date' => 'nullable|date|after_or_equal:event_date',
+            'display_end_date' => 'nullable|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i|after:start_time',
+            'description' => 'nullable|string',
+            'location' => 'nullable|string|max:255',
+            'cover_photo' => 'nullable|string|max:500',
+            'total_photos' => 'nullable|integer|min:0',
+        ]);
+
         $event = GalleryEvent::where('slug', $slug)->firstOrFail();
 
         DB::beginTransaction();
 
         try {
-            File::deleteDirectory(public_path('gallery/' . $event->slug));
-            $event->delete();
+            $event->event_name = $request->event_name;
+            $event->description = $request->description;
+            $event->event_date = $request->event_date;
+            $event->event_end_date = $request->event_end_date;
+            $event->display_end_date = $request->display_end_date;
+            $event->start_time = $request->start_time;
+            $event->end_time = $request->end_time;
+            $event->location = $request->location;
+            $event->cover_photo = $request->cover_photo;
+            $event->total_photos = $request->total_photos ?? $event->total_photos;
+            
+            if ($request->has('status')) {
+                $event->status = $request->status;
+            }
+            
+            if ($event->isDirty('event_name')) {
+                $newSlug = Str::slug($request->event_name);
+                
+                if (GalleryEvent::where('slug', $newSlug)->where('id', '!=', $event->id)->exists()) {
+                    $newSlug = $newSlug . '-' . time();
+                }
+                
+                $event->slug = $newSlug;
+            }
+
+            $event->save();
+
             DB::commit();
 
             return redirect()
-                ->route('gallery.index')
-                ->with('success', 'Event deleted successfully.');
+                ->route('gallery.show', $event->slug)
+                ->with('success', 'Event updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', $e->getMessage());
+            
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update event: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Delete event by slug
+     */
+    // public function destroyEvent($slug)
+    // {
+    //     $event = GalleryEvent::where('slug', $slug)->firstOrFail();
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         File::deleteDirectory(public_path('gallery/' . $event->slug));
+    //         $event->delete();
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('gallery.index')
+    //             ->with('success', 'Event deleted successfully.');
+
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return back()->with('error', $e->getMessage());
+    //     }
+    // }
+	/**
+ * Delete event by slug
+ */
+public function destroyEvent($slug)
+	{
+	    try {
+	        \Log::info('=== DELETE EVENT STARTED ===');
+	        \Log::info('Event slug: ' . $slug);
+	        
+	        $event = GalleryEvent::where('slug', $slug)->firstOrFail();
+	        \Log::info('Event found: ID=' . $event->id . ', Name=' . $event->event_name);
+	        
+	        // Check how many photos this event has
+	        $photoCount = $event->photos()->count();
+	        \Log::info('Photo count: ' . $photoCount);
+	        
+	        // Check if there are photo records
+	        $photos = $event->photos()->get();
+	        \Log::info('Photos: ' . $photos->pluck('id')->join(', '));
+	        
+	        DB::beginTransaction();
+	        
+	        try {
+	            // Option 1: If ON DELETE CASCADE is set, just delete the event
+	            // But first, let's manually delete photos to be safe
+	            
+	            \Log::info('Deleting photos...');
+	            foreach ($photos as $photo) {
+	                \Log::info('Deleting photo ID: ' . $photo->id);
+	                
+	                // Delete files
+	                $paths = [
+	                    public_path($photo->original_path),
+	                    public_path($photo->thumbnail_path),
+	                    public_path($photo->small_path),
+	                    public_path($photo->medium_path),
+	                    public_path($photo->large_path)
+	                ];
+	                
+	                foreach ($paths as $path) {
+	                    if ($path && File::exists($path)) {
+	                        File::delete($path);
+	                        \Log::info('Deleted file: ' . basename($path));
+	                    }
+	                }
+	                
+	                // Delete photo record
+	                $photo->delete();
+	                \Log::info('Photo record deleted');
+	            }
+	            
+	            // Delete the folder
+	            $folderPath = public_path('gallery/' . $event->slug);
+	            if (File::exists($folderPath)) {
+	                File::deleteDirectory($folderPath);
+	                \Log::info('Deleted folder: ' . $folderPath);
+	            }
+	            
+	            // Delete the event
+	            \Log::info('Deleting event record...');
+	            $event->delete();
+	            \Log::info('Event record deleted');
+	            
+	            DB::commit();
+	            
+	            \Log::info('=== DELETE EVENT SUCCESS ===');
+	            
+	            return redirect()
+	                ->route('gallery.index')
+	                ->with('success', 'Event and ' . $photoCount . ' photos deleted successfully.');
+	                
+	        } catch (\Exception $e) {
+	            DB::rollBack();
+	            \Log::error('=== DELETE EVENT ERROR (Transaction) ===');
+	            \Log::error('Error: ' . $e->getMessage());
+	            \Log::error('Trace: ' . $e->getTraceAsString());
+	            
+	            throw $e; // Re-throw to be caught by outer catch
+	        }
+	        
+	    } catch (\Exception $e) {
+	        \Log::error('=== DELETE EVENT ERROR (Outer) ===');
+	        \Log::error('Error: ' . $e->getMessage());
+	        \Log::error('Trace: ' . $e->getTraceAsString());
+	        
+	        return redirect()
+	            ->back()
+	            ->with('error', 'Failed to delete event: ' . $e->getMessage());
+	    }
+	}
 
     /**
      * Upload photos by event slug
@@ -232,7 +339,6 @@ public function edit($slug)
             $event = GalleryEvent::where('slug', $slug)->firstOrFail();
             \Log::info('Event found: ' . $event->slug);
 
-            // Create all necessary directories
             $folders = ['originals', 'thumbnails', 'small', 'medium', 'large'];
             foreach ($folders as $folder) {
                 $path = public_path("gallery/{$event->slug}/{$folder}");
@@ -269,7 +375,6 @@ public function edit($slug)
                     $filename = now()->format('YmdHis') . '_' . Str::random(15) . '.' . $extension;
                     \Log::info('Generated filename: ' . $filename);
                     
-                    // Get the temp file path
                     $tempPath = $photo->getRealPath();
                     \Log::info('Temp path: ' . $tempPath);
                     
@@ -277,7 +382,6 @@ public function edit($slug)
                         throw new \Exception("Temp file does not exist: " . $tempPath);
                     }
                     
-                    // Read the file contents
                     $fileContents = file_get_contents($tempPath);
                     
                     if ($fileContents === false) {
@@ -286,11 +390,9 @@ public function edit($slug)
                     
                     \Log::info('File size: ' . strlen($fileContents) . ' bytes');
                     
-                    // Save to originals
                     $originalPath = public_path("gallery/{$event->slug}/originals/{$filename}");
                     \Log::info('Saving to: ' . $originalPath);
                     
-                    // Try to save the file
                     $bytesWritten = file_put_contents($originalPath, $fileContents);
                     
                     if ($bytesWritten === false) {
@@ -303,7 +405,6 @@ public function edit($slug)
                     
                     \Log::info('Bytes written: ' . $bytesWritten);
                     
-                    // Verify the file was saved
                     if (!file_exists($originalPath)) {
                         throw new \Exception("File does not exist after save: " . $originalPath);
                     }
@@ -314,19 +415,16 @@ public function edit($slug)
                     
                     \Log::info('File saved successfully');
 
-                    // Get image dimensions from the saved file
                     $imageInfo = getimagesize($originalPath);
                     $width = $imageInfo[0] ?? 0;
                     $height = $imageInfo[1] ?? 0;
                     \Log::info('Image dimensions: ' . $width . 'x' . $height);
 
-                    // Generate unique slug for photo
                     $photoSlug = Str::slug(pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . Str::random(6);
                     while (GalleryPhoto::where('slug', $photoSlug)->exists()) {
                         $photoSlug = Str::slug(pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . Str::random(6);
                     }
 
-                    // Create thumbnails
                     try {
                         $this->createThumbnailGD($originalPath, public_path("gallery/{$event->slug}/thumbnails/{$filename}"), 300, 200);
                         $this->resizeImageGD($originalPath, public_path("gallery/{$event->slug}/small/{$filename}"), 800);
@@ -337,7 +435,6 @@ public function edit($slug)
                         \Log::warning("Image processing failed for {$filename}: " . $e->getMessage());
                     }
 
-                    // Create database record with slug
                     $galleryPhoto = GalleryPhoto::create([
                         'event_id' => $event->id,
                         'title' => pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME),
@@ -368,6 +465,10 @@ public function edit($slug)
                     
                     $uploadedCount++;
                 }
+
+                // Update total photos count
+                $event->total_photos = GalleryPhoto::where('event_id', $event->id)->count();
+                $event->save();
 
                 DB::commit();
 
@@ -431,7 +532,6 @@ public function edit($slug)
         $thumb = imagecreatetruecolor($width, $height);
         $source = $this->createImageFromFile($sourcePath);
         
-        // Calculate crop coordinates for center crop
         $cropX = max(0, ($origWidth - $height * ($origWidth / $origHeight)) / 2);
         $cropY = max(0, ($origHeight - $width * ($origHeight / $origWidth)) / 2);
         $cropWidth = min($origWidth, $height * ($origWidth / $origHeight));
@@ -463,7 +563,6 @@ public function edit($slug)
             throw new \Exception("Could not get image dimensions for: " . $sourcePath);
         }
         
-        // Calculate new dimensions maintaining aspect ratio
         $ratio = $origWidth / $origHeight;
         if ($origWidth > $maxWidth) {
             $newWidth = $maxWidth;
@@ -636,134 +735,127 @@ public function edit($slug)
      * Download photo by slug
      */
     public function downloadPhoto($slug, $size)
-	{
-	    try {
-	        $photo = GalleryPhoto::where('slug', $slug)->firstOrFail();
-	
-	        $allowed = ['original', 'large', 'medium', 'small', 'thumbnail'];
-	
-	        if (!in_array($size, $allowed)) {
-	            return response()->json(['error' => 'Invalid size'], 400);
-	        }
-	
-	        $path = null;
-	        switch ($size) {
-	            case 'original':
-	                $path = $photo->original_path;
-	                break;
-	            case 'large':
-	                $path = $photo->large_path;
-	                break;
-	            case 'medium':
-	                $path = $photo->medium_path;
-	                break;
-	            case 'small':
-	                $path = $photo->small_path;
-	                break;
-	            case 'thumbnail':
-	                $path = $photo->thumbnail_path;
-	                break;
-	        }
-	
-	        if (empty($path)) {
-	            $path = $photo->original_path;
-	        }
-	
-	        $fullPath = public_path($path);
-	
-	        if (!File::exists($fullPath)) {
-	            $fullPath = public_path($photo->original_path);
-	            if (!File::exists($fullPath)) {
-	                return response()->json(['error' => 'File not found'], 404);
-	            }
-	        }
-	
-	        // Only increment once here - this is the only place that should increment
-	        $photo->increment('downloads');
-	
-	        return response()->download(
-	            $fullPath,
-	            $photo->original_name,
-	            [
-	                'Content-Type' => $photo->mime_type ?? 'application/octet-stream',
-	                'Content-Disposition' => 'attachment; filename="' . $photo->original_name . '"'
-	            ]
-	        );
-	
-	    } catch (\Exception $e) {
-	        \Log::error('Download error: ' . $e->getMessage());
-	        return response()->json(['error' => 'Download failed: ' . $e->getMessage()], 500);
-	    }
-	}
-	/**
- * Delete a single photo
- */
-	public function destroyPhoto(Request $request, $slug)
-	{
-	    try {
-	        // Find the photo by slug
-	        $photo = GalleryPhoto::where('slug', $slug)->firstOrFail();
-	        $eventId = $photo->event_id;
-	        $eventSlug = $photo->event->slug;
-	        
-	        // Get the file paths
-	        $originalPath = public_path($photo->original_path);
-	        $thumbnailPath = public_path($photo->thumbnail_path);
-	        $smallPath = public_path($photo->small_path);
-	        $mediumPath = public_path($photo->medium_path);
-	        $largePath = public_path($photo->large_path);
-	        
-	        // Delete all image files
-	        $deletedFiles = 0;
-	        $paths = [$originalPath, $thumbnailPath, $smallPath, $mediumPath, $largePath];
-	        
-	        foreach ($paths as $path) {
-	            if ($path && File::exists($path)) {
-	                File::delete($path);
-	                $deletedFiles++;
-	            }
-	        }
-	        
-	        // Delete the database record
-	        $photo->delete();
-	        
-	        // Update the event's photo count
-	        $event = GalleryEvent::find($eventId);
-	        if ($event) {
-	            $event->total_photos = GalleryPhoto::where('event_id', $eventId)->count();
-	            $event->save();
-	        }
-	        
-	        \Log::info("Photo deleted: {$photo->original_name} (ID: {$photo->id}) - {$deletedFiles} files removed");
-	        
-	        // Check if request is AJAX/JSON
-	        if ($request->ajax() || $request->wantsJson()) {
-	            return response()->json([
-	                'success' => true,
-	                'message' => 'Photo deleted successfully.',
-	                'photo_id' => $photo->id
-	            ]);
-	        }
-	        
-	        // Redirect back with success message (for non-AJAX requests)
-	        return redirect()
-	            ->route('gallery.show', $eventSlug)
-	            ->with('success', 'Photo deleted successfully.');
-	            
-	    } catch (\Exception $e) {
-	        \Log::error('Delete photo error: ' . $e->getMessage());
-	        \Log::error('Delete photo trace: ' . $e->getTraceAsString());
-	        
-	        if ($request->ajax() || $request->wantsJson()) {
-	            return response()->json([
-	                'success' => false,
-	                'message' => 'Failed to delete photo: ' . $e->getMessage()
-	            ], 500);
-	        }
-	        
-	        return redirect()
-	            ->back()
-	            ->with('error', 'Failed to delete photo: ' . $e->getMessage());
-	    }
-	}
+    {
+        try {
+            $photo = GalleryPhoto::where('slug', $slug)->firstOrFail();
+
+            $allowed = ['original', 'large', 'medium', 'small', 'thumbnail'];
+
+            if (!in_array($size, $allowed)) {
+                return response()->json(['error' => 'Invalid size'], 400);
+            }
+
+            $path = null;
+            switch ($size) {
+                case 'original':
+                    $path = $photo->original_path;
+                    break;
+                case 'large':
+                    $path = $photo->large_path;
+                    break;
+                case 'medium':
+                    $path = $photo->medium_path;
+                    break;
+                case 'small':
+                    $path = $photo->small_path;
+                    break;
+                case 'thumbnail':
+                    $path = $photo->thumbnail_path;
+                    break;
+            }
+
+            if (empty($path)) {
+                $path = $photo->original_path;
+            }
+
+            $fullPath = public_path($path);
+
+            if (!File::exists($fullPath)) {
+                $fullPath = public_path($photo->original_path);
+                if (!File::exists($fullPath)) {
+                    return response()->json(['error' => 'File not found'], 404);
+                }
+            }
+
+            $photo->increment('downloads');
+
+            return response()->download(
+                $fullPath,
+                $photo->original_name,
+                [
+                    'Content-Type' => $photo->mime_type ?? 'application/octet-stream',
+                    'Content-Disposition' => 'attachment; filename="' . $photo->original_name . '"'
+                ]
+            );
+
+        } catch (\Exception $e) {
+            \Log::error('Download error: ' . $e->getMessage());
+            return response()->json(['error' => 'Download failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Delete a single photo
+     */
+    public function destroyPhoto(Request $request, $slug)
+    {
+        try {
+            $photo = GalleryPhoto::where('slug', $slug)->firstOrFail();
+            $eventId = $photo->event_id;
+            $eventSlug = $photo->event->slug;
+            
+            $originalPath = public_path($photo->original_path);
+            $thumbnailPath = public_path($photo->thumbnail_path);
+            $smallPath = public_path($photo->small_path);
+            $mediumPath = public_path($photo->medium_path);
+            $largePath = public_path($photo->large_path);
+            
+            $deletedFiles = 0;
+            $paths = [$originalPath, $thumbnailPath, $smallPath, $mediumPath, $largePath];
+            
+            foreach ($paths as $path) {
+                if ($path && File::exists($path)) {
+                    File::delete($path);
+                    $deletedFiles++;
+                }
+            }
+            
+            $photo->delete();
+            
+            $event = GalleryEvent::find($eventId);
+            if ($event) {
+                $event->total_photos = GalleryPhoto::where('event_id', $eventId)->count();
+                $event->save();
+            }
+            
+            \Log::info("Photo deleted: {$photo->original_name} (ID: {$photo->id}) - {$deletedFiles} files removed");
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Photo deleted successfully.',
+                    'photo_id' => $photo->id
+                ]);
+            }
+            
+            return redirect()
+                ->route('gallery.show', $eventSlug)
+                ->with('success', 'Photo deleted successfully.');
+                
+        } catch (\Exception $e) {
+            \Log::error('Delete photo error: ' . $e->getMessage());
+            \Log::error('Delete photo trace: ' . $e->getTraceAsString());
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to delete photo: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to delete photo: ' . $e->getMessage());
+        }
+    }
 }
