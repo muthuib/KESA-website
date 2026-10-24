@@ -2,9 +2,6 @@
 
 @section('styles')
 <style>
-    /* ============================================
-       EDIT GALLERY EVENT - WORLD CLASS STYLING
-       ============================================ */
     .edit-gallery-container {
         max-width: 800px;
         margin: 40px auto;
@@ -28,7 +25,6 @@
             0 12px 32px rgba(0,0,0,0.05);
     }
 
-    /* Header */
     .edit-gallery-header {
         padding: 8px 32px 4px;
         background: linear-gradient(145deg, #0d0505, #1a0a0a);
@@ -81,12 +77,10 @@
         margin: 2px 0 0;
     }
 
-    /* Body */
     .edit-gallery-body {
         padding: 32px;
     }
 
-    /* Form Labels */
     .form-label {
         font-size: 13px;
         font-weight: 600;
@@ -107,7 +101,6 @@
         opacity: 0.7;
     }
 
-    /* Form Controls */
     .form-control {
         padding: 12px 16px;
         border-radius: 10px;
@@ -136,7 +129,6 @@
         min-height: 100px;
     }
 
-    /* Form Groups */
     .form-group {
         margin-bottom: 22px;
     }
@@ -145,27 +137,25 @@
         margin-bottom: 28px;
     }
 
-    /* Status Badge */
-    .status-badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
-    .status-badge.published {
-        background: #d4edda;
-        color: #155724;
+    .form-row-three {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
-    .status-badge.draft {
-        background: #fff3cd;
-        color: #856404;
+    .form-row-four {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
-    /* Form Select */
-    .form-select {
+    input[type="time"] {
         padding: 12px 16px;
         border-radius: 10px;
         border: 2px solid #e9ecef;
@@ -177,21 +167,23 @@
         cursor: pointer;
     }
 
-    .form-select:focus {
+    input[type="time"]:focus {
         border-color: #800000;
         background: #ffffff;
         box-shadow: 0 0 0 4px rgba(128,0,0,0.06);
         outline: none;
     }
 
-    /* Row Layout */
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        opacity: 0.6;
+        padding: 4px;
+        cursor: pointer;
     }
 
-    /* Submit Button */
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+
     .btn-submit {
         padding: 14px 36px;
         border-radius: 12px;
@@ -238,7 +230,6 @@
         font-size: 18px;
     }
 
-    /* Alert Messages */
     .alert {
         padding: 14px 20px;
         border-radius: 12px;
@@ -288,7 +279,6 @@
         margin-bottom: 2px;
     }
 
-    /* Cancel Button */
     .btn-cancel {
         padding: 14px 28px;
         border-radius: 12px;
@@ -318,34 +308,13 @@
         margin-top: 8px;
     }
 
-    /* Info Box */
-    .info-box {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 14px 18px;
-        margin-bottom: 22px;
-        border-left: 4px solid #800000;
-        display: flex;
-        align-items: center;
-        gap: 12px;
+    @media (max-width: 992px) {
+        .form-row-four {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
     }
 
-    .info-box i {
-        color: #800000;
-        font-size: 18px;
-    }
-
-    .info-box .info-text {
-        font-size: 13px;
-        color: #6c757d;
-        margin: 0;
-    }
-
-    .info-box .info-text strong {
-        color: #1a1a2e;
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
         .edit-gallery-container {
             padding: 0 12px;
@@ -362,6 +331,16 @@
 
         .form-row {
             grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-row-three {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-row-four {
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
@@ -406,6 +385,11 @@
             font-size: 14px;
         }
 
+        input[type="time"] {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
         .btn-submit {
             padding: 12px 24px;
             font-size: 14px;
@@ -415,6 +399,11 @@
             padding: 12px 20px;
             font-size: 14px;
         }
+
+        .form-row-four {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
     }
 </style>
 @endsection
@@ -422,8 +411,6 @@
 @section('content')
 <div class="container">
     <div class="edit-gallery-card">
-
-        <!-- Header -->
         <div class="edit-gallery-header">
             <div class="header-content">
                 <div class="header-icon">
@@ -436,10 +423,7 @@
             </div>
         </div>
 
-        <!-- Body -->
         <div class="edit-gallery-body">
-
-            <!-- Alert Messages -->
             @if(session('error'))
                 <div class="alert alert-danger">
                     <i class="fa fa-exclamation-circle"></i>
@@ -468,26 +452,10 @@
                 </div>
             @endif
 
-            <!-- Info Box -->
-            <!-- <div class="info-box">
-                <i class="fa fa-info-circle"></i>
-                <p class="info-text">
-                    <strong>Current Slug:</strong> {{ $event->slug }}
-                    <span style="margin-left: 12px;">
-                        <strong>Status:</strong>
-                        <span class="status-badge {{ strtolower($event->status) == 'published' ? 'published' : 'draft' }}">
-                            {{ $event->status ?? 'Published' }}
-                        </span>
-                    </span>
-                </p>
-            </div> -->
-
-            <!-- Form -->
             <form action="{{ route('gallery.update', $event->slug) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <!-- Event Name -->
                 <div class="form-group">
                     <label class="form-label">
                         <i class="fa fa-tag label-icon"></i>
@@ -503,7 +471,6 @@
                         value="{{ old('event_name', $event->event_name) }}">
                 </div>
 
-                <!-- Description -->
                 <div class="form-group">
                     <label class="form-label">
                         <i class="fa fa-align-left label-icon"></i>
@@ -516,7 +483,6 @@
                         placeholder="Describe the event...">{{ old('description', $event->description) }}</textarea>
                 </div>
 
-                <!-- Event Date & Location -->
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">
@@ -529,7 +495,7 @@
                             class="form-control"
                             name="event_date"
                             required
-                            value="{{ old('event_date', $event->event_date) }}">
+                            value="{{ old('event_date', $event->event_date ? \Carbon\Carbon::parse($event->event_date)->format('Y-m-d') : '') }}">
                     </div>
 
                     <div class="form-group">
@@ -546,23 +512,70 @@
                     </div>
                 </div>
 
-                <!-- Status -->
-                <!-- <div class="form-group">
-                    <label class="form-label">
-                        <i class="fa fa-toggle-on label-icon"></i>
-                        Status
-                    </label>
-                    <select class="form-select" name="status">
-                        <option value="Published" {{ old('status', $event->status) == 'Published' ? 'selected' : '' }}>
-                            <i class="fa fa-check-circle"></i> Published
-                        </option>
-                        <option value="Draft" {{ old('status', $event->status) == 'Draft' ? 'selected' : '' }}>
-                            <i class="fa fa-pencil-square-o"></i> Draft
-                        </option>
-                    </select>
-                </div> -->
+                <div class="form-row-three">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-calendar-check-o label-icon"></i>
+                            Event End Date
+                        </label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="event_end_date"
+                            value="{{ old('event_end_date', $event->event_end_date ? \Carbon\Carbon::parse($event->event_end_date)->format('Y-m-d') : '') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            Leave blank if single-day event
+                        </small>
+                    </div>
 
-                <!-- Form Actions -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-eye label-icon"></i>
+                            Display End Date
+                        </label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="display_end_date"
+                            value="{{ old('display_end_date', $event->display_end_date ? \Carbon\Carbon::parse($event->display_end_date)->format('Y-m-d') : '') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            When to stop displaying this event
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-row-four">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-clock-o label-icon"></i>
+                            Start Time
+                        </label>
+                        <input
+                            type="time"
+                            class="form-control"
+                            name="start_time"
+                            value="{{ old('start_time', $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            e.g., 09:00 AM
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-clock-o label-icon"></i>
+                            End Time
+                        </label>
+                        <input
+                            type="time"
+                            class="form-control"
+                            name="end_time"
+                            value="{{ old('end_time', $event->end_time ? \Carbon\Carbon::parse($event->end_time)->format('H:i') : '') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            e.g., 05:00 PM
+                        </small>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
                         <i class="fa fa-save"></i>
@@ -573,7 +586,6 @@
                         Cancel
                     </a>
                 </div>
-
             </form>
         </div>
     </div>

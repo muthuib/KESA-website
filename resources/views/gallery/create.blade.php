@@ -2,9 +2,6 @@
 
 @section('styles')
 <style>
-    /* ============================================
-       CREATE GALLERY EVENT - WORLD CLASS STYLING
-       ============================================ */
     .create-gallery-container {
         max-width: 800px;
         margin: 40px auto;
@@ -28,7 +25,6 @@
             0 12px 32px rgba(0,0,0,0.05);
     }
 
-    /* Header */
     .create-gallery-header {
         padding: 8px 32px 4px;
         background: linear-gradient(145deg, #0d0505, #1a0a0a);
@@ -81,12 +77,10 @@
         margin: 2px 0 0;
     }
 
-    /* Body */
     .create-gallery-body {
         padding: 32px;
     }
 
-    /* Form Labels */
     .form-label {
         font-size: 13px;
         font-weight: 600;
@@ -107,7 +101,6 @@
         opacity: 0.7;
     }
 
-    /* Form Controls */
     .form-control {
         padding: 12px 16px;
         border-radius: 10px;
@@ -136,7 +129,6 @@
         min-height: 100px;
     }
 
-    /* Form Groups */
     .form-group {
         margin-bottom: 22px;
     }
@@ -145,14 +137,53 @@
         margin-bottom: 28px;
     }
 
-    /* Row Layout */
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
     }
 
-    /* Submit Button */
+    .form-row-three {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-row-four {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    input[type="time"] {
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        color: #1a1a2e;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    input[type="time"]:focus {
+        border-color: #800000;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(128,0,0,0.06);
+        outline: none;
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        opacity: 0.6;
+        padding: 4px;
+        cursor: pointer;
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+
     .btn-submit {
         padding: 14px 36px;
         border-radius: 12px;
@@ -199,7 +230,6 @@
         font-size: 18px;
     }
 
-    /* Alert Messages */
     .alert {
         padding: 14px 20px;
         border-radius: 12px;
@@ -249,7 +279,6 @@
         margin-bottom: 2px;
     }
 
-    /* Cancel Button */
     .btn-cancel {
         padding: 14px 28px;
         border-radius: 12px;
@@ -279,7 +308,13 @@
         margin-top: 8px;
     }
 
-    /* Responsive */
+    @media (max-width: 992px) {
+        .form-row-four {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+    }
+
     @media (max-width: 768px) {
         .create-gallery-container {
             padding: 0 12px;
@@ -296,6 +331,16 @@
 
         .form-row {
             grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-row-three {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-row-four {
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
@@ -340,6 +385,11 @@
             font-size: 14px;
         }
 
+        input[type="time"] {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
         .btn-submit {
             padding: 12px 24px;
             font-size: 14px;
@@ -349,6 +399,11 @@
             padding: 12px 20px;
             font-size: 14px;
         }
+
+        .form-row-four {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
     }
 </style>
 @endsection
@@ -356,8 +411,6 @@
 @section('content')
 <div class="container">
     <div class="create-gallery-card">
-
-        <!-- Header -->
         <div class="create-gallery-header">
             <div class="header-content">
                 <div class="header-icon">
@@ -370,10 +423,7 @@
             </div>
         </div>
 
-        <!-- Body -->
         <div class="create-gallery-body">
-
-            <!-- Alert Messages -->
             @if(session('error'))
                 <div class="alert alert-danger">
                     <i class="fa fa-exclamation-circle"></i>
@@ -402,11 +452,9 @@
                 </div>
             @endif
 
-            <!-- Form -->
             <form action="{{ route('gallery.store') }}" method="POST">
                 @csrf
 
-                <!-- Event Name -->
                 <div class="form-group">
                     <label class="form-label">
                         <i class="fa fa-tag label-icon"></i>
@@ -422,7 +470,6 @@
                         value="{{ old('event_name') }}">
                 </div>
 
-                <!-- Description -->
                 <div class="form-group">
                     <label class="form-label">
                         <i class="fa fa-align-left label-icon"></i>
@@ -435,7 +482,6 @@
                         placeholder="Describe the event...">{{ old('description') }}</textarea>
                 </div>
 
-                <!-- Event Date & Location -->
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">
@@ -465,7 +511,70 @@
                     </div>
                 </div>
 
-                <!-- Form Actions -->
+                <div class="form-row-three">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-calendar-check-o label-icon"></i>
+                            Event End Date
+                        </label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="event_end_date"
+                            value="{{ old('event_end_date') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            Leave blank if single-day event
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-eye label-icon"></i>
+                            Display End Date
+                        </label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="display_end_date"
+                            value="{{ old('display_end_date') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            When to stop displaying this event
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-row-four">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-clock-o label-icon"></i>
+                            Start Time
+                        </label>
+                        <input
+                            type="time"
+                            class="form-control"
+                            name="start_time"
+                            value="{{ old('start_time') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            e.g., 09:00 AM
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-clock-o label-icon"></i>
+                            End Time
+                        </label>
+                        <input
+                            type="time"
+                            class="form-control"
+                            name="end_time"
+                            value="{{ old('end_time') }}">
+                        <small class="text-muted" style="font-size: 12px; color: #6c757d; display: block; margin-top: 4px;">
+                            e.g., 05:00 PM
+                        </small>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
                         <i class="fa fa-plus-circle"></i>
@@ -476,7 +585,6 @@
                         Cancel
                     </a>
                 </div>
-
             </form>
         </div>
     </div>
